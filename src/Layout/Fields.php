@@ -18,7 +18,6 @@ class Fields {
 
     public function makeComponents() {
         $componentComponent = offbeat('components')->get($this->service->getActiveComponentComponent());
-        var_dump($componentComponent);
 
         $components = [];
 
@@ -32,7 +31,6 @@ class Fields {
 
             if (!empty($componentComponent::getForm())) {
                 $formFields = array_merge($formFields, $componentComponent::getForm());
-                var_dump($formFields);
             }
 
             if (!empty($formFields)) {
