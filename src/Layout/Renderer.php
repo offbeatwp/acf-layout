@@ -4,9 +4,12 @@ namespace OffbeatWP\AcfLayout\Layout;
 class Renderer
 {
     protected $postId;
+    protected $service;
 
     public function __construct($service)
     {
+        $this->service = $service;
+
         add_filter('the_content', [$this, 'renderLayout'], 15);
     }
 
@@ -62,7 +65,9 @@ class Renderer
 
         $rowSettings['rowContent'] = $rowContent;
 
-        return offbeat('components')->render('row', $rowSettings);
+        $rowComponent = $this->service->getActiveRowComponent();
+
+        return offbeat('components')->render($rowComponent, $rowSettings);
     }
 
     public function renderComponent($componentSettings)
@@ -75,8 +80,9 @@ class Renderer
             $componentSettings['componentContent'] = __('Component does not exists', 'raow');
         }
 
+        $componentComponent = $this->service->getActiveComponentComponent();
 
-        return offbeat('components')->render('component', $componentSettings);
+        return offbeat('components')->render($componentComponent, $componentSettings);
     }
 
     public function getFields($data, $ignoreKeys = [])

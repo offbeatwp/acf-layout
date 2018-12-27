@@ -113,7 +113,7 @@ class Fields {
         ];
 
         $appearanceFields = [];
-        $rowComponent = offbeat('components')->get('row');
+        $rowComponent = offbeat('components')->get($this->service->getActiveRowComponent());
         if (method_exists($rowComponent, 'variations')) {
             $variations = collect($rowComponent::variations());
             $variations = $variations->map(function ($item, $key) {

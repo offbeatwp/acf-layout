@@ -20,10 +20,28 @@ class Service extends AbstractServicePageBuilder {
         PostModel::macro('isLayoutEditorActive', function () {
             return get_field('layout_enabled', $this->id);
         });
+
+        offbeat('components')->register('acflayout.row', Components\Row\Row::class);
+        offbeat('components')->register('acflayout.component', Components\Component\Component::class);
     }
 
     public function onRegisterComponent($event)
     {
         $this->components[$event->getName()] = $event->getComponentClass();
+    }
+
+    public function getActiveRowComponent()
+    {   
+        $rowComponent = 'acflayout.row';
+        if(offbeat('components')->exists('row')) $rowComponent = 'row';
+
+        return $rowComponent;
+    }
+    public function getActiveComponentComponent()
+    {
+        $componentComponent = 'acflayout.component';
+        if(offbeat('components')->exists('component')) $componentComponent = 'row';
+
+        return $componentComponent;
     }
 }
