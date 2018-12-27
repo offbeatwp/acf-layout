@@ -5,6 +5,13 @@ use OffbeatWP\Components\AbstractComponent;
 
 class Component extends AbstractComponent
 {
+    public static function settings()
+    {
+        return [
+            'form' => self::form()
+        ];
+    }
+
     public function render($settings)
     {
         $componentContent = $settings->componentContent;
@@ -30,4 +37,10 @@ class Component extends AbstractComponent
         ]);
     }
 
+    public static function form()
+    {
+        return [
+            \OffbeatWP\AcfLayout\Fields\DisplaySettings()
+        ];
+    }
 }
