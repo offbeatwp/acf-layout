@@ -17,6 +17,9 @@ class Fields {
     }
 
     public function makeComponents() {
+        $componentComponent = offbeat('components')->get($this->service->getActiveComponentComponent());
+        var_dump($componentComponent);
+
         $components = [];
 
         if(!empty($this->service->components)) foreach ($this->service->components as $name => $component) {
@@ -25,6 +28,12 @@ class Fields {
             $form = [];
 
             $formFields = $component::getForm();
+            if (empty($formFields)) $formFields = [];
+
+            if (!empty($componentComponent::getForm())) {
+                $formFields = array_merge($formFields, $componentComponent::getForm());
+                var_dump($formFields);
+            }
 
             if (!empty($formFields)) {
                 $fieldsMapper = new FieldsMapper($formFields, $componentSettings['slug']);

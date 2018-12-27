@@ -40,7 +40,7 @@ class Component extends AbstractComponent
     public static function form()
     {
         return [
-            \OffbeatWP\AcfLayout\Fields\DisplaySettings()
+            \OffbeatWP\AcfLayout\Fields\DisplaySettings::get()
         ];
     }
 }

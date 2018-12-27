@@ -25,9 +25,9 @@ class Service extends AbstractServicePageBuilder {
         offbeat('components')->register('acflayout.component', Components\Component\Component::class);
     }
 
-    public function onRegisterComponent($event)
+    public function onRegisterComponent($name, $componentClass)
     {
-        $this->components[$event->getName()] = $event->getComponentClass();
+        $this->components[$name] = $componentClass;
     }
 
     public function getActiveRowComponent()
