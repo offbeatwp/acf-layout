@@ -12,5 +12,7 @@
             "OffbeatWP\\AcfLayout\\": "src"
         }
     },
-    "require": {}
+    "require": {
+        "offbeatwp/acf-core": "dev-master"
+    }
 }

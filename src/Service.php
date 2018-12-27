@@ -4,7 +4,7 @@ namespace OffbeatWP\AcfLayout;
 use OffbeatWP\Services\AbstractServicePageBuilder;
 use OffbeatWP\Content\Post\PostModel;
 
-class AcfLayoutService extends AbstractServicePageBuilder {
+class Service extends AbstractServicePageBuilder {
 
     public $components = [];
 

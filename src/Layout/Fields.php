@@ -1,7 +1,7 @@
 <?php
 namespace OffbeatWP\Tools\Acf\Layout;
 
-use OffbeatWP\Tools\Acf\FieldsMapper;
+use OffbeatWP\AcfCore\FieldsMapper;
 
 class Fields {
 
