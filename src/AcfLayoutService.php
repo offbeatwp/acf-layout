@@ -1,5 +1,5 @@
 <?php
-namespace OffbeatWP\Tools\Acf;
+namespace OffbeatWP\AcfLayout;
 
 use OffbeatWP\Services\AbstractServicePageBuilder;
 use OffbeatWP\Content\Post\PostModel;
