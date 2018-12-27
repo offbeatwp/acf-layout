@@ -1,5 +1,5 @@
 <?php
-namespace OffbeatWP\Tools\Acf\Layout;
+namespace OffbeatWP\AcfLayout\Layout;
 
 class Admin {
     public function __construct($service)
