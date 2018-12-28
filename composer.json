@@ -1,5 +1,7 @@
 {
     "name": "offbeatwp/acf-layout",
+    "description": "Layout builder based on ACF using Offbeat's components",
+    "license": "MIT",
     "type": "offbeatwp-service",
     "authors": [
         {
