@@ -6,13 +6,6 @@ class Renderer
     protected $postId;
     protected $service;
 
-    public function __construct($service)
-    {
-        $this->service = $service;
-
-        add_filter('the_content', [$this, 'renderLayout'], 15);
-    }
-
     public function renderLayout($content)
     {
         $this->postId = get_the_ID();

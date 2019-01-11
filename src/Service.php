@@ -14,12 +14,17 @@ class Service extends AbstractServicePageBuilder {
             new Layout\Admin($this);     
         }
 
-        new Layout\Fields($this);
-        new Layout\Renderer($this);
+        new Layout\LayoutEditor($this);
 
-        PostModel::macro('isLayoutEditorActive', function () {
+        PostModel::macro('hasLayout', function () {
             return get_field('layout_enabled', $this->id);
         });
+
+        PostModel::macro('layout', function () {
+            $renderer = new Layout\Renderer();
+            return $renderer->renderLayout($this->post_content);
+        });
+
 
         offbeat('components')->register('acflayout.row', Components\Row\Row::class);
         offbeat('components')->register('acflayout.component', Components\Component\Component::class);

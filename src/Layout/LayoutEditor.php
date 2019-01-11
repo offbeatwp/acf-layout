@@ -3,7 +3,7 @@ namespace OffbeatWP\AcfLayout\Layout;
 
 use OffbeatWP\AcfCore\FieldsMapper;
 
-class Fields {
+class LayoutEditor {
 
     protected $service;
 
