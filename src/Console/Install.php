@@ -5,6 +5,8 @@ use OffbeatWP\Console\AbstractCommand;
 
 class Install extends AbstractCommand
 {
+    const COMMAND = 'acf-layout:install';
+
     public function execute($args, $argsNamed)
         $this->copyFolder(dirname(__FILE__) . '/../../templates/Row', get_template_directory() . '/components/Row');
         $this->copyFolder(dirname(__FILE__) . '/../../templates/Component', get_template_directory() . '/components/Component');
