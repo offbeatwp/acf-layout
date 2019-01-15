@@ -59,7 +59,7 @@ class LayoutEditor {
         $rowFields = [
             array(
                 'key' => 'field_5c16d2ee4177f',
-                'label' => __('Components', 'raow'),
+                'label' => __('Components', 'offbeatwp'),
                 'name' => '',
                 'type' => 'tab',
                 'instructions' => '',
@@ -75,7 +75,7 @@ class LayoutEditor {
             ),
             array(
                 'key' => 'field_5c16d191e5383',
-                'label' => __('Component', 'raow'),
+                'label' => __('Component', 'offbeatwp'),
                 'name' => 'component',
                 'type' => 'flexible_content',
                 'instructions' => '',
@@ -87,7 +87,7 @@ class LayoutEditor {
                     'id' => '',
                 ),
                 'layouts' => $this->makeComponents(),
-                'button_label' => __('Add component', 'raow'),
+                'button_label' => __('Add component', 'offbeatwp'),
                 'min' => '',
                 'max' => '',
             ),
@@ -103,7 +103,7 @@ class LayoutEditor {
         $rowSettings = [
             array(
                 'key' => 'field_5c16d30841780',
-                'label' => __('Row Settings', 'raow'),
+                'label' => __('Row Settings', 'offbeatwp'),
                 'name' => '',
                 'type' => 'tab',
                 'instructions' => '',
@@ -129,7 +129,7 @@ class LayoutEditor {
 
             $appearanceFields[] = [
                 'key' => 'field_5c16d32c41789',
-                'label' => __('Width', 'raow'),
+                'label' => __('Width', 'offbeatwp'),
                 'name' => 'width',
                 'type' => 'select',
                 'instructions' => '',
@@ -156,7 +156,7 @@ class LayoutEditor {
         if(is_array($rowThemes)) {
             $appearanceFields[] = [
                 'key' => 'field_5c16d32c41786',
-                'label' => __('Row theme', 'raow'),
+                'label' => __('Row theme', 'offbeatwp'),
                 'name' => 'row_theme',
                 'type' => 'select',
                 'instructions' => '',
@@ -183,7 +183,7 @@ class LayoutEditor {
         $rowSettings[] = [
             'key'           => 'field_5c16d30841789',
             'name'          => 'appearance',
-            'label'         => __('Appearance', 'raow'),
+            'label'         => __('Appearance', 'offbeatwp'),
             'type'          => 'group',
             'layout'        => 'row',
             'sub_fields'    => $appearanceFields
@@ -195,13 +195,13 @@ class LayoutEditor {
         $rowSettings[] = [
             'key'           => 'field_5c16d30841781',
             'name'          => 'margins',
-            'label'         => __('Margins', 'raow'),
+            'label'         => __('Margins', 'offbeatwp'),
             'type'          => 'group',
             'layout'        => 'row',
             'sub_fields'    => [
                 array(
                     'key' => 'field_5c16d32c41782',
-                    'label' => __('Margin Top', 'raow'),
+                    'label' => __('Margin Top', 'offbeatwp'),
                     'name' => 'margin_top',
                     'type' => 'select',
                     'instructions' => '',
@@ -224,7 +224,7 @@ class LayoutEditor {
                 ),
                 array(
                     'key' => 'field_5c16d32c41783',
-                    'label' => __('Margin Bottom', 'raow'),
+                    'label' => __('Margin Bottom', 'offbeatwp'),
                     'name' => 'margin_bottom',
                     'type' => 'select',
                     'instructions' => '',
@@ -253,13 +253,13 @@ class LayoutEditor {
         $rowSettings[] = [
             'key'           => 'field_5c16d30841782',
             'name'          => 'paddings',
-            'label'         => __('Paddings', 'raow'),
+            'label'         => __('Paddings', 'offbeatwp'),
             'type'          => 'group',
             'layout'        => 'row',
             'sub_fields'    => [
                 array(
                     'key' => 'field_5c16d32c41784',
-                    'label' => __('Padding top', 'raow'),
+                    'label' => __('Padding top', 'offbeatwp'),
                     'name' => 'padding_top',
                     'type' => 'select',
                     'instructions' => '',
@@ -282,7 +282,7 @@ class LayoutEditor {
                 ),
                 array(
                     'key' => 'field_5c16d32c41785',
-                    'label' => __('Padding bottom', 'raow'),
+                    'label' => __('Padding bottom', 'offbeatwp'),
                     'name' => 'padding_bottom',
                     'type' => 'select',
                     'instructions' => '',
@@ -309,13 +309,13 @@ class LayoutEditor {
         $rowSettings[] = [
             'key'           => 'field_5c16d30841784',
             'name'          => 'misc',
-            'label'         => __('Other', 'raow'),
+            'label'         => __('Other', 'offbeatwp'),
             'type'          => 'group',
             'layout'        => 'row',
             'sub_fields'    => [
                 array(
                     'key' => 'field_5c16d32c41787',
-                    'label' => __('ID', 'raow'),
+                    'label' => __('ID', 'offbeatwp'),
                     'name' => 'id',
                     'type' => 'text',
                     'instructions' => '',
@@ -336,7 +336,7 @@ class LayoutEditor {
                 ),
                 array(
                     'key' => 'field_5c16d32c41788',
-                    'label' => __('Class', 'raow'),
+                    'label' => __('Class', 'offbeatwp'),
                     'name' => 'css_class',
                     'type' => 'text',
                     'instructions' => '',
@@ -369,7 +369,7 @@ class LayoutEditor {
             'fields' => array(
                 array(
                     'key' => 'field_5c16c331388e0',
-                    'label' => __('Use Layout editor', 'raow'),
+                    'label' => __('Use Layout editor', 'offbeatwp'),
                     'name' => 'layout_enabled',
                     'type' => 'true_false',
                     'instructions' => '',
@@ -390,7 +390,7 @@ class LayoutEditor {
 
                 array(
                     'key' => 'field_5c16d18ae5382',
-                    'label' => __('Rows', 'raow'),
+                    'label' => __('Rows', 'offbeatwp'),
                     'name' => 'layout_row',
                     'type' => 'repeater',
                     'instructions' => '',
@@ -413,7 +413,7 @@ class LayoutEditor {
                     'min' => 0,
                     'max' => 0,
                     'layout' => 'block',
-                    'button_label' => __('Add row', 'raow'),
+                    'button_label' => __('Add row', 'offbeatwp'),
                     'sub_fields' => $this->makeRowFields(),
                 ),
             ),

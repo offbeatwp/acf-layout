@@ -1,7 +1,7 @@
 <?php
 namespace Components\Component;
 
-use \Raow\Components\AbstractComponent;
+use \OffbeatWP\Components\AbstractComponent;
 
 class Component extends AbstractComponent
 {
@@ -10,8 +10,8 @@ class Component extends AbstractComponent
         $componentContent = $settings->componentContent;
         unset($settings->componentContent);
 
-        $marginTop    = raowApp('design')->getMarginClasses($settings->margin_top, 'component', 'mt');
-        $marginBottom = raowApp('design')->getMarginClasses($settings->margin_bottom, 'component', 'mb');
+        $marginTop    = offbeat('design')->getMarginClasses($settings->margin_top, 'component', 'mt');
+        $marginBottom = offbeat('design')->getMarginClasses($settings->margin_bottom, 'component', 'mb');
 
         $componentId       = isset($settings->id) || empty($settings->id) ? $settings->id : null;
         $additionalClasses = isset($settings->css_classes) ? $settings->css_classes : null;

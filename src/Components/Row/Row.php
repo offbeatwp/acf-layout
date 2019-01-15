@@ -17,11 +17,11 @@ class Row extends AbstractComponent
             $variation = 'default';
         }
 
-        $rowTheme      = raowApp('design')->getRowThemeClasses($settings->row_theme);
-        $marginTop     = raowApp('design')->getMarginClasses($settings->margin_top, 'row', 'mt');
-        $marginBottom  = raowApp('design')->getMarginClasses($settings->margin_bottom, 'row', 'mb');
-        $paddingTop    = raowApp('design')->getPaddingClasses($settings->padding_top, 'row', 'pt');
-        $paddingBottom = raowApp('design')->getPaddingClasses($settings->padding_bottom, 'row', 'pb');
+        $rowTheme      = offbeat('design')->getRowThemeClasses($settings->row_theme);
+        $marginTop     = offbeat('design')->getMarginClasses($settings->margin_top, 'row', 'mt');
+        $marginBottom  = offbeat('design')->getMarginClasses($settings->margin_bottom, 'row', 'mb');
+        $paddingTop    = offbeat('design')->getPaddingClasses($settings->padding_top, 'row', 'pt');
+        $paddingBottom = offbeat('design')->getPaddingClasses($settings->padding_bottom, 'row', 'pb');
 
         $rowId                = isset($settings->id) || empty($settings->id) ? $settings->id : null;
         $additionalRowClasses = isset($settings->css_classes) ? $settings->css_classes : null;
@@ -44,7 +44,7 @@ class Row extends AbstractComponent
     {
         return [
             'default'    => [
-                'label' => __('Default', 'raow'),
+                'label' => __('Default', 'offbeatwp'),
             ],
         ];
     }
