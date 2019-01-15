@@ -28,6 +28,10 @@ class Service extends AbstractServicePageBuilder {
 
         offbeat('components')->register('acflayout.row', Components\Row\Row::class);
         offbeat('components')->register('acflayout.component', Components\Component\Component::class);
+
+        if(offbeat('console')->isConsole()) {
+            offbeat('console')->register(Console\Install::class);
+        }
     }
 
     public function onRegisterComponent($name, $componentClass)
