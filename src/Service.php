@@ -22,7 +22,7 @@ class Service extends AbstractServicePageBuilder {
         
         $service = $this;
         PostModel::macro('layout', function () use ($service) {
-            $renderer = new Layout\Renderer();
+            $renderer = new Layout\Renderer($service);
             return $renderer->renderLayout();
         });
 
