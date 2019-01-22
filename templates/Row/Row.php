@@ -7,8 +7,8 @@ class Row extends AbstractComponent
 {
     public function render($settings)
     {
-        $rowContent = $settings->rowContent;
-        unset($settings->rowContent);
+        $rowComponents = $settings->rowComponents;
+        unset($settings->rowComponents);
 
         $variations = self::variations();
         $variation  = isset($settings->width) ? $settings->width : '';
@@ -33,7 +33,7 @@ class Row extends AbstractComponent
         }
 
         return $this->view($variation, [
-            'rowContent' => $rowContent,
+            'rowComponents' => $rowComponents,
             'rowClasses' => $rowClasses,
             'rowId'      => $rowId,
             'settings'   => $settings,

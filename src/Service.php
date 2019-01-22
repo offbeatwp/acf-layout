@@ -19,12 +19,12 @@ class Service extends AbstractServicePageBuilder {
         PostModel::macro('hasLayout', function () {
             return get_field('layout_enabled', $this->id);
         });
-
-        PostModel::macro('layout', function () {
+        
+        $service = $this;
+        PostModel::macro('layout', function () use ($service) {
             $renderer = new Layout\Renderer();
-            return $renderer->renderLayout($this->post_content);
+            return $renderer->renderLayout(;
         });
-
 
         offbeat('components')->register('acflayout.row', Components\Row\Row::class);
         offbeat('components')->register('acflayout.component', Components\Component\Component::class);
@@ -49,7 +49,7 @@ class Service extends AbstractServicePageBuilder {
     public function getActiveComponentComponent()
     {
         $componentComponent = 'acflayout.component';
-        if(offbeat('components')->exists('component')) $componentComponent = 'row';
+        if(offbeat('components')->exists('component')) $componentComponent = 'component';
 
         return $componentComponent;
     }

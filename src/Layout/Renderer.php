@@ -6,7 +6,11 @@ class Renderer
     protected $postId;
     protected $service;
 
-    public function renderLayout($content)
+    public function __construct ($service) {
+        $this->service = $service;
+    }
+
+    public function renderLayout()
     {
         $this->postId = get_the_ID();
 
@@ -42,7 +46,7 @@ class Renderer
 
     public function renderRow($rowSettings)
     {
-        $rowContent           = '';
+        $rowComponents        = [];
         $componentFieldGroups = get_sub_field('component');
         $componentIndex       = 0;
 
@@ -50,13 +54,13 @@ class Renderer
             while (have_rows('component')) {
                 the_row();
                 $componentFields = $this->getFields($componentFieldGroups[$componentIndex], ['acf_fc_layout']);
-                $rowContent .= $this->renderComponent($componentFields);
+                $rowComponents[] = $this->renderComponent($componentFields);
 
                 $componentIndex++;
             }
         }
 
-        $rowSettings['rowContent'] = $rowContent;
+        $rowSettings['rowComponents'] = $rowComponents;
 
         $rowComponent = $this->service->getActiveRowComponent();
 
