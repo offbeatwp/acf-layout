@@ -23,7 +23,7 @@ class Service extends AbstractServicePageBuilder {
         $service = $this;
         PostModel::macro('layout', function () use ($service) {
             $renderer = new Layout\Renderer();
-            return $renderer->renderLayout(;
+            return $renderer->renderLayout();
         });
 
         offbeat('components')->register('acflayout.row', Components\Row\Row::class);
