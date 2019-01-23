@@ -1,3 +1,5 @@
-<div {% if rowId %}id="{{rowId}}" {%endif%}class="container-narrow {{rowClasses}}">
-    {{ rowComponents | join | raw }}
+<div class="container-narrow">
+    <div {% if rowId %}id="{{rowId}}" {%endif%}class="{{rowClasses}}">
+        {{ rowComponents | join | raw }}
+    </div>
 </div>
