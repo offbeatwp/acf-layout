@@ -24,7 +24,7 @@ class AcfGui {
             if (!method_exists($component, 'settings') || (!$component::supports('pagebuilder') && !$component::supports('widget') && !$component::supports('editor'))) continue;
 
             $componentSettings = $component::settings();
-            $choices[$component] = $componentSettings['name'];
+            $choices[$componentKey] = $componentSettings['name'];
         }
         
         return $choices;

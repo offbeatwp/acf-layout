@@ -42,7 +42,7 @@ class LayoutEditor {
                 }
             }
 
-            $acfDefinedFields = $this->getAcfDefinedFields($component);
+            $acfDefinedFields = $this->getAcfDefinedFields($name);
 
             if (!empty($acfDefinedFields)) {
                 $fields = array_merge($acfDefinedFields, $fields);
