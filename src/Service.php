@@ -12,6 +12,7 @@ class Service extends AbstractServicePageBuilder {
     {
         if (is_admin()) {
             new Layout\Admin($this);     
+            new Layout\AcfGui($this);
         }
 
         new Layout\LayoutEditor($this);

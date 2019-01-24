@@ -24,7 +24,7 @@ class LayoutEditor {
         if(!empty($this->service->components)) foreach ($this->service->components as $name => $component) {
             $componentSettings = $component::settings();
 
-            $form = [];
+            $fields = [];
 
             $formFields = $component::getForm();
             if (empty($formFields)) $formFields = [];
@@ -35,23 +35,51 @@ class LayoutEditor {
 
             if (!empty($formFields)) {
                 $fieldsMapper = new FieldsMapper($formFields, $componentSettings['slug']);
-                $fields = $fieldsMapper->map();
+                $mappedFields = $fieldsMapper->map();
 
-                $componentKey = 'component_' . $name;
-
-                $components[$componentKey] = [
-                    'key' => $componentKey,
-                    'name' => $name,
-                    'label' => $componentSettings['name'],
-                    'display' => 'row',
-                    'sub_fields' => $fields,
-                    'min' => '',
-                    'max' => '',
-                ];
+                if (!empty($mappedFields)) {
+                    $fields = $mappedFields;
+                }
             }
+
+            $acfDefinedFields = $this->getAcfDefinedFields($component);
+
+            if (!empty($acfDefinedFields)) {
+                $fields = array_merge($acfDefinedFields, $fields);
+            }
+
+            $componentKey = 'component_' . $name;
+
+            $components[$componentKey] = [
+                'key' => $componentKey,
+                'name' => $name,
+                'label' => $componentSettings['name'],
+                'display' => 'row',
+                'sub_fields' => $fields,
+                'min' => '',
+                'max' => '',
+            ];
         }
 
         return $components;
+    }
+
+    public function getAcfDefinedFields($component)
+    {
+        $fieldGroups = acf_get_field_groups(['offbeatwp_component' => $component]);
+
+        if (empty($fieldGroups)) return false;
+
+        $fields = [];
+
+        foreach ($fieldGroups as $fieldGroup) {
+            $fieldGroupFields = acf_get_fields($fieldGroup['key']);
+
+            if(!empty($fieldGroupFields))
+                $fields = array_merge($fields, $fieldGroupFields);
+        }
+
+        return $fields;
     }
 
     public function makeRowFields()
