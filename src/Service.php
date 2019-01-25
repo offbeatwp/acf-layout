@@ -11,8 +11,7 @@ class Service extends AbstractServicePageBuilder {
     public function afterRegister()
     {
         if (is_admin()) {
-            new Layout\Admin($this);     
-            new Layout\AcfGui($this);
+            new Layout\Admin($this);
         }
 
         new Layout\LayoutEditor($this);

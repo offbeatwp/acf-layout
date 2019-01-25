@@ -1,6 +1,7 @@
 <?php
 namespace OffbeatWP\AcfLayout\Layout;
 
+use OffbeatWP\AcfCore\ComponentFields;
 use OffbeatWP\AcfCore\FieldsMapper;
 
 class LayoutEditor {
@@ -24,28 +25,15 @@ class LayoutEditor {
         if(!empty($this->service->components)) foreach ($this->service->components as $name => $component) {
             $componentSettings = $component::settings();
 
-            $fields = [];
+            $fields = ComponentFields::get($name);
 
-            $formFields = $component::getForm();
-            if (empty($formFields)) $formFields = [];
-
-            if (!empty($componentComponent::getForm())) {
-                $formFields = array_merge($formFields, $componentComponent::getForm());
-            }
-
-            if (!empty($formFields)) {
-                $fieldsMapper = new FieldsMapper($formFields, $componentSettings['slug']);
+            if (!empty($componentComponentForm = $componentComponent::getForm())) {
+                $fieldsMapper = new FieldsMapper($componentComponentForm, $componentSettings['slug']);
                 $mappedFields = $fieldsMapper->map();
 
                 if (!empty($mappedFields)) {
-                    $fields = $mappedFields;
+                    $fields = array_merge($fields, $mappedFields);
                 }
-            }
-
-            $acfDefinedFields = $this->getAcfDefinedFields($name);
-
-            if (!empty($acfDefinedFields)) {
-                $fields = array_merge($acfDefinedFields, $fields);
             }
 
             $componentKey = 'component_' . $name;
@@ -62,24 +50,6 @@ class LayoutEditor {
         }
 
         return $components;
-    }
-
-    public function getAcfDefinedFields($component)
-    {
-        $fieldGroups = acf_get_field_groups(['offbeatwp_component' => $component]);
-
-        if (empty($fieldGroups)) return false;
-
-        $fields = [];
-
-        foreach ($fieldGroups as $fieldGroup) {
-            $fieldGroupFields = acf_get_fields($fieldGroup['key']);
-
-            if(!empty($fieldGroupFields))
-                $fields = array_merge($fields, $fieldGroupFields);
-        }
-
-        return $fields;
     }
 
     public function makeRowFields()

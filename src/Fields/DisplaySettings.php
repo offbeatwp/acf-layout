@@ -1,9 +1,11 @@
 <?php
 namespace OffbeatWP\AcfLayout\Fields;
 
-class DisplaySettings
+use OffbeatWP\Form\FieldsCollections\AbstractFieldsCollection;
+
+class DisplaySettings extends AbstractFieldsCollection
 {
-    public static function get()
+    public function __construct()
     {
         $sections = [];
 
