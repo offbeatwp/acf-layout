@@ -14,10 +14,25 @@ Next add the following line to your `config/services.php` file:
 OffbeatWP\AcfLayout\Service::class,
 ```
 
-### Installing the "Row" and "Component" Components
+## Installing the "Row" and "Component" Components
 
 Run the following command from somewhere in your wordpress installation.
 
 ```bash
 wp acf-layout:install
+```
+
+## Enable component for the pagebuilder
+
+Add within the `support` array in the settings method `pagebuilder` like:
+
+```php
+public static function settings()
+{
+    return [
+        ...
+        'supports'   => ['pagebuilder'],
+        ...
+    ];
+}
 ```
