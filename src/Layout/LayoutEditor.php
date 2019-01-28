@@ -25,7 +25,7 @@ class LayoutEditor {
         if(!empty($this->service->components)) foreach ($this->service->components as $name => $component) {
             $componentSettings = $component::settings();
 
-            $fields = ComponentFields::get($name);
+            $fields = ComponentFields::get($name, 'acfeditor');
 
             if (!empty($componentComponentForm = $componentComponent::getForm())) {
                 $fieldsMapper = new FieldsMapper($componentComponentForm, $componentSettings['slug']);
