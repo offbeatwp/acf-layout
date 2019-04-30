@@ -42,7 +42,7 @@ class LayoutEditor {
                 'key' => $componentKey,
                 'name' => $name,
                 'label' => $componentSettings['name'],
-                'display' => 'row',
+                'display' => 'block',
                 'sub_fields' => $fields,
                 'min' => '',
                 'max' => '',
