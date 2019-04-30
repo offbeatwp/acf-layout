@@ -81,7 +81,7 @@ class LayoutEditor {
                 'conditional_logic' => 0,
                 'wrapper' => array(
                     'width' => '',
-                    'class' => '',
+                    'class' => 'components-container',
                     'id' => '',
                 ),
                 'layouts' => $this->makeComponents(),
