@@ -8,6 +8,10 @@ class Service extends AbstractServicePageBuilder {
 
     public $components = [];
 
+    public $bindings = [
+        Repositories\AcfLayoutComponentRepository::class => Repositories\AcfLayoutComponentRepository::class
+    ];
+
     public function afterRegister()
     {
         if (is_admin()) {
