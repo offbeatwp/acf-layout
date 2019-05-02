@@ -72,6 +72,7 @@ class Renderer
         $componentName = get_row_layout();
 
         if (offbeat('components')->exists($componentName)) {
+            $componentSettings['context'] = 'row';
             $componentSettings['componentContent'] = offbeat('components')->render($componentName, $componentSettings);
         } else {
             $componentSettings['componentContent'] = __('Component does not exists', 'offbeatwp');

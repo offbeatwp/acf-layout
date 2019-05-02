@@ -3,6 +3,7 @@ namespace OffbeatWP\AcfLayout\Layout;
 
 use OffbeatWP\AcfCore\ComponentFields;
 use OffbeatWP\AcfCore\FieldsMapper;
+use OffbeatWP\AcfLayout\Repositories\AcfLayoutComponentRepository;
 
 class LayoutEditor {
 
@@ -17,43 +18,10 @@ class LayoutEditor {
         });
     }
 
-    public function makeComponents() {
-        $componentComponent = offbeat('components')->get($this->service->getActiveComponentComponent());
-
-        $components = [];
-
-        if(!empty($this->service->components)) foreach ($this->service->components as $name => $component) {
-            $componentSettings = $component::settings();
-
-            $fields = ComponentFields::get($name, 'acfeditor');
-
-            if (!empty($componentComponentForm = $componentComponent::getForm())) {
-                $fieldsMapper = new FieldsMapper($componentComponentForm, $componentSettings['slug']);
-                $mappedFields = $fieldsMapper->map();
-
-                if (!empty($mappedFields)) {
-                    $fields = array_merge($fields, $mappedFields);
-                }
-            }
-
-            $componentKey = 'component_' . $name;
-
-            $components[$componentKey] = [
-                'key' => $componentKey,
-                'name' => $name,
-                'label' => $componentSettings['name'],
-                'display' => 'block',
-                'sub_fields' => $fields,
-                'min' => '',
-                'max' => '',
-            ];
-        }
-
-        return $components;
-    }
-
     public function makeRowFields()
     {
+        $acfLayoutComponentRepository = offbeat(AcfLayoutComponentRepository::class);
+
         $rowFields = [
             array(
                 'key' => 'field_5c16d2ee4177f',
@@ -84,7 +52,7 @@ class LayoutEditor {
                     'class' => 'components-container',
                     'id' => '',
                 ),
-                'layouts' => $this->makeComponents(),
+                'layouts' => $acfLayoutComponentRepository->getLayouts(),
                 'button_label' => __('Add component', 'offbeatwp'),
                 'min' => '',
                 'max' => '',
@@ -405,7 +373,7 @@ class LayoutEditor {
                     'wrapper' => array(
                         'width' => '',
                         'class' => '',
-                        'id' => '',
+                        'id' => 'acf-layout-builder',
                     ),
                     'collapsed' => '',
                     'min' => 0,
