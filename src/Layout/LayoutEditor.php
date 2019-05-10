@@ -329,6 +329,17 @@ class LayoutEditor {
 
     public function make()
     {
+        $post_types = apply_filters('offbeat_acf_layouteditor_posttypes', ['page']);
+        $locations = [];
+
+        if (!empty($post_types)) foreach($post_types as $post_type) {
+            $locations[] = [[
+                'param' => 'post_type',
+                'operator' => '==',
+                'value' => $post_type,
+            ]];
+        }
+
         acf_add_local_field_group(array(
             'key' => 'group_layout',
             'title' => 'Layout',
@@ -383,15 +394,7 @@ class LayoutEditor {
                     'sub_fields' => $this->makeRowFields(),
                 ),
             ),
-            'location' => array(
-                array(
-                    array(
-                        'param' => 'post_type',
-                        'operator' => '==',
-                        'value' => 'page',
-                    ),
-                ),
-            ),
+            'location' => $locations,
             'menu_order' => 0,
             'position' => 'normal',
             'style' => 'default',
