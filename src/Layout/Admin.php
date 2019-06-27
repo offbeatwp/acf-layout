@@ -45,6 +45,19 @@ class Admin {
         <script type="text/javascript">
             
             (function($) {
+                $(document).on('change', '.acf-field-flexible-content', function () {
+                    acfResetFieldNames(this);
+                });
+
+                function acfResetFieldNames(wrapper) {
+                    // $(wrapper).parent().find('[name^="acf[field_"]').each(function() { // should be better solution, somehow not working
+                    $('body').find('[name^="acf[field_"]').each(function() {
+
+                        var field_name = getFieldName(this);
+
+                        $(this).attr('name', field_name);
+                    });
+                }
 
                 function getFieldName(fieldElement, doAltId) {
                     var currentElement = fieldElement;
@@ -99,28 +112,7 @@ class Admin {
                     });
                 });
 
-                acf.add_action('sortstop', function ($el) {
-                    if($('#acf-layout-builder .acf-input > .acf-repeater').length) {
-
-                        $('#acf-layout-builder [name^="acf[field_"]').each(function() {
-
-                            var field_name = getFieldName(this);
-
-                            $(this).attr('name', field_name);
-                        });
-                    }
-                });
-
             })(jQuery); 
-
-            function GetSubstringIndex(str, substring, n) {
-                var times = 0, index = null;
-                while (times < n && index !== -1) {
-                    index = str.indexOf(substring, index+1);
-                    times++;
-                }
-                return index;
-            }
 
         </script>
         <?php
