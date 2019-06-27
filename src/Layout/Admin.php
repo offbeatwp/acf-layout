@@ -50,8 +50,7 @@ class Admin {
                 });
 
                 function acfResetFieldNames(wrapper) {
-                    // $(wrapper).parent().find('[name^="acf[field_"]').each(function() { // should be better solution, somehow not working
-                    $('body').find('[name^="acf[field_"]').each(function() {
+                    $(wrapper).parents('.acf-row').find('[name^="acf[field_"]').each(function() {
 
                         var field_name = getFieldName(this);
 
