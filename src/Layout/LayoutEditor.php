@@ -47,6 +47,7 @@ class LayoutEditor {
                 'instructions' => '',
                 'required' => 0,
                 'conditional_logic' => 0,
+                'mc_acf_ft_true_false'=> 1,
                 'wrapper' => array(
                     'width' => '',
                     'class' => 'components-container',
