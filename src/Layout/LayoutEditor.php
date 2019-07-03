@@ -324,7 +324,7 @@ class LayoutEditor {
             ]
         ];
 
-        return $rowSettings;
+        return apply_filters('offbeat_acf_layout_rowsettings', $rowSettings);
     }
 
     public function make()
