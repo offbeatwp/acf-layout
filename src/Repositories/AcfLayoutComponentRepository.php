@@ -2,6 +2,8 @@
 namespace OffbeatWP\AcfLayout\Repositories;
 
 use OffbeatWP\AcfCore\ComponentFields;
+use OffbeatWP\AcfCore\FieldsMapper;
+use OffbeatWP\Components\NestedComponent;
 
 class AcfLayoutComponentRepository {
 
@@ -18,13 +20,26 @@ class AcfLayoutComponentRepository {
         $components = [];
 
         if(!empty($acfLayoutService->components)) foreach ($acfLayoutService->components as $name => $component) {
-            if ($excludeNested && $component == \Components\Column\Column::class) {
+            $componentClassReflection = new \ReflectionClass($component);
+            if ($excludeNested && $componentClassReflection->implementsInterface(NestedComponent::class)) {
                 continue;
             }
 
             $componentSettings = $component::settings();
 
-            $fields = ComponentFields::get($name, 'acfeditor');
+            $formFields = $component::getForm();
+
+            if (empty($formFields)) $formFields = [];
+    
+            if (!empty($formFields)) {
+                $fieldsMapper = new FieldsMapper($formFields, $component::getSlug());
+                $fieldsMapper->setContext('acfeditor');
+                $mappedFields = $fieldsMapper->map();
+    
+                if (!empty($mappedFields)) {
+                    $fields = $mappedFields;
+                }
+            }
 
             if (!empty($componentComponentForm = $componentComponent::getForm())) {
                 $fieldsMapper = new FieldsMapper($componentComponentForm, $componentSettings['slug']);

@@ -15,7 +15,7 @@ class LayoutEditor {
 
         add_action('acf/init', function () {
             $this->make();
-        });
+        }, 9999);
     }
 
     public function makeRowFields()
