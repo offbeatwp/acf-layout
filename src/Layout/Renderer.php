@@ -75,7 +75,7 @@ class Renderer
             $componentSettings['context'] = 'row';
             $componentSettings['componentContent'] = offbeat('components')->render($componentName, $componentSettings);
         } else {
-            $componentSettings['componentContent'] = __('Component does not exists', 'offbeatwp');
+            $componentSettings['componentContent'] = __('Component does not exist', 'offbeatwp');
         }
 
         $componentComponent = $this->service->getActiveComponentComponent();

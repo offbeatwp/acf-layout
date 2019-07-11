@@ -62,6 +62,13 @@ class AcfLayoutComponentRepository {
                 'max' => '',
             ];
         }
+        
+        uasort($components, function($a, $b) {
+            if ($a['label'] == $b['label']) {
+                return 0;
+            }
+            return ($a['label'] < $b['label']) ? -1 : 1;
+        });
 
         $this->layouts = $components;
 

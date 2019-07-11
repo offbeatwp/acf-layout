@@ -47,6 +47,7 @@ class LayoutEditor {
                 'instructions' => '',
                 'required' => 0,
                 'conditional_logic' => 0,
+                'mc_acf_ft_true_false'=> 1,
                 'wrapper' => array(
                     'width' => '',
                     'class' => 'components-container',
@@ -324,7 +325,7 @@ class LayoutEditor {
             ]
         ];
 
-        return $rowSettings;
+        return apply_filters('offbeat_acf_layout_rowsettings', $rowSettings);
     }
 
     public function make()
