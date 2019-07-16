@@ -20,6 +20,8 @@ class AcfLayoutComponentRepository {
         $components = [];
 
         if(!empty($acfLayoutService->components)) foreach ($acfLayoutService->components as $name => $component) {
+            $fields = [];
+            
             $componentClassReflection = new \ReflectionClass($component);
             if ($excludeNested && $componentClassReflection->implementsInterface(NestedComponent::class)) {
                 continue;
@@ -31,7 +33,7 @@ class AcfLayoutComponentRepository {
 
             if (empty($formFields)) $formFields = [];
     
-            if (!empty($formFields)) {
+            if ($formFields->isNotEmpty()) {
                 $fieldsMapper = new FieldsMapper($formFields, $component::getSlug());
                 $fieldsMapper->setContext('acfeditor');
                 $mappedFields = $fieldsMapper->map();
