@@ -8,6 +8,8 @@ class Admin {
         add_action('acf/input/admin_head', [$this, 'rdsn_acf_repeater_collapse']);
 
         add_action('acf/input/admin_footer', [$this,'acfDragNDropFlexibleLayoutsBetweenRepeaters']);
+
+        add_action('admin_enqueue_scripts', [$this, 'enqueueScripts'], 999);
     }
 
     public  function disableEditorWhenLayoutIsActive()
@@ -22,6 +24,13 @@ class Admin {
         ) {
             remove_post_type_support(get_post_type($_GET['post']), 'editor');
         }
+    }
+
+    public function enqueueScripts()
+    {
+        $min = defined('WP_DEBUG') && WP_DEBUG ? '' : 'min.';
+        wp_enqueue_script('offbeat-acf-layout', get_template_directory_uri() . "/vendor/offbeatwp/acf-layout/src/assets/js/main.{$min}js", ['jquery'], 1);
+        wp_enqueue_style( 'offbeat-acf-layout', get_template_directory_uri() . "/vendor/offbeatwp/acf-layout/src/assets/css/main.css", [], 1);
     }
 
     public function rdsn_acf_repeater_collapse() {

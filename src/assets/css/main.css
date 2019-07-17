@@ -1,0 +1,41 @@
+.acf-fc-popup ul li a {
+    padding: 5px 10px;
+}
+
+.acf-fc-popup ul li span {
+    display: block;
+    padding: 5px 10px;
+}
+
+.acf-fc-popup ul li a span {
+    padding: 0;
+}
+
+.acf-fc-popup .groups ul li span {
+    font-weight: bold;
+}
+
+.acf-fc-popup ul li.active,
+.acf-fc-popup ul li span:hover {
+    cursor: pointer;
+    background: #0073aa;
+}
+
+.acf-fc-popup ul li li {
+    background: #565656;
+}
+
+.acf-fc-popup ul li li.active,
+.acf-fc-popup ul li li a:hover {
+    background: #0073aa;
+}
+
+.acf-fc-popup ul li li a {
+}
+
+.acf-fc-popup input {
+    margin: 4px 10px 8px 10px;
+    border-radius: 3px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}

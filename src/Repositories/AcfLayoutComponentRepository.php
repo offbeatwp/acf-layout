@@ -36,11 +36,14 @@ class AcfLayoutComponentRepository {
             }
 
             $componentKey = 'component_' . $name;
+            $categoryName = isset($componentSettings['category']) && $componentSettings['category']
+                ? " ({$componentSettings['category']})"
+                : null;
 
             $components[$componentKey] = [
                 'key' => $componentKey,
                 'name' => $name,
-                'label' => $componentSettings['name'],
+                'label' => $componentSettings['name'] . $categoryName,
                 'display' => 'block',
                 'sub_fields' => $fields,
                 'min' => '',
