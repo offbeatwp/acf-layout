@@ -16,6 +16,66 @@ class LayoutEditor {
         add_action('acf/init', function () {
             $this->make();
         }, 9999);
+
+        add_filter('acf/pre_update_value', [$this, 'preUpdateValue'], 10, 4);
+        add_filter('acf/pre_load_value', [$this, 'preLoadValue'], 10, 3);
+        add_filter('acf/pre_load_reference', [$this, 'preLoadReference'], 10, 3);
+    }
+
+    public function preUpdateValue($check, $value, $postId, $field )
+    {
+        if ($field['name'] === 'layout_row') {
+            $value = $this->normalizeAcfInputField($value, true);
+
+            update_post_meta($postId, 'acf_layout_editor_content', json_encode($value, JSON_UNESCAPED_UNICODE));
+
+            $check = false;
+        }
+
+        return $check;
+    }
+
+    public function normalizeAcfInputField($values, $toIndexedArray = false) {
+
+        if ($toIndexedArray && is_array($values)) {
+            $values = array_values($values);
+        }
+
+        if (!empty($values) && is_array($values)) foreach ($values as $key => $value) {
+            $toIndexedArray = false;
+
+            $fieldObject = get_field_object($key);
+
+            if (is_array($fieldObject) && isset($fieldObject['type']) && in_array($fieldObject['type'], ['flexible_content', 'repeater'])) {
+                $toIndexedArray = true;
+            }
+
+            $values[$key] = $this->normalizeAcfInputField($value, $toIndexedArray);
+        }
+
+        return $values;
+    }
+
+    public function preLoadValue($value, $postId, $field)
+    {
+        if ($field['name'] === 'layout_row') {
+            $layoutEditorContent = get_post_meta($postId, 'acf_layout_editor_content', true);
+
+            if (!empty($layoutEditorContent) && ($layoutEditorContentDecoded = json_decode($layoutEditorContent, true))) {
+                return $layoutEditorContentDecoded;
+            }
+        }
+
+        return $value;
+    }
+
+    public function preLoadReference($reference, $fieldName, $postId)
+    {
+        if ($fieldName === 'layout_row') {
+            return 'field_5c16d18ae5382';
+        }
+
+        return $reference;
     }
 
     public function makeRowFields()
