@@ -17,13 +17,13 @@ class Row extends AbstractComponent
             $variation = 'default';
         }
 
-        $rowTheme      = offbeat('design')->getRowThemeClasses($settings->row_theme);
-        $marginTop     = offbeat('design')->getMarginClasses($settings->margin_top, 'row', 'mt');
-        $marginBottom  = offbeat('design')->getMarginClasses($settings->margin_bottom, 'row', 'mb');
-        $paddingTop    = offbeat('design')->getPaddingClasses($settings->padding_top, 'row', 'pt');
-        $paddingBottom = offbeat('design')->getPaddingClasses($settings->padding_bottom, 'row', 'pb');
+        $rowTheme      = isset($settings->row_theme) ? offbeat('design')->getRowThemeClasses($settings->row_theme) : '';
+        $marginTop     = isset($settings->margin_top) ? offbeat('design')->getMarginClasses($settings->margin_top, 'row', 'mt') : '';
+        $marginBottom  = isset($settings->margin_bottom) ? offbeat('design')->getMarginClasses($settings->margin_bottom, 'row', 'mb') : '';
+        $paddingTop    = isset($settings->padding_top) ? offbeat('design')->getPaddingClasses($settings->padding_top, 'row', 'pt') : '';
+        $paddingBottom = isset($settings->padding_bottom) ? offbeat('design')->getPaddingClasses($settings->padding_bottom, 'row', 'pb') : '';
 
-        $rowId                = isset($settings->id) || empty($settings->id) ? $settings->id : null;
+        $rowId                = isset($settings->id) && !empty($settings->id) ? $settings->id : null;
         $additionalRowClasses = isset($settings->css_classes) ? $settings->css_classes : null;
 
         $rowClasses = implode(' ', compact('rowTheme', 'marginTop', 'marginBottom', 'paddingTop', 'paddingBottom'));
