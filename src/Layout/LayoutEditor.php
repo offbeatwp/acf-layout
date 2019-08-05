@@ -27,7 +27,7 @@ class LayoutEditor {
         if ($field['name'] === 'layout_row') {
             $value = $this->normalizeAcfInputField($value, true);
 
-            update_post_meta($postId, 'acf_layout_editor_content', json_encode($value, JSON_UNESCAPED_UNICODE));
+            update_post_meta($postId, 'acf_layout_editor_content', json_encode($value, JSON_UNESCAPED_UNICODE | JSON_HEX_APOS));
 
             $check = false;
         }
