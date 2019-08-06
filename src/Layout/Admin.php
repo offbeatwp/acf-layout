@@ -104,8 +104,8 @@ class Admin {
                     return 'acf' + nameValue;
                 }
 
-                acf.add_action('ready', function($el){
-                    $("#acf-layout-builder .values").sortable({
+                function setupAcfLayoutSortable(el) {
+                    $(el).find(".values").sortable({
                         connectWith: "#acf-layout-builder .values",
                         start: function(event, ui) {
                             acf.do_action('sortstart', ui.item, ui.placeholder);
@@ -118,8 +118,17 @@ class Admin {
                             });
                         }
                     });
+                }
+
+                acf.add_action('ready', function($el){
+                    setupAcfLayoutSortable('#acf-layout-builder');
                 });
 
+                acf.add_action('append_field', function (el) {
+                    if ($(el).find('.values').length) {
+                        setupAcfLayoutSortable(el);
+                    }
+                });
             })(jQuery); 
 
         </script>
