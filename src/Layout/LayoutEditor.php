@@ -27,7 +27,7 @@ class LayoutEditor {
         if ($field['name'] === 'layout_row') {
             $value = $this->normalizeAcfInputField($value, true);
 
-            update_post_meta($postId, 'acf_layout_editor_content', json_encode($value, JSON_UNESCAPED_UNICODE | JSON_HEX_APOS));
+            update_post_meta($postId, 'acf_layout_editor_content', base64_encode(serialize($value)));
 
             $check = false;
         }
@@ -51,6 +51,8 @@ class LayoutEditor {
             }
 
             $values[$key] = $this->normalizeAcfInputField($value, $toIndexedArray);
+        } elseif (is_string($values)) {
+            $values = stripslashes($values);
         }
 
         return $values;
@@ -61,8 +63,12 @@ class LayoutEditor {
         if ($field['name'] === 'layout_row') {
             $layoutEditorContent = get_post_meta($postId, 'acf_layout_editor_content', true);
 
-            if (!empty($layoutEditorContent) && ($layoutEditorContentDecoded = json_decode($layoutEditorContent, true))) {
-                return $layoutEditorContentDecoded;
+            if (!empty($layoutEditorContent)) {
+                if ($layoutEditorContentDecoded = unserialize(base64_decode($layoutEditorContent))) {
+                    return $layoutEditorContentDecoded;
+                } elseif ($layoutEditorContentDecoded = json_decode($layoutEditorContent, true)) {
+                    return $layoutEditorContentDecoded;
+                }
             }
         }
 
