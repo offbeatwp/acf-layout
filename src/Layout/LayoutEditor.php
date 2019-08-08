@@ -20,14 +20,18 @@ class LayoutEditor {
         add_filter('acf/pre_update_value', [$this, 'preUpdateValue'], 10, 4);
         add_filter('acf/pre_load_value', [$this, 'preLoadValue'], 10, 3);
         add_filter('acf/pre_load_reference', [$this, 'preLoadReference'], 10, 3);
+        add_filter('acf/load_meta', [$this, 'loadMeta'], 10, 2);
     }
 
     public function preUpdateValue($check, $value, $postId, $field )
     {
+        global $post;
+
         if ($field['name'] === 'layout_row') {
+
             $value = $this->normalizeAcfInputField($value, true);
 
-            update_post_meta($postId, 'acf_layout_editor_content', base64_encode(serialize($value)));
+            acf_update_metadata($postId, 'acf_layout_editor_content', base64_encode(serialize($value)));
 
             $check = false;
         }
@@ -82,6 +86,14 @@ class LayoutEditor {
         }
 
         return $reference;
+    }
+
+    public function loadMeta($meta, $postId) {
+        if ($acfLayoutEditorContent = get_post_meta($postId, 'acf_layout_editor_content', true)) {
+            $meta['acf_layout_editor_content'] = $acfLayoutEditorContent;
+        }
+
+        return $meta;
     }
 
     public function makeRowFields()
