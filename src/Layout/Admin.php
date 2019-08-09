@@ -60,6 +60,7 @@ class Admin {
 
                 function acfResetFieldNames(wrapper) {
                     $(wrapper).parents('.acf-row').find('[name^="acf[field_"]').each(function() {
+                        if ($(this).closest('.clones').length > 0) return;
 
                         var field_name = getFieldName(this);
 
@@ -75,9 +76,9 @@ class Admin {
                     while($(currentElement).parents('[data-key], [data-id]').length > 0) {
                         var currentElement = $(currentElement).parents('[data-key], [data-id]').first();
 
-                        if (currentElement.data('key')) {
+                        if (typeof currentElement.data('key') !== 'undefined') {
                             nameValue = '[' + currentElement.data('key') + ']' + nameValue;
-                        } else if (currentElement.data('id')) {
+                        } else if (typeof currentElement.data('id') !== 'undefined') {
                             var id = currentElement.data('id');
 
                             if (typeof currentElement.data('altid') !== 'undefined') {
@@ -100,6 +101,7 @@ class Admin {
                     if (!nameValue.match(new RegExp(field_name_additional_key_regex + '$', 'g'))) {
                         nameValue += field_name_additional_key;
                     }
+
 
                     return 'acf' + nameValue;
                 }
