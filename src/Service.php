@@ -18,7 +18,7 @@ class Service extends AbstractServicePageBuilder {
             new Layout\Admin($this);
         }
 
-        new Layout\LayoutEditor($this);
+        new Layout\LayoutEditor();
 
         PostModel::macro('hasLayout', function () {
             return get_field('layout_enabled', $this->getId());
@@ -26,7 +26,7 @@ class Service extends AbstractServicePageBuilder {
         
         $service = $this;
         PostModel::macro('layout', function () use ($service) {
-            $renderer = new Layout\Renderer($service);
+            $renderer = new Layout\Renderer();
             return $renderer->renderLayout();
         });
 
@@ -41,20 +41,5 @@ class Service extends AbstractServicePageBuilder {
     public function onRegisterComponent($name, $componentClass)
     {
         $this->components[$name] = $componentClass;
-    }
-
-    public function getActiveRowComponent()
-    {   
-        $rowComponent = 'acflayout.row';
-        if(offbeat('components')->exists('row')) $rowComponent = 'row';
-
-        return $rowComponent;
-    }
-    public function getActiveComponentComponent()
-    {
-        $componentComponent = 'acflayout.component';
-        if(offbeat('components')->exists('component')) $componentComponent = 'component';
-
-        return $componentComponent;
     }
 }

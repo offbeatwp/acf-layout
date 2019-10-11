@@ -15,7 +15,7 @@ class AcfLayoutComponentRepository {
         }
 
         $acfLayoutService = offbeat()->getService(\OffbeatWP\AcfLayout\Service::class);
-        $componentComponent = offbeat('components')->get($acfLayoutService->getActiveComponentComponent());
+        $componentComponent = offbeat('components')->get($this->getActiveComponentComponent());
 
         $components = [];
 
@@ -79,4 +79,19 @@ class AcfLayoutComponentRepository {
 
         return $this->layouts;
     }
+
+    public function getActiveRowComponent()
+    {   
+        $rowComponent = 'acflayout.row';
+        if(offbeat('components')->exists('row')) $rowComponent = 'row';
+
+        return $rowComponent;
+    }
+    public function getActiveComponentComponent()
+    {
+        $componentComponent = 'acflayout.component';
+        if(offbeat('components')->exists('component')) $componentComponent = 'component';
+
+        return $componentComponent;
+    }    
 }

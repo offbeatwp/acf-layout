@@ -7,6 +7,8 @@ class Admin {
         add_action('admin_init',    [$this, 'disableEditorWhenLayoutIsActive'], 99);
         add_action('acf/input/admin_head', [$this, 'rdsn_acf_repeater_collapse']);
 
+        add_filter('acf/field_wrapper_attributes', [$this, 'setDataInputName'], 10, 2);
+
         add_action('acf/input/admin_footer', [$this,'acfDragNDropFlexibleLayoutsBetweenRepeaters']);
 
         add_action('admin_enqueue_scripts', [$this, 'enqueueScripts'], 999);
@@ -24,6 +26,15 @@ class Admin {
         ) {
             remove_post_type_support(get_post_type($_GET['post']), 'editor');
         }
+    }
+
+    public function setDataInputName($wrapper, $field)
+    {
+        $inputKey = preg_replace('#.*\[([^\]]+)\]$#misU', '$1', $field['name']);
+
+        $wrapper['data-input-key'] = $inputKey;
+        
+        return $wrapper;
     }
 
     public function enqueueScripts()
@@ -73,11 +84,11 @@ class Admin {
                     var nameValue = '';
                     var isFirstId = true;
 
-                    while($(currentElement).parents('[data-key], [data-id]').length > 0) {
-                        var currentElement = $(currentElement).parents('[data-key], [data-id]').first();
+                    while($(currentElement).parents('[data-input-key], [data-id]').length > 0) {
+                        var currentElement = $(currentElement).parents('[data-input-key], [data-id]').first();
 
-                        if (typeof currentElement.data('key') !== 'undefined') {
-                            nameValue = '[' + currentElement.data('key') + ']' + nameValue;
+                        if (typeof currentElement.data('input-key') !== 'undefined') {
+                            nameValue = '[' + currentElement.data('input-key') + ']' + nameValue;
                         } else if (typeof currentElement.data('id') !== 'undefined') {
                             var id = currentElement.data('id');
 

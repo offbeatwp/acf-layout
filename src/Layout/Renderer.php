@@ -1,14 +1,11 @@
 <?php
 namespace OffbeatWP\AcfLayout\Layout;
 
+use OffbeatWP\AcfLayout\Repositories\AcfLayoutComponentRepository;
+
 class Renderer
 {
     protected $postId;
-    protected $service;
-
-    public function __construct ($service) {
-        $this->service = $service;
-    }
 
     public function renderLayout()
     {
@@ -18,23 +15,23 @@ class Renderer
         $inLoop  = in_the_loop();
 
         if ($enabled && $inLoop) {
-            $content = $this->renderRows();
+            $content = $this->renderRows(get_field('layout_row'));
         }
 
         return $content;
     }
 
-    public function renderRows()
+    public function renderRows($layoutFields)
     {
         $content           = '';
         $layoutFieldsIndex = 0;
-        $layoutFields      = get_field('layout_row');
 
         if (have_rows('layout_row')) {
             while (have_rows('layout_row')) {
                 the_row();
 
                 $rowSettings = $this->getFields($layoutFields[$layoutFieldsIndex], ['component']);
+
                 $content .= $this->renderRow($rowSettings);
 
                 $layoutFieldsIndex++;
@@ -53,16 +50,19 @@ class Renderer
         if (have_rows('component')) {
             while (have_rows('component')) {
                 the_row();
+
                 $componentFields = $this->getFields($componentFieldGroups[$componentIndex], ['acf_fc_layout']);
+
                 $rowComponents[] = $this->renderComponent($componentFields);
 
                 $componentIndex++;
             }
         }
 
+
         $rowSettings['rowComponents'] = $rowComponents;
 
-        $rowComponent = $this->service->getActiveRowComponent();
+        $rowComponent = offbeat(AcfLayoutComponentRepository::class)->getActiveRowComponent();
 
         return offbeat('components')->render($rowComponent, $rowSettings);
     }
@@ -78,7 +78,10 @@ class Renderer
             $componentSettings['componentContent'] = __('Component does not exist', 'offbeatwp');
         }
 
-        $componentComponent = $this->service->getActiveComponentComponent();
+        $componentComponent = offbeat(AcfLayoutComponentRepository::class)->getActiveComponentComponent();
+
+        $componentSettings = json_encode($componentSettings);
+        $componentSettings = json_decode($componentSettings);
 
         return offbeat('components')->render($componentComponent, $componentSettings);
     }
@@ -97,12 +100,18 @@ class Renderer
                 $subFieldsIndex = 0;
                 $fieldObject    = get_sub_field_object($key);
 
+
                 if ($fieldObject['type'] == 'repeater') {
+
                     $repeaterFields = [];
+                    if (is_array($subFields)) {
+                        $subFields = array_values($subFields);
+                    }
+
                     while (have_rows($key)) {
                         the_row();
 
-                        $repeaterFields[] = (object) $this->getFields($subFields[$subFieldsIndex]);
+                        $repeaterFields[] = $this->getFields($subFields[$subFieldsIndex]);
 
                         $subFieldsIndex++;
                     }
@@ -111,13 +120,12 @@ class Renderer
                 } elseif ($fieldObject['type'] == 'group') {
                     while (have_rows($key)) {
                         the_row();
-
-                        $fields = array_merge($fields, $this->getFields($subFields, $ignoreKeys));
+                        $fields[$key] = $this->getFields($subFields, $ignoreKeys);
                     }
                 } else {
                     $fieldValue = get_sub_field($key);
 
-                    if (is_array($fieldValue)) $fieldValue = (object) $fieldValue;
+                    if (is_array($fieldValue)) $fieldValue = $fieldValue;
 
                     $fields[$key] = $fieldValue;
                 }

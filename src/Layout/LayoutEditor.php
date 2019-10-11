@@ -7,12 +7,8 @@ use OffbeatWP\AcfLayout\Repositories\AcfLayoutComponentRepository;
 
 class LayoutEditor {
 
-    protected $service;
-
-    public function __construct($service)
+    public function __construct()
     {
-        $this->service = $service;
-
         add_action('acf/init', function () {
             $this->make();
         }, 9999);
@@ -165,7 +161,7 @@ class LayoutEditor {
         ];
 
         $appearanceFields = [];
-        $rowComponent = offbeat('components')->get($this->service->getActiveRowComponent());
+        $rowComponent = offbeat(AcfLayoutComponentRepository::class)->getActiveRowComponent();
         if (method_exists($rowComponent, 'variations')) {
             $variations = collect($rowComponent::variations());
             $variations = $variations->map(function ($item, $key) {
