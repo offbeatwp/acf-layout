@@ -29,7 +29,7 @@ class Renderer
         if (have_rows('layout_row')) {
             while (have_rows('layout_row')) {
                 the_row();
-
+                $layoutFields = array_values($layoutFields);
                 $rowSettings = $this->getFields($layoutFields[$layoutFieldsIndex], ['component']);
 
                 $content .= $this->renderRow($rowSettings);
@@ -100,8 +100,9 @@ class Renderer
                 $subFieldsIndex = 0;
                 $fieldObject    = get_sub_field_object($key);
 
-
-                if ($fieldObject['type'] == 'repeater') {
+                if ($key == 'layout_row') {
+                    $fields['layout'] = $this->renderRows($subFields );
+                } elseif ($fieldObject['type'] == 'repeater') {
 
                     $repeaterFields = [];
                     if (is_array($subFields)) {
