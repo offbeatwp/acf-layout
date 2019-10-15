@@ -71,17 +71,17 @@ class Renderer
     {
         $componentName = get_row_layout();
 
+        $componentSettings = json_encode($componentSettings);
+        $componentSettings = json_decode($componentSettings);
+
         if (offbeat('components')->exists($componentName)) {
-            $componentSettings['context'] = 'row';
-            $componentSettings['componentContent'] = offbeat('components')->render($componentName, $componentSettings);
+            $componentSettings->context = 'row';
+            $componentSettings->componentContent = offbeat('components')->render($componentName, $componentSettings);
         } else {
-            $componentSettings['componentContent'] = __('Component does not exist', 'offbeatwp');
+            $componentSettings->componentContent = __('Component does not exist', 'offbeatwp');
         }
 
         $componentComponent = offbeat(AcfLayoutComponentRepository::class)->getActiveComponentComponent();
-
-        $componentSettings = json_encode($componentSettings);
-        $componentSettings = json_decode($componentSettings);
 
         return offbeat('components')->render($componentComponent, $componentSettings);
     }
