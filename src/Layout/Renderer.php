@@ -47,6 +47,9 @@ class Renderer
         $componentFieldGroups = get_sub_field('component');
         $componentIndex       = 0;
 
+        $rowSettings = json_encode($rowSettings);
+        $rowSettings = json_decode($rowSettings);
+
         if (have_rows('component')) {
             while (have_rows('component')) {
                 the_row();
@@ -59,8 +62,7 @@ class Renderer
             }
         }
 
-
-        $rowSettings['rowComponents'] = $rowComponents;
+        $rowSettings->rowComponents = $rowComponents;
 
         $rowComponent = offbeat(AcfLayoutComponentRepository::class)->getActiveRowComponent();
 
