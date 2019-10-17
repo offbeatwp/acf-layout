@@ -76,6 +76,10 @@ class Renderer
         $componentSettings = json_encode($componentSettings);
         $componentSettings = json_decode($componentSettings);
 
+        if (!is_object($componentSettings)) {
+            $componentSettings = (object) [];
+        }
+
         if (offbeat('components')->exists($componentName)) {
             $componentSettings->context = 'row';
             $componentSettings->componentContent = offbeat('components')->render($componentName, $componentSettings);
