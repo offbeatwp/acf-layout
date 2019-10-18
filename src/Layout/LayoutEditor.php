@@ -162,6 +162,8 @@ class LayoutEditor {
 
         $appearanceFields = [];
         $rowComponent = offbeat(AcfLayoutComponentRepository::class)->getActiveRowComponent();
+        $rowComponent = offbeat('components')->get($rowComponent);
+        
         if (method_exists($rowComponent, 'variations')) {
             $variations = collect($rowComponent::variations());
             $variations = $variations->map(function ($item, $key) {
