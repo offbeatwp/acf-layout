@@ -17,6 +17,8 @@ class LayoutEditor {
         add_filter('acf/pre_load_value', [$this, 'preLoadValue'], 10, 3);
         add_filter('acf/pre_load_reference', [$this, 'preLoadReference'], 10, 3);
         add_filter('acf/load_meta', [$this, 'loadMeta'], 10, 2);
+
+        add_filter('acfe/flexible/thumbnail/name=component', [$this, 'layoutThumbnail'], 10, 3);
     }
 
     public function preUpdateValue($check, $value, $postId, $field )
@@ -90,6 +92,17 @@ class LayoutEditor {
         }
 
         return $meta;
+    }
+
+    public function layoutThumbnail($thumbnail, $field, $layout) {
+        $classInfo = new \ReflectionClass(offbeat('components')->get($layout['name']));
+        $componentPath = dirname($classInfo->getFileName());
+
+        if (!file_exists($componentPath . '/assets/thumbnail.png')) return $thumbnail;
+
+        $componentUri = get_stylesheet_directory_uri() . str_replace(get_template_directory(), '', $componentPath);
+
+        return $componentUri . '/assets/thumbnail.png';
     }
 
     public function makeRowFields()
