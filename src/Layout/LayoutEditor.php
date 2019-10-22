@@ -121,7 +121,20 @@ class LayoutEditor {
                 'instructions' => '',
                 'required' => 0,
                 'conditional_logic' => 0,
-                'mc_acf_ft_true_false'=> 1,
+                'acfe_flexible_stylised_button' => 1,
+                'acfe_flexible_layouts_thumbnails' => 1,
+                'acfe_flexible_layouts_templates' => 0,
+                'acfe_flexible_layouts_placeholder' => 1,
+                'acfe_flexible_close_button' => 1,
+                'acfe_flexible_title_edition' => 0,
+                'acfe_flexible_copy_paste' => 1,
+                'acfe_flexible_modal_edition' => 1,
+                'acfe_flexible_modal' => array(
+                    'acfe_flexible_modal_enabled' => '1',
+                    'acfe_flexible_modal_title' => '',
+                    'acfe_flexible_modal_col' => '5',
+                    'acfe_flexible_modal_categories' => '1',
+                ),
                 'wrapper' => array(
                     'width' => '',
                     'class' => 'components-container',
@@ -162,6 +175,7 @@ class LayoutEditor {
 
         $appearanceFields = [];
         $rowComponent = offbeat(AcfLayoutComponentRepository::class)->getActiveRowComponent();
+
         if (method_exists($rowComponent, 'variations')) {
             $variations = collect($rowComponent::variations());
             $variations = $variations->map(function ($item, $key) {

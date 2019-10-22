@@ -65,6 +65,7 @@ class AcfLayoutComponentRepository {
                 'sub_fields' => $fields,
                 'min' => '',
                 'max' => '',
+                'acfe_flexible_category' => isset($componentSettings['category']) && $componentSettings['category'] ? $componentSettings['category'] : 'Basic',
             ];
         }
         
