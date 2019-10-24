@@ -76,6 +76,10 @@ class Admin {
                         var field_name = getFieldName(this);
 
                         $(this).attr('name', field_name);
+
+                        if ($(this).is('input[type="radio"], input[type="checkbox"]')) {
+                            $(this).prop('checked', true);
+                        }
                     });
                 }
 
