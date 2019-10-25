@@ -65,8 +65,8 @@ class Admin {
         <script type="text/javascript">
             
             (function($) {
-                $(document).on('change', '.acf-field-flexible-content', function () {
-                    acfResetFieldNames(this);
+                acf.add_action('sortstop', function( item, placeholder ){
+                    acfResetFieldNames($(item).closest('.acf-field-flexible-content').first());              
                 });
 
                 function acfResetFieldNames(wrapper) {
@@ -76,10 +76,6 @@ class Admin {
                         var field_name = getFieldName(this);
 
                         $(this).attr('name', field_name);
-
-                        if ($(this).is('input[type="radio"], input[type="checkbox"]')) {
-                            $(this).prop('checked', true);
-                        }
                     });
                 }
 
