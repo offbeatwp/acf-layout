@@ -65,7 +65,11 @@ class Admin {
         <script type="text/javascript">
             
             (function($) {
-                acf.add_action('sortstop', function( item, placeholder ){
+                acf.add_action('sortstop', function( item, placeholder ) {
+                    acfResetFieldNames($(item).closest('.acf-field-flexible-content').first());              
+                });
+
+                acf.add_action('hide', function( item ) {
                     acfResetFieldNames($(item).closest('.acf-field-flexible-content').first());              
                 });
 
