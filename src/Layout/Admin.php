@@ -69,7 +69,7 @@ class Admin {
                     acfResetFieldNames($(item).closest('.acf-field-flexible-content').first());              
                 });
 
-                acf.add_action('hide', function( item ) {
+                acf.add_action('append', function( item ) {
                     acfResetFieldNames($(item).closest('.acf-field-flexible-content').first());              
                 });
 
