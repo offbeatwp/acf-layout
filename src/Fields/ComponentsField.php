@@ -10,7 +10,7 @@ class ComponentsField extends AbstractField {
     public function __construct()
     {
         if (did_action('acf/init')) {
-            $this->layouts();
+            // $this->layouts();
             $this->attribute('button_label', __('Add component', 'offbeatwp'));
         }
     }
