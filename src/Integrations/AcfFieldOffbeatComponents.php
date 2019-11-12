@@ -262,7 +262,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		
 		// empty
 		if( empty($field['value']) ) {
-			$div['class'] .= ' -empty';
+			$div['class'] .= 'acf-flexible-content -empty';
 		}
 		
 		
@@ -320,20 +320,28 @@ class AcfFieldOffbeatComponents extends \acf_field {
 	*/
 	
 	function render_component(  ) {
-		
+		$component = offbeat('components')->get($_GET['component']);
+
+		$fieldsMapper = new \OffbeatWP\AcfCore\FieldsMapper($component::getForm());
+
 		// vars
 		$order = 0;
 		$el = 'div';
-		$sub_fields = $layout['sub_fields'];
+		$sub_fields = $fieldsMapper->map();
 		$id = ( $i === 'acfcloneindex' ) ? 'acfcloneindex' : "row-$i";
 		$prefix = $field['name'] . '[' . $id .  ']';
 		
 		
+		$layout = [
+			'display' => 'block',
+			'label' => $component::getName()
+		];
+
 		// div
 		$div = array(
-			'class'			=> 'component',
+			'class'			=> 'component layout',
 			'data-id'		=> $id,
-			'data-component'	=> $layout['name']
+			'data-component'	=> $component::getName()
 		);
 		
 		
@@ -377,7 +385,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		<a class="acf-icon -collapse small acf-js-tooltip" href="#" data-name="collapse-layout" title="<?php _e('Click to toggle','acf'); ?>"></a>
 	</div>
 	
-	Tralala
+
 <?php if( !empty($sub_fields) ): ?>
 	
 	<?php if( $layout['display'] == 'table' ): ?>

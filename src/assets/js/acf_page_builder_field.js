@@ -15,7 +15,7 @@
 		},
 		
 		$control: function(){
-			return this.$('.acf-field-offbeat-components:first');
+			return this.$('.acf-flexible-content:first');
 		},
 		
 		$layoutsWrap: function(){
@@ -23,26 +23,14 @@
 		},
 		
 		$layouts: function(){
-			return this.$('.acf-field-offbeat-components:first > .values > .layout');
+			return this.$('.acf-flexible-content:first > .values > .component');
 		},
 		
 		$layout: function( index ){
-			return this.$('.acf-field-offbeat-components:first > .values > .layout:eq(' + index + ')');
+			return this.$('.acf-flexible-content:first > .values > .component:eq(' + index + ')');
 		},
 		
-		$clonesWrap: function(){
-			return this.$('.acf-field-offbeat-components:first > .clones');
-		},
-		
-		$clones: function(){
-			return this.$('.acf-field-offbeat-components:first > .clones  > .layout');
-		},
-		
-		$clone: function( name ){
-			return this.$('.acf-field-offbeat-components:first > .clones  > .layout[data-layout="' + name + '"]');
-		},
-		
-		$actions: function(){
+        $actions: function(){
 			return this.$('.acf-actions:last');
 		},
 		
@@ -152,7 +140,7 @@
 			this.addCollapsed();
 			
 			// disable clone
-			acf.disable( this.$clonesWrap(), this.cid );
+			// acf.disable( this.$clonesWrap(), this.cid );
 						
 			// render
 			this.render();
@@ -165,7 +153,8 @@
 				$(this).find('.acf-fc-layout-order:first').html( i+1 );
 			});
 			
-			// empty
+            // empty
+
 			if( this.val() == 0 ) {
 				this.$control().addClass('-empty');
 			} else {
@@ -248,7 +237,7 @@
 
 					// add
 					this.add({
-						layout: $el.data('component'),
+						component: $el.data('component'),
 						before: $layout
 					});
 				},
@@ -275,7 +264,7 @@
 			// validate
 			if( !this.allowAdd() ) {
 				return false;
-			}
+            }
 
             
             // Load field HTML
@@ -283,7 +272,8 @@
             $.ajax({
                 url: ajaxurl,
                 data: {
-                    action: 'get_component_field_html'
+                    action: 'get_component_field_html',
+                    component: args.component
                 },
                 dataType: 'html',
                 success: function (html) {
@@ -296,12 +286,10 @@
 			var $el = acf.duplicate({
 				target: $(fieldHtml),
 				append: this.proxy(function( $el, $el2 ){
-					console.log($el2);
 					// append
 					if( args.before ) {
 						args.before.before( $el2 );
 					} else {
-                        console.log(this.$layoutsWrap());
 						this.$layoutsWrap().append( $el2 );
 					}
 					
