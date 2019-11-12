@@ -289,7 +289,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 				
 				
 				// // render
-				// $this->render_layout( $field, $layouts[ $value['acf_fc_layout'] ], $i, $value );
+				// $this->render_component($layouts[ $value['acf_fc_layout'] ], $i, $value );
 				
 			endforeach;
 			
@@ -319,7 +319,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 	*  @return	$post_id (int)
 	*/
 	
-	function render_component(  ) {
+	function render_component( $layout, $i, $value ) {
 		$component = offbeat('components')->get($_GET['component']);
 
 		$fieldsMapper = new \OffbeatWP\AcfCore\FieldsMapper($component::getForm());
@@ -995,7 +995,14 @@ class AcfFieldOffbeatComponents extends \acf_field {
 	
 	public function ajaxComponentFieldHtml()
 	{
-		$this->render_component();
+		$component = offbeat('components')->get($_GET['component']);
+
+		$layout = [
+			'display' => 'block',
+			'label' => $component::getName()
+		];
+
+		$this->render_component($layout, 'acfcloneindex', []);
 		exit;
 	}
 	

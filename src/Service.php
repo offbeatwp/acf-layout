@@ -19,9 +19,9 @@ class Service extends AbstractServicePageBuilder {
         
         add_action('admin_enqueue_scripts', [$this, 'adminEnqueueScripts'], 50);
 
-        // if (is_admin()) {
-        //     new Layout\Admin($this);
-        // }
+        if (is_admin()) {
+            new Layout\Admin($this);
+        }
 
         // new Layout\LayoutEditor();
 

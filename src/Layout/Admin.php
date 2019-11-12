@@ -11,7 +11,7 @@ class Admin {
 
         add_action('acf/input/admin_footer', [$this,'acfDragNDropFlexibleLayoutsBetweenRepeaters']);
 
-        add_action('admin_enqueue_scripts', [$this, 'enqueueScripts'], 999);
+        // add_action('admin_enqueue_scripts', [$this, 'enqueueScripts'], 999);
     }
 
     public  function disableEditorWhenLayoutIsActive()
@@ -66,11 +66,11 @@ class Admin {
             
             (function($) {
                 acf.add_action('sortstop', function( item, placeholder ) {
-                    acfResetFieldNames($(item).closest('.acf-field-flexible-content').first());              
+                    acfResetFieldNames($(item).closest('.acf-field-offbeat-components').first());              
                 });
 
                 acf.add_action('append', function( item ) {
-                    acfResetFieldNames($(item).closest('.acf-field-flexible-content').first());              
+                    acfResetFieldNames($(item).closest('.acf-field-offbeat-components').first());              
                 });
 
                 function acfResetFieldNames(wrapper) {
@@ -79,6 +79,8 @@ class Admin {
 
                         var field_name = getFieldName(this);
 
+                        var field_name = getFieldName(this);
+                        console.log();
                         $(this).attr('name', field_name);
                     });
                 }
