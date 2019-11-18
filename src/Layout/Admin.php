@@ -74,13 +74,8 @@ class Admin {
                 });
 
                 function acfResetFieldNames(wrapper) {
-                    $(wrapper).parents('.acf-row').find('[name^="acf[field_"]').each(function() {
-                        if ($(this).closest('.clones').length > 0) return;
-
+                    $(wrapper).find('[name^="acf[field_"]').each(function() {
                         var field_name = getFieldName(this);
-
-                        var field_name = getFieldName(this);
-                        console.log();
                         $(this).attr('name', field_name);
                     });
                 }
