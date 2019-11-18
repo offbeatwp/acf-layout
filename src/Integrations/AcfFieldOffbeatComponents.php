@@ -329,12 +329,12 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		$el = 'div';
 		$sub_fields = $fieldsMapper->map();
 		$id = ( $i === 'acfcloneindex' ) ? 'acfcloneindex' : "row-$i";
-		$prefix = $field['name'] . '[' . $id .  ']';
-		
+		$prefix = ( $i === 'acfcloneindex' ) ? 'acf' : $field['name'] . '[' . $id .  ']';
 		
 		$layout = [
 			'display' => 'block',
-			'label' => $component::getName()
+			'label' => $component::getName(),
+			'name' => $component::getSlug(),
 		];
 
 		// div
@@ -343,20 +343,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 			'data-id'		=> $id,
 			'data-component'	=> $component::getName()
 		);
-		
-		
-		// clone
-		if( is_numeric($i) ) {
-			
-			$order = $i + 1;
-			
-		} else {
-			
-			$div['class'] .= ' acf-clone';
-			
-		}
-		
-		
+
 		// display
 		if( $layout['display'] == 'table' ) {
 			
@@ -375,7 +362,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 ?>
 <div <?php echo acf_esc_attr($div); ?>>
 			
-	<?php acf_hidden_input(array( 'name' => $prefix.'[acf_fc_layout]', 'value' => $layout['name'] )); ?>
+	<?php acf_hidden_input(array( 'name' => $prefix.'[acf_component]', 'value' => $layout['name'] )); ?>
 	
 	<div class="acf-fc-layout-handle" title="<?php _e('Drag to reorder','acf'); ?>" data-name="collapse-layout"><?php echo $title; ?></div>
 	

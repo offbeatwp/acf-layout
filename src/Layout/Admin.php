@@ -74,7 +74,7 @@ class Admin {
                 });
 
                 function acfResetFieldNames(wrapper) {
-                    $(wrapper).find('[name^="acf[field_"]').each(function() {
+                    $(wrapper).find('[name^="acf["]').each(function() {
                         var field_name = getFieldName(this);
                         $(this).attr('name', field_name);
                     });
