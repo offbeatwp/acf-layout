@@ -284,6 +284,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 			
 			foreach( $field['value'] as $i => $value ):
 				
+				// var_dump($value);
 				// validate
 				// if( empty($layouts[ $value['acf_fc_layout'] ]) ) continue;
 				

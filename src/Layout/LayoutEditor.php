@@ -9,27 +9,27 @@ class LayoutEditor {
 
     public function __construct()
     {
-        add_action('acf/init', function () {
-            $this->make();
-        }, 9999);
+        // add_action('acf/init', function () {
+        //     $this->make();
+        // }, 9999);
 
         add_filter('acf/pre_update_value', [$this, 'preUpdateValue'], 10, 4);
         add_filter('acf/pre_load_value', [$this, 'preLoadValue'], 10, 3);
         add_filter('acf/pre_load_reference', [$this, 'preLoadReference'], 10, 3);
         add_filter('acf/load_meta', [$this, 'loadMeta'], 10, 2);
 
-        add_filter('acfe/flexible/thumbnail/name=component', [$this, 'layoutThumbnail'], 10, 3);
+        // add_filter('acfe/flexible/thumbnail/name=component', [$this, 'layoutThumbnail'], 10, 3);
     }
 
     public function preUpdateValue($check, $value, $postId, $field )
     {
         global $post;
 
-        if ($field['name'] === 'layout_row') {
+        if ($field['name'] === 'page_layout') {
 
             $value = $this->normalizeAcfInputField($value, true);
 
-            acf_update_metadata($postId, 'acf_layout_editor_content', base64_encode(serialize($value)));
+            acf_update_metadata($postId, 'acf_layout_builder', serialize($value));
 
             $check = false;
         }
@@ -62,11 +62,11 @@ class LayoutEditor {
 
     public function preLoadValue($value, $postId, $field)
     {
-        if ($field['name'] === 'layout_row') {
-            $layoutEditorContent = get_post_meta($postId, 'acf_layout_editor_content', true);
+        if ($field['name'] === 'page_layout') {
+            $layoutEditorContent = get_post_meta($postId, 'acf_layout_builder', true);
 
             if (!empty($layoutEditorContent)) {
-                if ($layoutEditorContentDecoded = unserialize(base64_decode($layoutEditorContent))) {
+                if ($layoutEditorContentDecoded = unserialize($layoutEditorContent)) {
                     return $layoutEditorContentDecoded;
                 } elseif ($layoutEditorContentDecoded = json_decode($layoutEditorContent, true)) {
                     return $layoutEditorContentDecoded;
@@ -79,15 +79,15 @@ class LayoutEditor {
 
     public function preLoadReference($reference, $fieldName, $postId)
     {
-        if ($fieldName === 'layout_row') {
-            return 'field_5c16d18ae5382';
+        if ($fieldName === 'page_layout') {
+            return 'field_5dc9d82d45c63';
         }
 
         return $reference;
     }
 
     public function loadMeta($meta, $postId) {
-        if ($acfLayoutEditorContent = get_post_meta($postId, 'acf_layout_editor_content', true)) {
+        if ($acfLayoutEditorContent = get_post_meta($postId, 'acf_layout_builder', true)) {
             $meta['acf_layout_editor_content'] = $acfLayoutEditorContent;
         }
 

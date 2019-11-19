@@ -23,7 +23,7 @@ class Service extends AbstractServicePageBuilder {
             new Layout\Admin($this);
         }
 
-        // new Layout\LayoutEditor();
+        new Layout\LayoutEditor();
 
         // PostModel::macro('hasLayout', function () {
         //     return get_field('layout_enabled', $this->getId());
