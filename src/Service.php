@@ -31,7 +31,7 @@ class Service extends AbstractServicePageBuilder {
             // return get_field('layout_enabled', $this->getId());
         });
         
-        PostModel::macro('layout', function () use ($service) {
+        PostModel::macro('layout', function () {
             $renderer = new Layout\Renderer();
             return $renderer->renderLayout();
         });

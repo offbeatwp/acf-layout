@@ -27,29 +27,12 @@ class Renderer
         $content           = '';
         $layoutFieldsIndex = 0;
 
-        var_dump(get_field('page_layout'));
+        $components = get_field('page_layout');
 
-        
-        if (have_rows('page_layout')) {
-            while (have_rows('page_layout')) {
-                the_row();
-
-                $row = get_row();
-
-                $this->renderComponent2();
-
-
-                // $row = get_row();
-
-                // $rowSettings = $this->getFields($layoutFields[$layoutFieldsIndex], ['component']);
-
-                // $content .= $this->renderRow($rowSettings);
-
-                // $layoutFieldsIndex++;
-            }
+        foreach($components as $component) {
+            $this->renderComponent2($component);
         }
-
-        return $content;
+        
     }
 
     public function getComponentName() {
@@ -58,13 +41,22 @@ class Renderer
         return $row['acf_component'];
     }
 
-    public function renderComponent2()
+    public function renderComponent2($component)
     {
-        $fields = $this->getAllComponentFields();
+        $component = json_encode($component);
+        $component = json_decode($component);
+        $componentName = $component->acf_component;
 
-        foreach ($fields as $field) {
-            // var_dump(get_sub_field($field));
+        if (offbeat('components')->exists($componentName)) {
+            $component->context = 'row';
+            $component->componentContent = offbeat('components')->render($componentName, $component);
+        } else {
+            $component->componentContent = __('Component does not exist', 'offbeatwp');
         }
+
+        $componentComponent = offbeat('acf_page_builder')->getActiveComponentComponent();
+
+        return offbeat('components')->render($componentComponent, $component);
     }
 
     public function getAllComponentFields()
@@ -105,7 +97,7 @@ class Renderer
 
         $rowSettings->rowComponents = $rowComponents;
 
-        $rowComponent = offbeat(AcfLayoutComponentRepository::class)->getActiveRowComponent();
+        $rowComponent = offbeat('acf_page_builder')->getActiveRowComponent();
 
         return offbeat('components')->render($rowComponent, $rowSettings);
     }
@@ -128,7 +120,7 @@ class Renderer
             $componentSettings->componentContent = __('Component does not exist', 'offbeatwp');
         }
 
-        $componentComponent = offbeat(AcfLayoutComponentRepository::class)->getActiveComponentComponent();
+        $componentComponent = offbeat('acf_page_builder')->getActiveComponentComponent();
 
         return offbeat('components')->render($componentComponent, $componentSettings);
     }
