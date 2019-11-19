@@ -34,7 +34,7 @@ class Admin {
 
         $wrapper['data-input-key'] = $inputKey;
         
-        $wrapper['class'] = str_replace('acf-field-offbeat-components', 'acf-field-offbeat-components acf-flexible-content', $wrapper['class']);
+        // $wrapper['class'] = str_replace('acf-field-offbeat-components', 'acf-field-offbeat-components acf-field-flexible-content', $wrapper['class']);
         
         return $wrapper;
     }

@@ -26,10 +26,10 @@ class LayoutEditor {
         global $post;
 
         if ($field['name'] === 'page_layout') {
-
+            error_log(print_r($value, true));
             $value = $this->normalizeAcfInputField($value, true);
 
-            acf_update_metadata($postId, 'acf_layout_builder', serialize($value));
+            acf_update_metadata($postId, 'acf_layout_builder', $value);
 
             $check = false;
         }
@@ -66,11 +66,7 @@ class LayoutEditor {
             $layoutEditorContent = get_post_meta($postId, 'acf_layout_builder', true);
 
             if (!empty($layoutEditorContent)) {
-                if ($layoutEditorContentDecoded = unserialize($layoutEditorContent)) {
-                    return $layoutEditorContentDecoded;
-                } elseif ($layoutEditorContentDecoded = json_decode($layoutEditorContent, true)) {
-                    return $layoutEditorContentDecoded;
-                }
+                return $layoutEditorContent;
             }
         }
 

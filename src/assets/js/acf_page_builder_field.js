@@ -19,7 +19,7 @@
 		},
 		
 		$layoutsWrap: function(){
-			return this.$('.values');
+			return this.$('.acf-flexible-content:first > .values');
 		},
 		
 		$layouts: function(){

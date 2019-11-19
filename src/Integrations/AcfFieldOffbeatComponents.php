@@ -260,6 +260,11 @@ class AcfFieldOffbeatComponents extends \acf_field {
 			$field['button_label'] = $this->defaults['button_label'];
 		}
 		
+
+		$div = array(
+			'class'		=> 'acf-flexible-content acf-offbeat-components',
+		);
+
 		// empty
 		if( empty($field['value']) ) {
 			$div['class'] .= 'acf-flexible-content -empty';
@@ -269,6 +274,8 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		// no value message
 		$no_value_message = __('Click the "%s" button below to start creating your layout','acf');
 		// $no_value_message = apply_filters('acf/fields/flexible_content/no_value_message', $no_value_message, $field);
+
+		var_dump($field['value']);
 
 ?>
 <div <?php acf_esc_attr_e( $div ); ?>>
@@ -286,11 +293,11 @@ class AcfFieldOffbeatComponents extends \acf_field {
 				
 				// var_dump($value);
 				// validate
-				// if( empty($layouts[ $value['acf_fc_layout'] ]) ) continue;
+				if( empty($layouts[ $value['acf_component'] ]) ) continue;
 				
 				
 				// // render
-				// $this->render_component($layouts[ $value['acf_fc_layout'] ], $i, $value );
+				$this->render_component($layouts[ $value['acf_component'] ], $i, $value );
 				
 			endforeach;
 			
