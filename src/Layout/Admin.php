@@ -67,6 +67,10 @@ class Admin {
         <script type="text/javascript">
             
             (function($) {
+                acf.add_action('ready', function( item ) {
+                    acfResetFieldNames($('.acf-field-offbeat-components').first());              
+                });
+
                 acf.add_action('sortstop', function( item, placeholder ) {
                     acfResetFieldNames($(item).closest('.acf-field-offbeat-components').first());              
                 });
@@ -74,6 +78,7 @@ class Admin {
                 acf.add_action('append', function( item ) {
                     acfResetFieldNames($(item).closest('.acf-field-offbeat-components').first());              
                 });
+                
 
                 function acfResetFieldNames(wrapper) {
                     $(wrapper).find('[name^="acf["]').each(function() {

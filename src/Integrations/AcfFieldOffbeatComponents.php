@@ -275,8 +275,6 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		$no_value_message = __('Click the "%s" button below to start creating your layout','acf');
 		// $no_value_message = apply_filters('acf/fields/flexible_content/no_value_message', $no_value_message, $field);
 
-		var_dump($field['value']);
-
 ?>
 <div <?php acf_esc_attr_e( $div ); ?>>
 	
@@ -289,15 +287,15 @@ class AcfFieldOffbeatComponents extends \acf_field {
 	<div class="values">
 		<?php if( !empty($field['value']) ): 
 			
+			error_log(print_r($field['value'], true));
+
 			foreach( $field['value'] as $i => $value ):
 				
-				// var_dump($value);
 				// validate
-				if( empty($layouts[ $value['acf_component'] ]) ) continue;
-				
-				
-				// // render
-				$this->render_component($layouts[ $value['acf_component'] ], $i, $value );
+				if( !($component = offbeat('components')->get($value['acf_component']))) continue;
+
+				// render
+				$this->render_component($value['acf_component'], $i, $value );
 				
 			endforeach;
 			
@@ -328,7 +326,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 	*/
 	
 	function render_component( $layout, $i, $value ) {
-		$component = offbeat('components')->get($_GET['component']);
+		$component = offbeat('components')->get($layout);
 
 		$fieldsMapper = new \OffbeatWP\AcfCore\FieldsMapper($component::getForm());
 
@@ -337,7 +335,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		$el = 'div';
 		$sub_fields = $fieldsMapper->map();
 		$id = ( $i === 'acfcloneindex' ) ? 'acfcloneindex' : "row-$i";
-		$prefix = ( $i === 'acfcloneindex' ) ? 'acf' : $field['name'] . '[' . $id .  ']';
+		$prefix = 'acf';
 		
 		$layout = [
 			'display' => 'block',
@@ -368,20 +366,23 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		reset_rows();
 		
 ?>
+
 <div <?php echo acf_esc_attr($div); ?>>
 			
 	<?php acf_hidden_input(array( 'name' => $prefix.'[acf_component]', 'value' => $layout['name'] )); ?>
 	
-	<div class="acf-fc-layout-handle" title="<?php _e('Drag to reorder','acf'); ?>" data-name="collapse-layout"><?php echo $title; ?></div>
+	<div class="acf-fc-layout-handle" title="<?php _e('Drag to reorder','acf'); ?>" data-name="collapse-component"><?php echo $title; ?></div>
 	
 	<div class="acf-fc-layout-controls">
-		<a class="acf-icon -plus small light acf-js-tooltip" href="#" data-name="add-layout" title="<?php _e('Add layout','acf'); ?>"></a>
-		<a class="acf-icon -minus small light acf-js-tooltip" href="#" data-name="remove-layout" title="<?php _e('Remove layout','acf'); ?>"></a>
-		<a class="acf-icon -collapse small acf-js-tooltip" href="#" data-name="collapse-layout" title="<?php _e('Click to toggle','acf'); ?>"></a>
+		<a class="acf-icon -plus small light acf-js-tooltip" href="#" data-name="add-component" title="<?php _e('Add layout','acf'); ?>"></a>
+		<a class="acf-icon -minus small light acf-js-tooltip" href="#" data-name="remove-component" title="<?php _e('Remove layout','acf'); ?>"></a>
+		<a class="acf-icon -collapse small acf-js-tooltip" href="#" data-name="collapse-component" title="<?php _e('Click to toggle','acf'); ?>"></a>
 	</div>
 	
 
-<?php if( !empty($sub_fields) ): ?>
+<?php 
+
+if( !empty($sub_fields) ): ?>
 	
 	<?php if( $layout['display'] == 'table' ): ?>
 	<table class="acf-table">
@@ -992,12 +993,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 	{
 		$component = offbeat('components')->get($_GET['component']);
 
-		$layout = [
-			'display' => 'block',
-			'label' => $component::getName()
-		];
-
-		$this->render_component($layout, 'acfcloneindex', []);
+		$this->render_component($_GET['component'], 'acfcloneindex', []);
 		exit;
 	}
 	

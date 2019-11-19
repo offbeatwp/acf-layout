@@ -2,6 +2,7 @@
 namespace OffbeatWP\AcfLayout;
 
 use OffbeatWP\Services\AbstractServicePageBuilder;
+use OffbeatWP\Content\Post\PostModel;
 
 class Service extends AbstractServicePageBuilder {
 
@@ -25,15 +26,15 @@ class Service extends AbstractServicePageBuilder {
 
         new Layout\LayoutEditor();
 
-        // PostModel::macro('hasLayout', function () {
-        //     return get_field('layout_enabled', $this->getId());
-        // });
+        PostModel::macro('hasLayout', function () {
+            return true;
+            // return get_field('layout_enabled', $this->getId());
+        });
         
-        // $service = $this;
-        // PostModel::macro('layout', function () use ($service) {
-        //     $renderer = new Layout\Renderer();
-        //     return $renderer->renderLayout();
-        // });
+        PostModel::macro('layout', function () use ($service) {
+            $renderer = new Layout\Renderer();
+            return $renderer->renderLayout();
+        });
 
         // offbeat('components')->register('acflayout.row', Components\Row\Row::class);
         // offbeat('components')->register('acflayout.component', Components\Component\Component::class);

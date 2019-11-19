@@ -11,12 +11,13 @@ class Renderer
     {
         $this->postId = get_the_ID();
 
-        $enabled = get_field('layout_enabled', $this->postId);
-        $inLoop  = in_the_loop();
+        // $enabled = get_field('layout_enabled', $this->postId);
+        // $inLoop  = in_the_loop();
 
-        if ($enabled && $inLoop) {
-            $content = $this->renderRows(get_field('layout_row'));
-        }
+        // if ($enabled && $inLoop) {
+            $content = $this->renderRows(get_field('page_layout'));
+            // var_dump(get_field('page_layout'));
+        // }
 
         return $content;
     }
@@ -26,15 +27,24 @@ class Renderer
         $content           = '';
         $layoutFieldsIndex = 0;
 
-        if (have_rows('layout_row')) {
-            while (have_rows('layout_row')) {
+        // var_dump($layoutFields);
+
+        if (have_rows('page_layout')) {
+            while (have_rows('page_layout')) {
                 the_row();
-                $layoutFields = array_values($layoutFields);
-                $rowSettings = $this->getFields($layoutFields[$layoutFieldsIndex], ['component']);
 
-                $content .= $this->renderRow($rowSettings);
+                $row = get_row();
 
-                $layoutFieldsIndex++;
+                var_dump(get_sub_field('component'));
+
+                echo "<br><br>";
+
+                // $layoutFields = array_values($layoutFields);
+                // $rowSettings = $this->getFields($layoutFields[$layoutFieldsIndex], ['component']);
+
+                // $content .= $this->renderRow($rowSettings);
+
+                // $layoutFieldsIndex++;
             }
         }
 
