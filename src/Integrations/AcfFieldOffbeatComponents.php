@@ -732,7 +732,11 @@ if( !empty($sub_fields) ): ?>
 			if (!empty($sub_fields)) foreach($sub_fields as $sub_field) {
 				if(!isset($value[$i][$sub_field['key']])) continue;
 
-				$formattedValue[$i][$sub_field['name']] = acf_format_value( $value[$i][$sub_field['key']], $post_id, $sub_field );
+								
+				// update $sub_field name
+				$sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
+
+				$formattedValue[$i][$sub_field['_name']] = acf_format_value( $value[$i][$sub_field['key']], $post_id, $sub_field );
 			}			
 		}
 
