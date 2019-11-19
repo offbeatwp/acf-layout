@@ -30,7 +30,7 @@ class Renderer
         $components = get_field('page_layout');
 
         foreach($components as $component) {
-            $this->renderComponent2($component);
+            echo $this->renderComponent2($component);
         }
         
     }

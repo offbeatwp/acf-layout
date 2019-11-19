@@ -713,7 +713,7 @@ if( !empty($sub_fields) ): ?>
 	
 	function format_value( $value, $post_id, $field ) {
 		$formattedValue = [];
-
+		
 		// loop over rows
 		foreach( array_keys($value) as $i ) {
 			
@@ -728,13 +728,14 @@ if( !empty($sub_fields) ): ?>
 			
 			$sub_fields = $fieldsMapper->map();
 
+
 			if (!empty($sub_fields)) foreach($sub_fields as $sub_field) {
 				if(!isset($value[$i][$sub_field['key']])) continue;
 
 				$formattedValue[$i][$sub_field['name']] = acf_format_value( $value[$i][$sub_field['key']], $post_id, $sub_field );
 			}			
 		}
-				
+
 		// return
 		return $formattedValue;
 	}
