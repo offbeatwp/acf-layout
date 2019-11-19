@@ -27,19 +27,20 @@ class Renderer
         $content           = '';
         $layoutFieldsIndex = 0;
 
-        // var_dump($layoutFields);
+        var_dump(get_field('page_layout'));
 
+        
         if (have_rows('page_layout')) {
             while (have_rows('page_layout')) {
                 the_row();
 
                 $row = get_row();
 
-                var_dump(get_sub_field('component'));
+                $this->renderComponent2();
 
-                echo "<br><br>";
 
-                // $layoutFields = array_values($layoutFields);
+                // $row = get_row();
+
                 // $rowSettings = $this->getFields($layoutFields[$layoutFieldsIndex], ['component']);
 
                 // $content .= $this->renderRow($rowSettings);
@@ -50,6 +51,36 @@ class Renderer
 
         return $content;
     }
+
+    public function getComponentName() {
+        $row = get_row();
+
+        return $row['acf_component'];
+    }
+
+    public function renderComponent2()
+    {
+        $fields = $this->getAllComponentFields();
+
+        foreach ($fields as $field) {
+            // var_dump(get_sub_field($field));
+        }
+    }
+
+    public function getAllComponentFields()
+    {
+		$component = offbeat('components')->get($this->getComponentName());
+
+        $fieldsMapper = new \OffbeatWP\AcfCore\FieldsMapper($component::getForm());
+        
+        $keys = wp_list_pluck($fieldsMapper->map(), 'name');
+        $keys = array_filter($keys);
+
+        return $keys;
+    }
+
+
+
 
     public function renderRow($rowSettings)
     {

@@ -213,29 +213,19 @@ class AcfFieldOffbeatComponents extends \acf_field {
 	*  @return	$post_id (int)
 	*/
 	function get_sub_field( $sub_field, $id, $field ) {
-		
-		// Get active layout.
-		$active = get_row_layout();
-		
-		// Loop over layouts.
-		if( $field['layouts'] ) {
-			foreach( $field['layouts'] as $layout ) {
-				
-				// Restict to active layout if within a have_rows() loop.
-				if( $active && $active !== $layout['name'] ) {
-					continue;
-				}
-				
-				// Check sub fields.
-				if( $layout['sub_fields'] ) {
-					$sub_field = acf_search_fields( $id, $layout['sub_fields'] );
-					if( $sub_field ) {
-						break;
-					}
-				}
-			}
-		}
-				
+
+		$row = get_row();
+		$componentName = $row['acf_component'];
+
+		$component = offbeat('components')->get($componentName);
+
+		$fieldsMapper = new \OffbeatWP\AcfCore\FieldsMapper($component::getForm());
+
+
+		$sub_fields = $fieldsMapper->map();
+
+		$sub_field = acf_search_fields( $id, $sub_fields );
+
 		// return
 		return $sub_field;
 	}
@@ -722,72 +712,31 @@ if( !empty($sub_fields) ): ?>
 	*/
 	
 	function format_value( $value, $post_id, $field ) {
-		
-		// bail early if no value
-		if( empty($value) || empty($field['layouts']) ) {
-			
-			return false;
-			
-		}
-		
-		
-		// sort layouts into names
-		$layouts = array();
-		foreach( $field['layouts'] as $k => $layout ) {
-		
-			$layouts[ $layout['name'] ] = $layout['sub_fields'];
-			
-		}
-		
-		
+		$formattedValue = [];
+
 		// loop over rows
 		foreach( array_keys($value) as $i ) {
 			
 			// get layout name
-			$l = $value[ $i ]['acf_fc_layout'];
+			$componentName = $value[ $i ]['acf_component'];
+			$formattedValue[$i] = [];
+			$formattedValue[$i]['acf_component'] = $componentName;
+
+			$component = offbeat('components')->get($componentName);
+
+			$fieldsMapper = new \OffbeatWP\AcfCore\FieldsMapper($component::getForm());
 			
-			
-			// bail early if layout deosnt exist
-			if( empty($layouts[ $l ]) ) continue;
-			
-			
-			// get layout
-			$layout = $layouts[ $l ];
-			
-			
-			// loop through sub fields
-			foreach( array_keys($layout) as $j ) {
-				
-				// get sub field
-				$sub_field = $layout[ $j ];
-				
-				
-				// bail ealry if no name (tab)
-				if( acf_is_empty($sub_field['name']) ) continue;
-				
-				
-				// extract value
-				$sub_value = acf_extract_var( $value[ $i ], $sub_field['key'] );
-				
-				
-				// update $sub_field name
-				$sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
-					
-				
-				// format value
-				$sub_value = acf_format_value( $sub_value, $post_id, $sub_field );
-				
-				
-				// append to $row
-				$value[ $i ][ $sub_field['_name'] ] = $sub_value;
-				
-			}
-			
+			$sub_fields = $fieldsMapper->map();
+
+			if (!empty($sub_fields)) foreach($sub_fields as $sub_field) {
+				if(!isset($value[$i][$sub_field['key']])) continue;
+
+				$formattedValue[$i][$sub_field['name']] = acf_format_value( $value[$i][$sub_field['key']], $post_id, $sub_field );
+			}			
 		}
-		
-		
+				
 		// return
-		return $value;
+		return $formattedValue;
 	}
 	
 	
