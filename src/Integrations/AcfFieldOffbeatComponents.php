@@ -276,8 +276,6 @@ class AcfFieldOffbeatComponents extends \acf_field {
 	
 	<div class="values">
 		<?php if( !empty($field['value']) ): 
-			
-			error_log(print_r($field['value'], true));
 
 			foreach( $field['value'] as $i => $value ):
 				
@@ -316,6 +314,8 @@ class AcfFieldOffbeatComponents extends \acf_field {
 	*/
 	
 	function render_component( $layout, $i, $value ) {
+		error_log($layout);
+
 		$component = offbeat('components')->get($layout);
 
 		$fieldsMapper = new \OffbeatWP\AcfCore\FieldsMapper($component::getForm());
@@ -327,7 +327,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		$id = ( $i === 'acfcloneindex' ) ? 'acfcloneindex' : "row-$i";
 		$prefix = 'acf';
 		
-		$layout = [
+		$acfLayout = [
 			'display' => 'block',
 			'label' => $component::getName(),
 			'name' => $component::getSlug(),
@@ -341,7 +341,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		);
 
 		// display
-		if( $layout['display'] == 'table' ) {
+		if( $acfLayout['display'] == 'table' ) {
 			
 			$el = 'td';
 			
@@ -349,7 +349,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		
 		
 		// title
-		$title = $this->get_layout_title( $field, $layout, $i, $value );
+		$title = $this->get_layout_title( $field, $acfLayout, $i, $value );
 		
 		
 		// remove row
@@ -359,7 +359,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 
 <div <?php echo acf_esc_attr($div); ?>>
 			
-	<?php acf_hidden_input(array( 'name' => $prefix.'[acf_component]', 'value' => $layout['name'] )); ?>
+	<?php acf_hidden_input(array( 'name' => $prefix.'[acf_component]', 'value' => $layout )); ?>
 	
 	<div class="acf-fc-layout-handle" title="<?php _e('Drag to reorder','acf'); ?>" data-name="collapse-component"><?php echo $title; ?></div>
 	
@@ -374,7 +374,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 
 if( !empty($sub_fields) ): ?>
 	
-	<?php if( $layout['display'] == 'table' ): ?>
+	<?php if( $acfLayout['display'] == 'table' ): ?>
 	<table class="acf-table">
 		
 		<thead>
@@ -420,7 +420,7 @@ if( !empty($sub_fields) ): ?>
 		<tbody>
 			<tr class="acf-row">
 	<?php else: ?>
-	<div class="acf-fields <?php if($layout['display'] == 'row'): ?>-left<?php endif; ?>">
+	<div class="acf-fields <?php if($acfLayout['display'] == 'row'): ?>-left<?php endif; ?>">
 	<?php endif; ?>
 	
 		<?php
@@ -453,7 +453,7 @@ if( !empty($sub_fields) ): ?>
 		
 		?>
 			
-	<?php if( $layout['display'] == 'table' ): ?>
+	<?php if( $acfLayout['display'] == 'table' ): ?>
 			</tr>
 		</tbody>
 	</table>
@@ -894,10 +894,10 @@ if( !empty($sub_fields) ): ?>
 
 		?>
 		<script type="text-html" class="tmpl-offbeat-components"><ul><?php 
-			foreach( offbeat('acf_page_builder')->getComponentsList() as $component ): 
+			foreach( offbeat('acf_page_builder')->getComponentsList() as $componentId => $component ): 
 					$atts = array(
 						'href'				=> '#',
-						'data-component'	=> $component::getSlug(),
+						'data-component'	=> $componentId,
 					);
 					
 					?><li><a <?php acf_esc_attr_e( $atts ); ?>><?php echo $component::getName(); ?></a></li><?php 

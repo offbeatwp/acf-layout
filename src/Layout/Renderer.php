@@ -15,22 +15,28 @@ class Renderer
         // $inLoop  = in_the_loop();
 
         // if ($enabled && $inLoop) {
-            $content = $this->renderRows(get_field('page_layout'));
+            $content = $this->renderRows();
             // var_dump(get_field('page_layout'));
         // }
 
         return $content;
     }
 
-    public function renderRows($layoutFields)
+    public function renderRows()
     {
         $content           = '';
         $layoutFieldsIndex = 0;
 
-        $components = get_field('page_layout');
+        var_dump(get_field('page_layout'));
 
-        foreach($components as $component) {
-            echo $this->renderComponent2($component);
+        if (have_rows('page_layout')) while(have_rows('page_layout')) {
+            the_row();
+            var_dump(get_sub_field('component'));
+        }
+
+        foreach($rows as $row) {
+            
+            // echo $this->renderComponent2($component);
         }
         
     }
@@ -51,7 +57,7 @@ class Renderer
             $component->context = 'row';
             $component->componentContent = offbeat('components')->render($componentName, $component);
         } else {
-            $component->componentContent = __('Component does not exist', 'offbeatwp');
+            $component->componentContent = __('Component does not exist (' . $componentName . ')', 'offbeatwp');
         }
 
         $componentComponent = offbeat('acf_page_builder')->getActiveComponentComponent();

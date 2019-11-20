@@ -26,7 +26,6 @@ class LayoutEditor {
         global $post;
 
         if ($field['name'] === 'page_layout') {
-            error_log(print_r($value, true));
             $value = $this->normalizeAcfInputField($value, true);
 
             acf_update_metadata($postId, 'acf_layout_builder', $value);
