@@ -68,15 +68,15 @@ class Admin {
             
             (function($) {
                 acf.add_action('ready', function( item ) {
-                    acfResetFieldNames($('.acf-field-offbeat-components').first());              
+                    acfResetFieldNames($('.page-layout-editor').first());              
                 });
 
                 acf.add_action('sortstop', function( item, placeholder ) {
-                    acfResetFieldNames($(item).closest('.acf-field-offbeat-components').first());              
+                    acfResetFieldNames($(item).closest('.page-layout-editor').first());              
                 });
 
                 acf.add_action('append', function( item ) {
-                    acfResetFieldNames($(item).closest('.acf-field-offbeat-components').first());              
+                    acfResetFieldNames($(item).closest('.page-layout-editor').first());              
                 });
                 
 
