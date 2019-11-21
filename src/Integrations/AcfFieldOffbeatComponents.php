@@ -314,8 +314,6 @@ class AcfFieldOffbeatComponents extends \acf_field {
 	*/
 	
 	function render_component( $layout, $i, $value ) {
-		error_log($layout);
-
 		$component = offbeat('components')->get($layout);
 
 		$fieldsMapper = new \OffbeatWP\AcfCore\FieldsMapper($component::getForm());
@@ -713,7 +711,7 @@ if( !empty($sub_fields) ): ?>
 	
 	function format_value( $value, $post_id, $field ) {
 		$formattedValue = [];
-		
+
 		// loop over rows
 		foreach( array_keys($value) as $i ) {
 			
@@ -732,7 +730,6 @@ if( !empty($sub_fields) ): ?>
 			if (!empty($sub_fields)) foreach($sub_fields as $sub_field) {
 				if(!isset($value[$i][$sub_field['key']])) continue;
 
-								
 				// update $sub_field name
 				$sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
 

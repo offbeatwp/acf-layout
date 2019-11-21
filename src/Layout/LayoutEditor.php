@@ -37,26 +37,29 @@ class LayoutEditor {
     }
 
     public function normalizeAcfInputField($values, $toIndexedArray = false) {
+        if (is_array($values)) {
+            $valueKeys = array_keys($values);
 
-        if ($toIndexedArray && is_array($values)) {
-            $values = array_values($values);
-        }
-
-        if (!empty($values) && is_array($values)) foreach ($values as $key => $value) {
-            $toIndexedArray = false;
-
-            $fieldObject = get_field_object($key);
-
-            if (is_array($fieldObject) && isset($fieldObject['type']) && in_array($fieldObject['type'], ['flexible_content', 'repeater'])) {
-                $toIndexedArray = true;
+            if ($this->isIndexedArray($valueKeys)) {
+                $values = array_values($values);
             }
 
-            $values[$key] = $this->normalizeAcfInputField($value, $toIndexedArray);
-        } elseif (is_string($values)) {
-            $values = stripslashes($values);
+            if (!empty($values)) foreach ($values as $valueKey => $value) {
+                $values[$valueKey] = $this->normalizeAcfInputField($value);
+            }
         }
 
         return $values;
+    }
+    
+    public function isIndexedArray($keys) {
+        if (!empty($keys)) foreach ($keys as $key) {
+            if (!is_numeric($key)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function preLoadValue($value, $postId, $field)
@@ -75,7 +78,7 @@ class LayoutEditor {
     public function preLoadReference($reference, $fieldName, $postId)
     {
         if ($fieldName === 'page_layout') {
-            return 'field_5dc9d82d45c63';
+            return 'field_5dd543a609ba3';
         }
 
         return $reference;

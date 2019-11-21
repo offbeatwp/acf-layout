@@ -12,31 +12,29 @@ class Renderer
         $this->postId = get_the_ID();
 
         // $enabled = get_field('layout_enabled', $this->postId);
-        // $inLoop  = in_the_loop();
+        $inLoop  = in_the_loop();
 
+
+        $rows = get_field('page_layout');
+        $rows = json_encode($rows);
+        $rows = json_decode($rows);
         // if ($enabled && $inLoop) {
-            $content = $this->renderRows();
+            $content = $this->renderRows($rows);
             // var_dump(get_field('page_layout'));
         // }
 
         return $content;
     }
 
-    public function renderRows()
+    public function renderRows($rows)
     {
-        $content           = '';
-        $layoutFieldsIndex = 0;
+        if (!empty($rows)) foreach($rows as $row) {
+            $components = $row->components;
 
-        var_dump(get_field('page_layout'));
+            if (!empty($components)) foreach ($components as $component) {
+                echo $this->renderComponent2($component);
+            }
 
-        if (have_rows('page_layout')) while(have_rows('page_layout')) {
-            the_row();
-            var_dump(get_sub_field('component'));
-        }
-
-        foreach($rows as $row) {
-            
-            // echo $this->renderComponent2($component);
         }
         
     }
@@ -49,8 +47,6 @@ class Renderer
 
     public function renderComponent2($component)
     {
-        $component = json_encode($component);
-        $component = json_decode($component);
         $componentName = $component->acf_component;
 
         if (offbeat('components')->exists($componentName)) {
@@ -111,9 +107,6 @@ class Renderer
     public function renderComponent($componentSettings)
     {
         $componentName = get_row_layout();
-
-        $componentSettings = json_encode($componentSettings);
-        $componentSettings = json_decode($componentSettings);
 
         if (!is_object($componentSettings)) {
             $componentSettings = (object) [];

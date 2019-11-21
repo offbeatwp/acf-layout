@@ -5,12 +5,13 @@ use OffbeatWP\Components\AbstractComponent;
 
 class Component extends AbstractComponent
 {
-    // public static function settings()
-    // {
-    //     return [
-    //         'form' => self::form()
-    //     ];
-    // }
+    public static function settings()
+    {
+        return [
+            'name' => 'Component',
+            'slug' => 'acflayout.component'
+        ];
+    }
 
     public function render($settings)
     {

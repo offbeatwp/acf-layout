@@ -3,6 +3,7 @@ namespace OffbeatWP\AcfLayout;
 
 use OffbeatWP\Services\AbstractServicePageBuilder;
 use OffbeatWP\Content\Post\PostModel;
+use OffbeatWP\Contracts\View;
 
 class Service extends AbstractServicePageBuilder {
 
@@ -12,7 +13,7 @@ class Service extends AbstractServicePageBuilder {
         'acf_page_builder' => Repositories\AcfPageBuilderRepository::class
     ];
 
-    public function afterRegister()
+    public function afterRegister(View $view)
     {
         add_action('acf/init', function () {
             include_once(dirname(__FILE__) . '/Integrations/AcfFieldOffbeatComponents.php');
@@ -35,6 +36,8 @@ class Service extends AbstractServicePageBuilder {
             $renderer = new Layout\Renderer();
             return $renderer->renderLayout();
         });
+
+        $view->registerGlobal('acflayout', new Helpers\AcfLayoutHelper());
 
         // offbeat('components')->register('acflayout.row', Components\Row\Row::class);
         // offbeat('components')->register('acflayout.component', Components\Component\Component::class);

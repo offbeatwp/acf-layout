@@ -45,6 +45,7 @@ class LayoutField extends AcfField
                         'key' => 'field_5dd5441909ba5',
                         'label' => 'Components',
                         'name' => 'components',
+                        '_name' => 'components',
                         'type' => 'offbeat_components',
                         'instructions' => '',
                         'required' => 0,
@@ -90,6 +91,7 @@ class LayoutField extends AcfField
                         'key' => 'field_5dd5445809ba7',
                         'label' => 'Appearance',
                         'name' => 'appearance',
+                        '_name' => 'appearance',
                         'type' => 'group',
                         'instructions' => '',
                         'required' => 0,
@@ -105,6 +107,7 @@ class LayoutField extends AcfField
                                 'key' => 'field_5dd5448809ba8',
                                 'label' => 'Width',
                                 'name' => 'width',
+                                '_name' => 'width',
                                 'type' => 'select',
                                 'instructions' => '',
                                 'required' => 0,
@@ -115,6 +118,7 @@ class LayoutField extends AcfField
                                     'id' => '',
                                 ),
                                 'choices' => array(
+
                                 ),
                                 'default_value' => array(
                                 ),
@@ -129,6 +133,7 @@ class LayoutField extends AcfField
                                 'key' => 'field_5dd5449509ba9',
                                 'label' => 'Row theme',
                                 'name' => 'row_theme',
+                                '_name' => 'row_theme',
                                 'type' => 'select',
                                 'instructions' => '',
                                 'required' => 0,
@@ -139,6 +144,7 @@ class LayoutField extends AcfField
                                     'id' => '',
                                 ),
                                 'choices' => array(
+                                    'default' => 'Default'
                                 ),
                                 'default_value' => array(
                                 ),
@@ -155,6 +161,7 @@ class LayoutField extends AcfField
                         'key' => 'field_5dd544cc09baa',
                         'label' => 'Margins',
                         'name' => 'margins',
+                        '_name' => 'margins',
                         'type' => 'group',
                         'instructions' => '',
                         'required' => 0,
@@ -170,6 +177,7 @@ class LayoutField extends AcfField
                                 'key' => 'field_5dd5455f09baf',
                                 'label' => 'Margin top',
                                 'name' => 'margin_top',
+                                '_name' => 'margin_top',
                                 'type' => 'select',
                                 'instructions' => '',
                                 'required' => 0,
@@ -180,6 +188,7 @@ class LayoutField extends AcfField
                                     'id' => '',
                                 ),
                                 'choices' => array(
+                                    'default' => 'Default'
                                 ),
                                 'default_value' => array(
                                 ),
@@ -194,6 +203,7 @@ class LayoutField extends AcfField
                                 'key' => 'field_5dd5456e09bb0',
                                 'label' => 'Margin bottom',
                                 'name' => 'margin_bottom',
+                                '_name' => 'margin_bottom',
                                 'type' => 'select',
                                 'instructions' => '',
                                 'required' => 0,
@@ -204,6 +214,7 @@ class LayoutField extends AcfField
                                     'id' => '',
                                 ),
                                 'choices' => array(
+                                    'default' => 'Default'
                                 ),
                                 'default_value' => array(
                                 ),
@@ -220,6 +231,7 @@ class LayoutField extends AcfField
                         'key' => 'field_5dd544da09bab',
                         'label' => 'Paddings',
                         'name' => 'paddings',
+                        '_name' => 'paddings',
                         'type' => 'group',
                         'instructions' => '',
                         'required' => 0,
@@ -235,6 +247,7 @@ class LayoutField extends AcfField
                                 'key' => 'field_5dd544fb09bad',
                                 'label' => 'Padding top',
                                 'name' => 'padding_top',
+                                '_name' => 'padding_top',
                                 'type' => 'select',
                                 'instructions' => '',
                                 'required' => 0,
@@ -245,6 +258,7 @@ class LayoutField extends AcfField
                                     'id' => '',
                                 ),
                                 'choices' => array(
+                                    'default' => 'Default'
                                 ),
                                 'default_value' => array(
                                 ),
@@ -259,6 +273,7 @@ class LayoutField extends AcfField
                                 'key' => 'field_5dd5454709bae',
                                 'label' => 'Padding bottom',
                                 'name' => 'padding_bottom',
+                                '_name' => 'padding_bottom',
                                 'type' => 'select',
                                 'instructions' => '',
                                 'required' => 0,
@@ -269,6 +284,7 @@ class LayoutField extends AcfField
                                     'id' => '',
                                 ),
                                 'choices' => array(
+                                    'default' => 'Default'
                                 ),
                                 'default_value' => array(
                                 ),
@@ -285,6 +301,7 @@ class LayoutField extends AcfField
                         'key' => 'field_5dd5458009bb1',
                         'label' => 'Other',
                         'name' => 'misc',
+                        '_name' => 'misc',
                         'type' => 'group',
                         'instructions' => '',
                         'required' => 0,
@@ -300,6 +317,7 @@ class LayoutField extends AcfField
                                 'key' => 'field_5dd5458b09bb2',
                                 'label' => 'ID',
                                 'name' => 'id',
+                                '_name' => 'id',
                                 'type' => 'text',
                                 'instructions' => '',
                                 'required' => 0,
@@ -319,6 +337,7 @@ class LayoutField extends AcfField
                                 'key' => 'field_5dd5459409bb3',
                                 'label' => 'Class',
                                 'name' => 'css_class',
+                                '_name' => 'css_class',
                                 'type' => 'text',
                                 'instructions' => '',
                                 'required' => 0,
