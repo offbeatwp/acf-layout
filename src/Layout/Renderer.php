@@ -1,7 +1,6 @@
 <?php
 namespace OffbeatWP\AcfLayout\Layout;
 
-use OffbeatWP\AcfLayout\Repositories\AcfLayoutComponentRepository;
 
 class Renderer
 {
