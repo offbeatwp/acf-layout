@@ -7,6 +7,6 @@ class AcfLayoutHelper {
     public function renderLayout($rows)
     {
         $renderer = new Renderer();
-        $renderer->renderRows($rows);
+        return $renderer->renderRows($rows);
     }
 }

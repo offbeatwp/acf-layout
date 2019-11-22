@@ -31,6 +31,7 @@ class Renderer
         $content           = '';
 
         if (!empty($rows)) foreach($rows as $row) {
+
             $content .= $this->renderRow($row);
         }
 
