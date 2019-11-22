@@ -413,31 +413,6 @@
 		
 		renderLayout: function( $layout ){
 			
-			// vars
-			var $input = $layout.children('input');
-			var prefix = $input.attr('name').replace('[acf_fc_layout]', '');
-			
-			// ajax data
-			var ajaxData = {
-				action: 	'acf/fields/flexible_content/layout_title',
-				field_key: 	this.get('key'),
-				i: 			$layout.index(),
-				layout:		$layout.data('layout'),
-				value:		acf.serialize( $layout, prefix )
-			};
-			
-			// ajax
-			$.ajax({
-		    	url: acf.get('ajaxurl'),
-		    	data: acf.prepareForAjax(ajaxData),
-				dataType: 'html',
-				type: 'post',
-				success: function( html ){
-					if( html ) {
-						$layout.children('.acf-fc-layout-handle').html( html );
-					}
-				}
-			});
 		},
 		
 		onUnload: function(){

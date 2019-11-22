@@ -42,9 +42,16 @@ class Service extends AbstractServicePageBuilder {
         // offbeat('components')->register('acflayout.row', Components\Row\Row::class);
         // offbeat('components')->register('acflayout.component', Components\Component\Component::class);
 
-        // if(offbeat('console')->isConsole()) {
-        //     offbeat('console')->register(Console\Install::class);
-        // }
+        if(offbeat('console')->isConsole()) {
+            offbeat('console')->register(Console\Install::class);
+            offbeat('console')->register(Console\CacheFields::class);
+        }
+
+        add_action('acf/init', function () {
+            $componentFields = get_option('acf_layout_builder_component_fields');
+
+            acf_add_local_fields( $componentFields );
+        });
     }
 
     public function onRegisterComponent($name, $componentClass)

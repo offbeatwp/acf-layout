@@ -316,13 +316,16 @@ class AcfFieldOffbeatComponents extends \acf_field {
 	function render_component( $layout, $i, $value ) {
 		$component = offbeat('components')->get($layout);
 
-		$fieldsMapper = new \OffbeatWP\AcfCore\FieldsMapper($component::getForm());
+		$componentClassName = explode('\\', $component);
+		$componentClassName = array_pop($componentClassName);
+
+		$fieldsMapper = new \OffbeatWP\AcfCore\FieldsMapper($component::getForm(), lcfirst($componentClassName));
 
 		// vars
 		$order = 0;
 		$el = 'div';
 		$sub_fields = $fieldsMapper->map();
-		$id = ( $i === 'acfcloneindex' ) ? 'acfcloneindex' : "row-$i";
+		$id = ( $i === 'acfcloneindex' ) ? 'acfcloneindex' : "row-$i-";
 		$prefix = 'acf';
 		
 		$acfLayout = [
@@ -335,7 +338,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		$div = array(
 			'class'			=> 'component layout',
 			'data-id'		=> $id,
-			'data-component'	=> $component::getName()
+			'data-component'	=> $component::getSlug()
 		);
 
 		// display
@@ -347,7 +350,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		
 		
 		// title
-		$title = $this->get_layout_title( $field, $acfLayout, $i, $value );
+		$title = $this->get_layout_title( $acfLayout, $i, $value );
 		
 		
 		// remove row
@@ -722,7 +725,10 @@ if( !empty($sub_fields) ): ?>
 
 			$component = offbeat('components')->get($componentName);
 
-			$fieldsMapper = new \OffbeatWP\AcfCore\FieldsMapper($component::getForm());
+			$componentClassName = explode('\\', $component);
+            $componentClassName = array_pop($componentClassName);
+
+			$fieldsMapper = new \OffbeatWP\AcfCore\FieldsMapper($component::getForm(), lcfirst($componentClassName));
 			
 			$sub_fields = $fieldsMapper->map();
 
@@ -1370,7 +1376,7 @@ if( !empty($sub_fields) ): ?>
 		
 		
 		// title
-		$title = $this->get_layout_title( $field, $layout, $options['i'], $options['value'] );
+		$title = $this->get_layout_title( $layout, $options['i'], $options['value'] );
 		
 		
 		// echo
@@ -1380,38 +1386,15 @@ if( !empty($sub_fields) ): ?>
 	}
 	
 	
-	function get_layout_title( $field, $layout, $i, $value ) {
-		
-		// vars
-		$rows = array();
-		$rows[ $i ] = $value;
-		
-		
-		// add loop
-		acf_add_loop(array(
-			'selector'	=> $field['name'],
-			'name'		=> $field['name'],
-			'value'		=> $rows,
-			'field'		=> $field,
-			'i'			=> $i,
-			'post_id'	=> 0,
-		));
-		
+	function get_layout_title( $layout, $i, $value ) {
 		
 		// vars
 		$title = $layout['label'];
 		
 		
 		// filters
-		$title = apply_filters('acf/fields/flexible_content/layout_title', 							$title, $field, $layout, $i);
-		$title = apply_filters('acf/fields/flexible_content/layout_title/name='.$field['_name'],	$title, $field, $layout, $i);
-		$title = apply_filters('acf/fields/flexible_content/layout_title/key='.$field['key'],		$title, $field, $layout, $i);
-		
-		
-		// remove loop
-		acf_remove_loop();
-		
-		
+		$title = apply_filters('acf/fields/offbeat_components/component_title', $title, $layout, $i);
+
 		// prepend order
 		$order = is_numeric($i) ? $i+1 : 0;
 		$title = '<span class="acf-fc-layout-order">' . $order . '</span> ' . $title;

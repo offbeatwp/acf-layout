@@ -16,6 +16,7 @@ class Renderer
 
 
         $rows = get_field('page_layout');
+
         $rows = json_encode($rows);
         $rows = json_decode($rows);
         // if ($enabled && $inLoop) {
@@ -47,6 +48,7 @@ class Renderer
 
     public function renderComponent2($component)
     {
+
         $componentName = $component->acf_component;
 
         if (offbeat('components')->exists($componentName)) {

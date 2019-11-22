@@ -68,7 +68,10 @@ class Admin {
             
             (function($) {
                 acf.add_action('ready', function( item ) {
-                    acfResetFieldNames($('.page-layout-editor').first());              
+                    var wrapper = $('.page-layout-editor').first();
+                    acfResetFieldNames(wrapper); 
+                    
+                    fixInputs(wrapper);
                 });
 
                 acf.add_action('sortstop', function( item, placeholder ) {
@@ -85,6 +88,29 @@ class Admin {
                         var field_name = getFieldName(this);
                         $(this).attr('name', field_name);
                     });
+                }
+
+                function fixInputs(wrapper) {
+                    $(wrapper).find('input:radio,input:checkbox').each(function() {
+                        
+                        if($(this).is('[checked="checked"]')) {
+                            $(this).attr('checked', 'checked');                        
+                        } else {
+                            $(this).attr('checked', false);
+                        }
+                    });
+                    
+                    $(wrapper).find('option').each(function(){
+                        
+                        if($(this).is('[selected="selected"]'))
+                            $(this).attr('selected', 'selected');
+                            
+                        else
+                            $(this).attr('selected', false);
+                        
+                    });
+        
+    
                 }
 
                 function getFieldName(fieldElement, doAltId) {
