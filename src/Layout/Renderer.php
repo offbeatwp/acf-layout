@@ -29,14 +29,13 @@ class Renderer
 
     public function renderRows($rows)
     {
+        $content           = '';
+
         if (!empty($rows)) foreach($rows as $row) {
-            $components = $row->components;
-
-            if (!empty($components)) foreach ($components as $component) {
-                echo $this->renderComponent2($component);
-            }
-
+            $content .= $this->renderRow($row);
         }
+
+        return $content;
         
     }
 
@@ -75,28 +74,13 @@ class Renderer
         return $keys;
     }
 
-
-
-
     public function renderRow($rowSettings)
     {
+        $components = $rowSettings->components;
         $rowComponents        = [];
-        $componentFieldGroups = get_sub_field('component');
-        $componentIndex       = 0;
 
-        $rowSettings = json_encode($rowSettings);
-        $rowSettings = json_decode($rowSettings);
-
-        if (have_rows('component')) {
-            while (have_rows('component')) {
-                the_row();
-
-                $componentFields = $this->getFields($componentFieldGroups[$componentIndex], ['acf_fc_layout']);
-
-                $rowComponents[] = $this->renderComponent($componentFields);
-
-                $componentIndex++;
-            }
+        if (!empty($components)) foreach ($components as $component) {
+            $rowComponents[] = $this->renderComponent2($component);
         }
 
         $rowSettings->rowComponents = $rowComponents;
