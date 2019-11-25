@@ -16,31 +16,23 @@
         /**
          * Reads the anchors from the current list and tries to create groups out of it.
          */
-        const re = new RegExp('^([^\(]+)\\((.+?)\\)$', 'gm');
         p.find('li a', p).each((_, anchor) => {
-            const text = $(anchor).text();
-            const labels = re.exec(text);
-            let itemlabel, grouplabel;
-            re.lastIndex = 0; // fuck this, resets the RegExp to work again on the next iteration
+            const itemLabel = $(anchor).text();
+            let groupLabel = $(anchor).data('category');
 
-            if (!labels) {
-                // defaults
-                itemlabel = text;
-                grouplabel = 'General';
-            } else {
-                itemlabel = labels[1];
-                grouplabel = labels[2];
+            if (!groupLabel) {
+                groupLabel = 'General';
             }
 
             const item = $(anchor).closest('li');
 
-            $(anchor).text(itemlabel);
+            $(anchor).text(itemLabel);
 
-            if (!groups[grouplabel]) {
-                groups[grouplabel] = []
+            if (!groups[groupLabel]) {
+                groups[groupLabel] = []
             }
 
-            groups[grouplabel].push(item.clone());
+            groups[groupLabel].push(item.clone());
         });
 
         let grouplabels = Object.keys(groups);
@@ -300,7 +292,7 @@
             return false;
         });
 
-        $(document).on('click', 'a[data-name="add-layout"]', (e) => {
+        $(document).on('click', 'a[data-name="add-component"]', (e) => {
             prepare(getCurrentPopup());
             attach(getCurrentPopup());
 

@@ -11,7 +11,7 @@ class Admin {
 
         add_action('acf/input/admin_footer', [$this,'acfDragNDropFlexibleLayoutsBetweenRepeaters']);
 
-        // add_action('admin_enqueue_scripts', [$this, 'enqueueScripts'], 999);
+        add_action('admin_enqueue_scripts', [$this, 'enqueueScripts'], 999);
     }
 
     public  function disableEditorWhenLayoutIsActive()

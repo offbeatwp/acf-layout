@@ -901,6 +901,7 @@ if( !empty($sub_fields) ): ?>
 					$atts = array(
 						'href'				=> '#',
 						'data-component'	=> $componentId,
+						'data-category'	    => $component::getCategory(),
 					);
 					
 					?><li><a <?php acf_esc_attr_e( $atts ); ?>><?php echo $component::getName(); ?></a></li><?php 
