@@ -26,7 +26,7 @@ class LayoutField extends AcfField
                 'button_label' => '',
                 'sub_fields' => array(
                     array(
-                        'key' => 'field_5dd543f709ba4',
+                        'key' => 'tab_components',
                         'label' => 'Components',
                         'name' => '',
                         'type' => 'tab',
@@ -42,7 +42,7 @@ class LayoutField extends AcfField
                         'endpoint' => 0,
                     ),
                     array(
-                        'key' => 'field_5dd5441909ba5',
+                        'key' => 'field_components',
                         'label' => 'Components',
                         'name' => 'components',
                         '_name' => 'components',
@@ -55,24 +55,12 @@ class LayoutField extends AcfField
                             'class' => '',
                             'id' => '',
                         ),
-                        'layouts' => array(
-                            'layout_5dd54421eca26' => array(
-                                'key' => 'layout_5dd54421eca26',
-                                'name' => '',
-                                'label' => '',
-                                'display' => 'block',
-                                'sub_fields' => array(
-                                ),
-                                'min' => '',
-                                'max' => '',
-                            ),
-                        ),
                         'min' => '',
                         'max' => '',
                         'button_label' => 'Add Component',
                     ),
                     array(
-                        'key' => 'field_5dd5442809ba6',
+                        'key' => 'tab_row_settings',
                         'label' => 'Row Settings',
                         'name' => '',
                         'type' => 'tab',
@@ -88,7 +76,7 @@ class LayoutField extends AcfField
                         'endpoint' => 0,
                     ),
                     array(
-                        'key' => 'field_5dd5445809ba7',
+                        'key' => 'group_row_appearance',
                         'label' => 'Appearance',
                         'name' => 'appearance',
                         '_name' => 'appearance',
@@ -104,7 +92,7 @@ class LayoutField extends AcfField
                         'layout' => 'block',
                         'sub_fields' => array(
                             array(
-                                'key' => 'field_5dd5448809ba8',
+                                'key' => 'field_row_appearance_width',
                                 'label' => 'Width',
                                 'name' => 'width',
                                 '_name' => 'width',
@@ -130,7 +118,7 @@ class LayoutField extends AcfField
                                 'placeholder' => '',
                             ),
                             array(
-                                'key' => 'field_5dd5449509ba9',
+                                'key' => 'field_row_appearance_row_theme',
                                 'label' => 'Row theme',
                                 'name' => 'row_theme',
                                 '_name' => 'row_theme',
@@ -158,7 +146,7 @@ class LayoutField extends AcfField
                         ),
                     ),
                     array(
-                        'key' => 'field_5dd544cc09baa',
+                        'key' => 'group_row_margins',
                         'label' => 'Margins',
                         'name' => 'margins',
                         '_name' => 'margins',
@@ -174,7 +162,7 @@ class LayoutField extends AcfField
                         'layout' => 'block',
                         'sub_fields' => array(
                             array(
-                                'key' => 'field_5dd5455f09baf',
+                                'key' => 'field_row_margins_margin_top',
                                 'label' => 'Margin top',
                                 'name' => 'margin_top',
                                 '_name' => 'margin_top',
@@ -200,7 +188,7 @@ class LayoutField extends AcfField
                                 'placeholder' => '',
                             ),
                             array(
-                                'key' => 'field_5dd5456e09bb0',
+                                'key' => 'field_row_margins_margin_bottom',
                                 'label' => 'Margin bottom',
                                 'name' => 'margin_bottom',
                                 '_name' => 'margin_bottom',
@@ -228,7 +216,7 @@ class LayoutField extends AcfField
                         ),
                     ),
                     array(
-                        'key' => 'field_5dd544da09bab',
+                        'key' => 'group_row_paddings',
                         'label' => 'Paddings',
                         'name' => 'paddings',
                         '_name' => 'paddings',
@@ -244,7 +232,7 @@ class LayoutField extends AcfField
                         'layout' => 'block',
                         'sub_fields' => array(
                             array(
-                                'key' => 'field_5dd544fb09bad',
+                                'key' => 'field_row_paddings_padding_top',
                                 'label' => 'Padding top',
                                 'name' => 'padding_top',
                                 '_name' => 'padding_top',
@@ -270,7 +258,7 @@ class LayoutField extends AcfField
                                 'placeholder' => '',
                             ),
                             array(
-                                'key' => 'field_5dd5454709bae',
+                                'key' => 'field_row_paddings_padding_bottom',
                                 'label' => 'Padding bottom',
                                 'name' => 'padding_bottom',
                                 '_name' => 'padding_bottom',
@@ -298,7 +286,7 @@ class LayoutField extends AcfField
                         ),
                     ),
                     array(
-                        'key' => 'field_5dd5458009bb1',
+                        'key' => 'group_row_misc',
                         'label' => 'Other',
                         'name' => 'misc',
                         '_name' => 'misc',
@@ -314,7 +302,7 @@ class LayoutField extends AcfField
                         'layout' => 'block',
                         'sub_fields' => array(
                             array(
-                                'key' => 'field_5dd5458b09bb2',
+                                'key' => 'field_row_misc_id',
                                 'label' => 'ID',
                                 'name' => 'id',
                                 '_name' => 'id',
@@ -334,7 +322,7 @@ class LayoutField extends AcfField
                                 'maxlength' => '',
                             ),
                             array(
-                                'key' => 'field_5dd5459409bb3',
+                                'key' => 'field_row_misc_css_class',
                                 'label' => 'Class',
                                 'name' => 'css_class',
                                 '_name' => 'css_class',

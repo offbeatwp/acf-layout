@@ -28,8 +28,7 @@ class Service extends AbstractServicePageBuilder {
         new Layout\LayoutEditor();
 
         PostModel::macro('hasLayout', function () {
-            return true;
-            // return get_field('layout_enabled', $this->getId());
+            return get_field('page_layout_editor_enabled', $this->getId());
         });
         
         PostModel::macro('layout', function () {
@@ -39,7 +38,7 @@ class Service extends AbstractServicePageBuilder {
 
         $view->registerGlobal('acflayout', new Helpers\AcfLayoutHelper());
 
-        // offbeat('components')->register('acflayout.row', Components\Row\Row::class);
+        // offbeat('components')->register(\'acflayout.row', Components\Row\Row::class);
         // offbeat('components')->register('acflayout.component', Components\Component\Component::class);
 
         if(offbeat('console')->isConsole()) {

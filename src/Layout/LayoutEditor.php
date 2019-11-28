@@ -3,15 +3,18 @@ namespace OffbeatWP\AcfLayout\Layout;
 
 use OffbeatWP\AcfCore\ComponentFields;
 use OffbeatWP\AcfCore\FieldsMapper;
+use OffbeatWP\AcfLayout\Fields\LayoutField;
 use OffbeatWP\AcfLayout\Repositories\AcfLayoutComponentRepository;
+use OffbeatWP\Form\Form;
 
 class LayoutEditor {
 
     public function __construct()
     {
-        // add_action('acf/init', function () {
-        //     $this->make();
-        // }, 9999);
+
+        add_action('acf/init', function () {
+            $this->make();
+        }, 9999);
 
         add_filter('acf/pre_update_value', [$this, 'preUpdateValue'], 10, 4);
         add_filter('acf/pre_load_value', [$this, 'preLoadValue'], 10, 3);
@@ -19,6 +22,73 @@ class LayoutEditor {
         add_filter('acf/load_meta', [$this, 'loadMeta'], 10, 2);
 
         // add_filter('acfe/flexible/thumbnail/name=component', [$this, 'layoutThumbnail'], 10, 3);
+    }
+
+    public function make() {
+        $form = new Form();
+        $form->add(LayoutField::make('page_layout', 'Layout'));
+        
+        $acfFieldMapper = new FieldsMapper($form);
+
+        $post_types = apply_filters('offbeat_acf_layouteditor_posttypes', ['page']);
+        $locations = [];
+
+        if (!empty($post_types)) foreach($post_types as $post_type) {
+            $locations[] = [[
+                'param' => 'post_type',
+                'operator' => '==',
+                'value' => $post_type,
+            ]];
+        }
+
+        $fields = [[
+            'key' => 'page_layout_editor_enabled',
+            'label' => __('Use Layout editor', 'offbeatwp'),
+            'name' => 'page_layout_editor_enabled',
+            'type' => 'true_false',
+            'instructions' => '',
+            'required' => 0,
+            'conditional_logic' => 0,
+            'wrapper' => array(
+                'width' => '',
+                'class' => '',
+                'id' => '',
+            ),
+            'message' => '',
+            'default_value' => 0,
+            'ui' => 0,
+            'ui_on_text' => '',
+            'ui_off_text' => '',
+        ]];
+
+        $layoutFields = $acfFieldMapper->map();
+        $layoutFields[0]['conditional_logic'] = [
+            [
+                [
+                    'field' => 'page_layout_editor_enabled',
+                    'operator' => '==',
+                    'value' => '1',
+                ],
+            ]
+        ];
+
+        $fields = array_merge($fields, $layoutFields);
+
+        acf_add_local_field_group(array(
+            'key' => 'group_page_layout',
+            'title' => 'Layout',
+            'fields' => $fields,
+            'location' => $locations,
+            'menu_order' => 0,
+            'position' => 'normal',
+            'style' => 'default',
+            'label_placement' => 'top',
+            'instruction_placement' => 'label',
+            'hide_on_screen' => '',
+            'active' => 1,
+            'description' => '',
+        ));
+
     }
 
     public function preUpdateValue($check, $value, $postId, $field )
@@ -78,7 +148,7 @@ class LayoutEditor {
     public function preLoadReference($reference, $fieldName, $postId)
     {
         if ($fieldName === 'page_layout') {
-            return 'field_5dd543a609ba3';
+            return 'field_page_layout';
         }
 
         return $reference;
@@ -92,418 +162,418 @@ class LayoutEditor {
         return $meta;
     }
 
-    public function layoutThumbnail($thumbnail, $field, $layout) {
-        $classInfo = new \ReflectionClass(offbeat('components')->get($layout['name']));
-        $componentPath = dirname($classInfo->getFileName());
+    // public function layoutThumbnail($thumbnail, $field, $layout) {
+    //     $classInfo = new \ReflectionClass(offbeat('components')->get($layout['name']));
+    //     $componentPath = dirname($classInfo->getFileName());
 
-        if (!file_exists($componentPath . '/assets/thumbnail.png')) return $thumbnail;
+    //     if (!file_exists($componentPath . '/assets/thumbnail.png')) return $thumbnail;
 
-        $componentUri = get_stylesheet_directory_uri() . str_replace(get_template_directory(), '', $componentPath);
+    //     $componentUri = get_stylesheet_directory_uri() . str_replace(get_template_directory(), '', $componentPath);
 
-        return $componentUri . '/assets/thumbnail.png';
-    }
+    //     return $componentUri . '/assets/thumbnail.png';
+    // }
 
-    public function makeRowFields()
-    {
-        $acfLayoutComponentRepository = offbeat(AcfLayoutComponentRepository::class);
+    // public function makeRowFields()
+    // {
+    //     $acfLayoutComponentRepository = offbeat(AcfLayoutComponentRepository::class);
 
-        $rowFields = [
-            array(
-                'key' => 'field_5c16d2ee4177f',
-                'label' => __('Components', 'offbeatwp'),
-                'name' => '',
-                'type' => 'tab',
-                'instructions' => '',
-                'required' => 0,
-                'conditional_logic' => 0,
-                'wrapper' => array(
-                    'width' => '',
-                    'class' => '',
-                    'id' => '',
-                ),
-                'placement' => 'top',
-                'endpoint' => 0,
-            ),
-            array(
-                'key' => 'field_5c16d191e5383',
-                'label' => __('Component', 'offbeatwp'),
-                'name' => 'component',
-                'type' => 'flexible_content',
-                'instructions' => '',
-                'required' => 0,
-                'conditional_logic' => 0,
-                'acfe_flexible_stylised_button' => 1,
-                'acfe_flexible_layouts_thumbnails' => 1,
-                'acfe_flexible_layouts_templates' => 0,
-                'acfe_flexible_layouts_placeholder' => 1,
-                'acfe_flexible_close_button' => 0,
-                'acfe_flexible_title_edition' => 0,
-                'acfe_flexible_copy_paste' => 1,
-                'acfe_flexible_modal_edition' => 0,
-                'acfe_flexible_modal' => array(
-                    'acfe_flexible_modal_enabled' => '0',
-                    'acfe_flexible_modal_title' => '',
-                    'acfe_flexible_modal_col' => '5',
-                    'acfe_flexible_modal_categories' => '1',
-                ),
-                'wrapper' => array(
-                    'width' => '',
-                    'class' => 'components-container',
-                    'id' => '',
-                ),
-                'layouts' => $acfLayoutComponentRepository->getLayouts(),
-                'button_label' => __('Add component', 'offbeatwp'),
-                'min' => '',
-                'max' => '',
-            ),
-        ];
+    //     $rowFields = [
+    //         array(
+    //             'key' => 'field_5c16d2ee4177f',
+    //             'label' => __('Components', 'offbeatwp'),
+    //             'name' => '',
+    //             'type' => 'tab',
+    //             'instructions' => '',
+    //             'required' => 0,
+    //             'conditional_logic' => 0,
+    //             'wrapper' => array(
+    //                 'width' => '',
+    //                 'class' => '',
+    //                 'id' => '',
+    //             ),
+    //             'placement' => 'top',
+    //             'endpoint' => 0,
+    //         ),
+    //         array(
+    //             'key' => 'field_5c16d191e5383',
+    //             'label' => __('Component', 'offbeatwp'),
+    //             'name' => 'component',
+    //             'type' => 'flexible_content',
+    //             'instructions' => '',
+    //             'required' => 0,
+    //             'conditional_logic' => 0,
+    //             'acfe_flexible_stylised_button' => 1,
+    //             'acfe_flexible_layouts_thumbnails' => 1,
+    //             'acfe_flexible_layouts_templates' => 0,
+    //             'acfe_flexible_layouts_placeholder' => 1,
+    //             'acfe_flexible_close_button' => 0,
+    //             'acfe_flexible_title_edition' => 0,
+    //             'acfe_flexible_copy_paste' => 1,
+    //             'acfe_flexible_modal_edition' => 0,
+    //             'acfe_flexible_modal' => array(
+    //                 'acfe_flexible_modal_enabled' => '0',
+    //                 'acfe_flexible_modal_title' => '',
+    //                 'acfe_flexible_modal_col' => '5',
+    //                 'acfe_flexible_modal_categories' => '1',
+    //             ),
+    //             'wrapper' => array(
+    //                 'width' => '',
+    //                 'class' => 'components-container',
+    //                 'id' => '',
+    //             ),
+    //             'layouts' => $acfLayoutComponentRepository->getLayouts(),
+    //             'button_label' => __('Add component', 'offbeatwp'),
+    //             'min' => '',
+    //             'max' => '',
+    //         ),
+    //     ];
 
-        $rowFields = array_merge($rowFields, $this->makeRowSettings());
+    //     $rowFields = array_merge($rowFields, $this->makeRowSettings());
 
-        return $rowFields;
-    }
+    //     return $rowFields;
+    // }
 
-    public function makeRowSettings()
-    {
-        $rowSettings = [
-            array(
-                'key' => 'field_5c16d30841780',
-                'label' => __('Row Settings', 'offbeatwp'),
-                'name' => '',
-                'type' => 'tab',
-                'instructions' => '',
-                'required' => 0,
-                'conditional_logic' => 0,
-                'wrapper' => array(
-                    'width' => '',
-                    'class' => '',
-                    'id' => '',
-                ),
-                'placement' => 'top',
-                'endpoint' => 0,
-            ),
-        ];
+    // public function makeRowSettings()
+    // {
+    //     $rowSettings = [
+    //         array(
+    //             'key' => 'field_5c16d30841780',
+    //             'label' => __('Row Settings', 'offbeatwp'),
+    //             'name' => '',
+    //             'type' => 'tab',
+    //             'instructions' => '',
+    //             'required' => 0,
+    //             'conditional_logic' => 0,
+    //             'wrapper' => array(
+    //                 'width' => '',
+    //                 'class' => '',
+    //                 'id' => '',
+    //             ),
+    //             'placement' => 'top',
+    //             'endpoint' => 0,
+    //         ),
+    //     ];
 
-        $appearanceFields = [];
-        $rowComponent = offbeat(AcfLayoutComponentRepository::class)->getActiveRowComponent();
-        $rowComponent = offbeat('components')->get($rowComponent);
+    //     $appearanceFields = [];
+    //     $rowComponent = offbeat(AcfLayoutComponentRepository::class)->getActiveRowComponent();
+    //     $rowComponent = offbeat('components')->get($rowComponent);
         
-        if (method_exists($rowComponent, 'variations')) {
-            $variations = collect($rowComponent::variations());
-            $variations = $variations->map(function ($item, $key) {
-                return $item['label'];
-            });
+    //     if (method_exists($rowComponent, 'variations')) {
+    //         $variations = collect($rowComponent::variations());
+    //         $variations = $variations->map(function ($item, $key) {
+    //             return $item['label'];
+    //         });
 
-            $appearanceFields[] = [
-                'key' => 'field_5c16d32c41789',
-                'label' => __('Width', 'offbeatwp'),
-                'name' => 'width',
-                'type' => 'select',
-                'instructions' => '',
-                'required' => 0,
-                'conditional_logic' => 0,
-                'wrapper' => array(
-                    'width' => '',
-                    'class' => '',
-                    'id' => '',
-                ),
-                'choices' => $variations->toArray(),
-                'default_value' => array(
-                ),
-                'allow_null' => 0,
-                'multiple' => 0,
-                'ui' => 0,
-                'return_format' => 'value',
-                'ajax' => 0,
-                'placeholder' => '',
-            ];
-        }
+    //         $appearanceFields[] = [
+    //             'key' => 'field_5c16d32c41789',
+    //             'label' => __('Width', 'offbeatwp'),
+    //             'name' => 'width',
+    //             'type' => 'select',
+    //             'instructions' => '',
+    //             'required' => 0,
+    //             'conditional_logic' => 0,
+    //             'wrapper' => array(
+    //                 'width' => '',
+    //                 'class' => '',
+    //                 'id' => '',
+    //             ),
+    //             'choices' => $variations->toArray(),
+    //             'default_value' => array(
+    //             ),
+    //             'allow_null' => 0,
+    //             'multiple' => 0,
+    //             'ui' => 0,
+    //             'return_format' => 'value',
+    //             'ajax' => 0,
+    //             'placeholder' => '',
+    //         ];
+    //     }
 
-        $rowThemes   = offbeat('design')->getRowThemesList();
-        if(is_array($rowThemes)) {
-            $appearanceFields[] = [
-                'key' => 'field_5c16d32c41786',
-                'label' => __('Row theme', 'offbeatwp'),
-                'name' => 'row_theme',
-                'type' => 'select',
-                'instructions' => '',
-                'required' => 0,
-                'conditional_logic' => 0,
-                'wrapper' => array(
-                    'width' => '',
-                    'class' => '',
-                    'id' => '',
-                ),
-                'choices' => $rowThemes,
-                'default_value' => array(
-                ),
-                'allow_null' => 0,
-                'multiple' => 0,
-                'ui' => 0,
-                'return_format' => 'value',
-                'ajax' => 0,
-                'placeholder' => '',
-            ];
-        }
-
-
-        $rowSettings[] = [
-            'key'           => 'field_5c16d30841789',
-            'name'          => 'appearance',
-            'label'         => __('Appearance', 'offbeatwp'),
-            'type'          => 'group',
-            'layout'        => 'row',
-            'sub_fields'    => $appearanceFields
-        ];
+    //     $rowThemes   = offbeat('design')->getRowThemesList();
+    //     if(is_array($rowThemes)) {
+    //         $appearanceFields[] = [
+    //             'key' => 'field_5c16d32c41786',
+    //             'label' => __('Row theme', 'offbeatwp'),
+    //             'name' => 'row_theme',
+    //             'type' => 'select',
+    //             'instructions' => '',
+    //             'required' => 0,
+    //             'conditional_logic' => 0,
+    //             'wrapper' => array(
+    //                 'width' => '',
+    //                 'class' => '',
+    //                 'id' => '',
+    //             ),
+    //             'choices' => $rowThemes,
+    //             'default_value' => array(
+    //             ),
+    //             'allow_null' => 0,
+    //             'multiple' => 0,
+    //             'ui' => 0,
+    //             'return_format' => 'value',
+    //             'ajax' => 0,
+    //             'placeholder' => '',
+    //         ];
+    //     }
 
 
-        $margins    = offbeat('design')->getMarginsList('row');
-
-        $rowSettings[] = [
-            'key'           => 'field_5c16d30841781',
-            'name'          => 'margins',
-            'label'         => __('Margins', 'offbeatwp'),
-            'type'          => 'group',
-            'layout'        => 'row',
-            'sub_fields'    => [
-                array(
-                    'key' => 'field_5c16d32c41782',
-                    'label' => __('Margin Top', 'offbeatwp'),
-                    'name' => 'margin_top',
-                    'type' => 'select',
-                    'instructions' => '',
-                    'required' => 0,
-                    'conditional_logic' => 0,
-                    'wrapper' => array(
-                        'width' => '',
-                        'class' => '',
-                        'id' => '',
-                    ),
-                    'choices' => $margins,
-                    'default_value' => array(
-                    ),
-                    'allow_null' => 0,
-                    'multiple' => 0,
-                    'ui' => 0,
-                    'return_format' => 'value',
-                    'ajax' => 0,
-                    'placeholder' => '',
-                ),
-                array(
-                    'key' => 'field_5c16d32c41783',
-                    'label' => __('Margin Bottom', 'offbeatwp'),
-                    'name' => 'margin_bottom',
-                    'type' => 'select',
-                    'instructions' => '',
-                    'required' => 0,
-                    'conditional_logic' => 0,
-                    'wrapper' => array(
-                        'width' => '',
-                        'class' => '',
-                        'id' => '',
-                    ),
-                    'choices' => $margins,
-                    'default_value' => array(
-                    ),
-                    'allow_null' => 0,
-                    'multiple' => 0,
-                    'ui' => 0,
-                    'return_format' => 'value',
-                    'ajax' => 0,
-                    'placeholder' => '',
-                ),
-            ]
-        ];
-
-        $paddings   = offbeat('design')->getPaddingsList('row');
-
-        $rowSettings[] = [
-            'key'           => 'field_5c16d30841782',
-            'name'          => 'paddings',
-            'label'         => __('Paddings', 'offbeatwp'),
-            'type'          => 'group',
-            'layout'        => 'row',
-            'sub_fields'    => [
-                array(
-                    'key' => 'field_5c16d32c41784',
-                    'label' => __('Padding top', 'offbeatwp'),
-                    'name' => 'padding_top',
-                    'type' => 'select',
-                    'instructions' => '',
-                    'required' => 0,
-                    'conditional_logic' => 0,
-                    'wrapper' => array(
-                        'width' => '',
-                        'class' => '',
-                        'id' => '',
-                    ),
-                    'choices' => $paddings,
-                    'default_value' => array(
-                    ),
-                    'allow_null' => 0,
-                    'multiple' => 0,
-                    'ui' => 0,
-                    'return_format' => 'value',
-                    'ajax' => 0,
-                    'placeholder' => '',
-                ),
-                array(
-                    'key' => 'field_5c16d32c41785',
-                    'label' => __('Padding bottom', 'offbeatwp'),
-                    'name' => 'padding_bottom',
-                    'type' => 'select',
-                    'instructions' => '',
-                    'required' => 0,
-                    'conditional_logic' => 0,
-                    'wrapper' => array(
-                        'width' => '',
-                        'class' => '',
-                        'id' => '',
-                    ),
-                    'choices' => $paddings,
-                    'default_value' => array(
-                    ),
-                    'allow_null' => 0,
-                    'multiple' => 0,
-                    'ui' => 0,
-                    'return_format' => 'value',
-                    'ajax' => 0,
-                    'placeholder' => '',
-                ),
-            ]
-        ];
-
-        $rowSettings[] = [
-            'key'           => 'field_5c16d30841784',
-            'name'          => 'misc',
-            'label'         => __('Other', 'offbeatwp'),
-            'type'          => 'group',
-            'layout'        => 'row',
-            'sub_fields'    => [
-                array(
-                    'key' => 'field_5c16d32c41787',
-                    'label' => __('ID', 'offbeatwp'),
-                    'name' => 'id',
-                    'type' => 'text',
-                    'instructions' => '',
-                    'required' => 0,
-                    'conditional_logic' => 0,
-                    'wrapper' => array(
-                        'width' => '',
-                        'class' => '',
-                        'id' => '',
-                    ),
-                    'default_value' => '',
-                    'allow_null' => 0,
-                    'multiple' => 0,
-                    'ui' => 0,
-                    'return_format' => 'value',
-                    'ajax' => 0,
-                    'placeholder' => '',
-                ),
-                array(
-                    'key' => 'field_5c16d32c41788',
-                    'label' => __('Class', 'offbeatwp'),
-                    'name' => 'css_class',
-                    'type' => 'text',
-                    'instructions' => '',
-                    'required' => 0,
-                    'conditional_logic' => 0,
-                    'wrapper' => array(
-                        'width' => '',
-                        'class' => '',
-                        'id' => '',
-                    ),
-                    'default_value' => '',
-                    'allow_null' => 0,
-                    'multiple' => 0,
-                    'ui' => 0,
-                    'return_format' => 'value',
-                    'ajax' => 0,
-                    'placeholder' => '',
-                ),
-            ]
-        ];
-
-        return apply_filters('offbeat_acf_layout_rowsettings', $rowSettings);
-    }
-
-    public function make()
-    {
-        $post_types = apply_filters('offbeat_acf_layouteditor_posttypes', ['page']);
-        $locations = [];
-
-        if (!empty($post_types)) foreach($post_types as $post_type) {
-            $locations[] = [[
-                'param' => 'post_type',
-                'operator' => '==',
-                'value' => $post_type,
-            ]];
-        }
-
-        acf_add_local_field_group(array(
-            'key' => 'group_layout',
-            'title' => 'Layout',
-            'fields' => array(
-                array(
-                    'key' => 'field_5c16c331388e0',
-                    'label' => __('Use Layout editor', 'offbeatwp'),
-                    'name' => 'layout_enabled',
-                    'type' => 'true_false',
-                    'instructions' => '',
-                    'required' => 0,
-                    'conditional_logic' => 0,
-                    'wrapper' => array(
-                        'width' => '',
-                        'class' => '',
-                        'id' => '',
-                    ),
-                    'message' => '',
-                    'default_value' => 0,
-                    'ui' => 0,
-                    'ui_on_text' => '',
-                    'ui_off_text' => '',
-                ),
+    //     $rowSettings[] = [
+    //         'key'           => 'field_5c16d30841789',
+    //         'name'          => 'appearance',
+    //         'label'         => __('Appearance', 'offbeatwp'),
+    //         'type'          => 'group',
+    //         'layout'        => 'row',
+    //         'sub_fields'    => $appearanceFields
+    //     ];
 
 
-                array(
-                    'key' => 'field_5c16d18ae5382',
-                    'label' => __('Rows', 'offbeatwp'),
-                    'name' => 'layout_row',
-                    'type' => 'repeater',
-                    'instructions' => '',
-                    'required' => 0,
-                    'conditional_logic' => [
-                        array(
-                            array(
-                                'field' => 'field_5c16c331388e0',
-                                'operator' => '==',
-                                'value' => '1',
-                            ),
-                        ),
-                    ],
-                    'wrapper' => array(
-                        'width' => '',
-                        'class' => '',
-                        'id' => 'acf-layout-builder',
-                    ),
-                    'collapsed' => '',
-                    'min' => 0,
-                    'max' => 0,
-                    'layout' => 'block',
-                    'button_label' => __('Add row', 'offbeatwp'),
-                    'sub_fields' => $this->makeRowFields(),
-                ),
-            ),
-            'location' => $locations,
-            'menu_order' => 0,
-            'position' => 'normal',
-            'style' => 'default',
-            'label_placement' => 'top',
-            'instruction_placement' => 'label',
-            'hide_on_screen' => '',
-            'active' => 1,
-            'description' => '',
-        ));
-    }
+    //     $margins    = offbeat('design')->getMarginsList('row');
+
+    //     $rowSettings[] = [
+    //         'key'           => 'field_5c16d30841781',
+    //         'name'          => 'margins',
+    //         'label'         => __('Margins', 'offbeatwp'),
+    //         'type'          => 'group',
+    //         'layout'        => 'row',
+    //         'sub_fields'    => [
+    //             array(
+    //                 'key' => 'field_5c16d32c41782',
+    //                 'label' => __('Margin Top', 'offbeatwp'),
+    //                 'name' => 'margin_top',
+    //                 'type' => 'select',
+    //                 'instructions' => '',
+    //                 'required' => 0,
+    //                 'conditional_logic' => 0,
+    //                 'wrapper' => array(
+    //                     'width' => '',
+    //                     'class' => '',
+    //                     'id' => '',
+    //                 ),
+    //                 'choices' => $margins,
+    //                 'default_value' => array(
+    //                 ),
+    //                 'allow_null' => 0,
+    //                 'multiple' => 0,
+    //                 'ui' => 0,
+    //                 'return_format' => 'value',
+    //                 'ajax' => 0,
+    //                 'placeholder' => '',
+    //             ),
+    //             array(
+    //                 'key' => 'field_5c16d32c41783',
+    //                 'label' => __('Margin Bottom', 'offbeatwp'),
+    //                 'name' => 'margin_bottom',
+    //                 'type' => 'select',
+    //                 'instructions' => '',
+    //                 'required' => 0,
+    //                 'conditional_logic' => 0,
+    //                 'wrapper' => array(
+    //                     'width' => '',
+    //                     'class' => '',
+    //                     'id' => '',
+    //                 ),
+    //                 'choices' => $margins,
+    //                 'default_value' => array(
+    //                 ),
+    //                 'allow_null' => 0,
+    //                 'multiple' => 0,
+    //                 'ui' => 0,
+    //                 'return_format' => 'value',
+    //                 'ajax' => 0,
+    //                 'placeholder' => '',
+    //             ),
+    //         ]
+    //     ];
+
+    //     $paddings   = offbeat('design')->getPaddingsList('row');
+
+    //     $rowSettings[] = [
+    //         'key'           => 'field_5c16d30841782',
+    //         'name'          => 'paddings',
+    //         'label'         => __('Paddings', 'offbeatwp'),
+    //         'type'          => 'group',
+    //         'layout'        => 'row',
+    //         'sub_fields'    => [
+    //             array(
+    //                 'key' => 'field_5c16d32c41784',
+    //                 'label' => __('Padding top', 'offbeatwp'),
+    //                 'name' => 'padding_top',
+    //                 'type' => 'select',
+    //                 'instructions' => '',
+    //                 'required' => 0,
+    //                 'conditional_logic' => 0,
+    //                 'wrapper' => array(
+    //                     'width' => '',
+    //                     'class' => '',
+    //                     'id' => '',
+    //                 ),
+    //                 'choices' => $paddings,
+    //                 'default_value' => array(
+    //                 ),
+    //                 'allow_null' => 0,
+    //                 'multiple' => 0,
+    //                 'ui' => 0,
+    //                 'return_format' => 'value',
+    //                 'ajax' => 0,
+    //                 'placeholder' => '',
+    //             ),
+    //             array(
+    //                 'key' => 'field_5c16d32c41785',
+    //                 'label' => __('Padding bottom', 'offbeatwp'),
+    //                 'name' => 'padding_bottom',
+    //                 'type' => 'select',
+    //                 'instructions' => '',
+    //                 'required' => 0,
+    //                 'conditional_logic' => 0,
+    //                 'wrapper' => array(
+    //                     'width' => '',
+    //                     'class' => '',
+    //                     'id' => '',
+    //                 ),
+    //                 'choices' => $paddings,
+    //                 'default_value' => array(
+    //                 ),
+    //                 'allow_null' => 0,
+    //                 'multiple' => 0,
+    //                 'ui' => 0,
+    //                 'return_format' => 'value',
+    //                 'ajax' => 0,
+    //                 'placeholder' => '',
+    //             ),
+    //         ]
+    //     ];
+
+    //     $rowSettings[] = [
+    //         'key'           => 'field_5c16d30841784',
+    //         'name'          => 'misc',
+    //         'label'         => __('Other', 'offbeatwp'),
+    //         'type'          => 'group',
+    //         'layout'        => 'row',
+    //         'sub_fields'    => [
+    //             array(
+    //                 'key' => 'field_5c16d32c41787',
+    //                 'label' => __('ID', 'offbeatwp'),
+    //                 'name' => 'id',
+    //                 'type' => 'text',
+    //                 'instructions' => '',
+    //                 'required' => 0,
+    //                 'conditional_logic' => 0,
+    //                 'wrapper' => array(
+    //                     'width' => '',
+    //                     'class' => '',
+    //                     'id' => '',
+    //                 ),
+    //                 'default_value' => '',
+    //                 'allow_null' => 0,
+    //                 'multiple' => 0,
+    //                 'ui' => 0,
+    //                 'return_format' => 'value',
+    //                 'ajax' => 0,
+    //                 'placeholder' => '',
+    //             ),
+    //             array(
+    //                 'key' => 'field_5c16d32c41788',
+    //                 'label' => __('Class', 'offbeatwp'),
+    //                 'name' => 'css_class',
+    //                 'type' => 'text',
+    //                 'instructions' => '',
+    //                 'required' => 0,
+    //                 'conditional_logic' => 0,
+    //                 'wrapper' => array(
+    //                     'width' => '',
+    //                     'class' => '',
+    //                     'id' => '',
+    //                 ),
+    //                 'default_value' => '',
+    //                 'allow_null' => 0,
+    //                 'multiple' => 0,
+    //                 'ui' => 0,
+    //                 'return_format' => 'value',
+    //                 'ajax' => 0,
+    //                 'placeholder' => '',
+    //             ),
+    //         ]
+    //     ];
+
+    //     return apply_filters('offbeat_acf_layout_rowsettings', $rowSettings);
+    // }
+
+    // public function make()
+    // {
+    //     $post_types = apply_filters('offbeat_acf_layouteditor_posttypes', ['page']);
+    //     $locations = [];
+
+    //     if (!empty($post_types)) foreach($post_types as $post_type) {
+    //         $locations[] = [[
+    //             'param' => 'post_type',
+    //             'operator' => '==',
+    //             'value' => $post_type,
+    //         ]];
+    //     }
+
+    //     acf_add_local_field_group(array(
+    //         'key' => 'group_layout',
+    //         'title' => 'Layout',
+    //         'fields' => array(
+    //             array(
+    //                 'key' => 'field_5c16c331388e0',
+    //                 'label' => __('Use Layout editor', 'offbeatwp'),
+    //                 'name' => 'layout_enabled',
+    //                 'type' => 'true_false',
+    //                 'instructions' => '',
+    //                 'required' => 0,
+    //                 'conditional_logic' => 0,
+    //                 'wrapper' => array(
+    //                     'width' => '',
+    //                     'class' => '',
+    //                     'id' => '',
+    //                 ),
+    //                 'message' => '',
+    //                 'default_value' => 0,
+    //                 'ui' => 0,
+    //                 'ui_on_text' => '',
+    //                 'ui_off_text' => '',
+    //             ),
+
+
+    //             array(
+    //                 'key' => 'field_5c16d18ae5382',
+    //                 'label' => __('Rows', 'offbeatwp'),
+    //                 'name' => 'layout_row',
+    //                 'type' => 'repeater',
+    //                 'instructions' => '',
+    //                 'required' => 0,
+    //                 'conditional_logic' => [
+    //                     array(
+    //                         array(
+    //                             'field' => 'field_5c16c331388e0',
+    //                             'operator' => '==',
+    //                             'value' => '1',
+    //                         ),
+    //                     ),
+    //                 ],
+    //                 'wrapper' => array(
+    //                     'width' => '',
+    //                     'class' => '',
+    //                     'id' => 'acf-layout-builder',
+    //                 ),
+    //                 'collapsed' => '',
+    //                 'min' => 0,
+    //                 'max' => 0,
+    //                 'layout' => 'block',
+    //                 'button_label' => __('Add row', 'offbeatwp'),
+    //                 'sub_fields' => $this->makeRowFields(),
+    //             ),
+    //         ),
+    //         'location' => $locations,
+    //         'menu_order' => 0,
+    //         'position' => 'normal',
+    //         'style' => 'default',
+    //         'label_placement' => 'top',
+    //         'instruction_placement' => 'label',
+    //         'hide_on_screen' => '',
+    //         'active' => 1,
+    //         'description' => '',
+    //     ));
+    // }
 }
