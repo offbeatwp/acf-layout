@@ -628,33 +628,32 @@
         
     }
 
-    // console.log(model);
+    function addCloneToLayout(layout) {
+        var $controls = layout.find('> .acf-fc-layout-controls');
+
+        if(!$controls.has('[data-acfe-flexible-control-clone]').length){
+            
+            $controls.prepend('<a class="acf-icon small light acf-js-tooltip acfe-flexible-icon dashicons dashicons-admin-page" href="#" title="Clone component" data-acfe-flexible-control-clone="' + layout.attr('data-component') + '"></a>');
+            
+        }
+    }
 
     acf.addAction('new_field/type=offbeat_components', function(offbeat_components_field){
-
-        // console.log(offbeat_components_field);
-
-        // // Vars
-        // var $clones = flexible.$clones();
         var $layouts = offbeat_components_field.$layouts();
-
-        
-        // // Merge
-        // var $all_layouts = $.merge($layouts, $clones);
         
         // Do Actions
         $layouts.each(function(){
             
-            var $layout = $(this);
-            var $controls = $layout.find('> .acf-fc-layout-controls');
-
-            if(!$controls.has('[data-acfe-flexible-control-clone]').length){
-                
-                $controls.prepend('<a class="acf-icon small light acf-js-tooltip acfe-flexible-icon dashicons dashicons-admin-page" href="#" title="Clone component" data-acfe-flexible-control-clone="' + $layout.attr('data-component') + '"></a>');
-                
-            }
+            addCloneToLayout($(this));
             
         });
 
     });
+
+    acf.add_action('append', function( item ) {
+        if ($(item).has('.component')) {
+            addCloneToLayout($(item));
+        }
+    });
+    
 })(jQuery);

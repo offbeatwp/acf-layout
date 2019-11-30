@@ -79,7 +79,10 @@ class Admin {
                 });
 
                 acf.add_action('append', function( item ) {
+                    var wrapper = $('.page-layout-editor').first();
                     acfResetFieldNames($(item).closest('.page-layout-editor').first());              
+
+                    fixInputs(wrapper);
                 });
                 
 

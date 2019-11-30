@@ -33,6 +33,10 @@
 .acf-fc-popup ul li li a {
 }
 
+.acf-offbeat-components .component {
+    margin: 0 0 20px 0 !important;
+}
+
 .acf-fc-popup input {
     margin: 4px 10px 8px 10px;
     border-radius: 3px;
