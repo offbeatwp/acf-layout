@@ -7,15 +7,16 @@ class Renderer
 {
     protected $postId;
 
-    public function renderLayout()
+    public function renderLayout($postId)
     {
-        $this->postId = get_the_ID();
+        $this->postId = $postId;
 
-        $enabled = get_field('layout_enabled', $this->postId);
+        $enabled = get_field('layout_enabled', $postId);
         $inLoop  = in_the_loop();
+        $content = null;
 
         if ($enabled && $inLoop) {
-            $content = $this->renderRows(get_field('layout_row'));
+            $content = $this->renderRows(get_field('layout_row', $postId));
         }
 
         return $content;
@@ -26,8 +27,8 @@ class Renderer
         $content           = '';
         $layoutFieldsIndex = 0;
 
-        if (have_rows('layout_row')) {
-            while (have_rows('layout_row')) {
+        if (have_rows('layout_row', $this->postId)) {
+            while (have_rows('layout_row', $this->postId)) {
                 the_row();
                 $layoutFields = array_values($layoutFields);
                 $rowSettings = $this->getFields($layoutFields[$layoutFieldsIndex], ['component']);
