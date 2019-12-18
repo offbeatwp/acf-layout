@@ -719,6 +719,10 @@ if( !empty($sub_fields) ): ?>
 	function format_value( $value, $post_id, $field ) {
 		$formattedValue = [];
 
+		if (empty($value)) {
+			return null;
+		}
+
 		// loop over rows
 		foreach( array_keys($value) as $i ) {
 			
