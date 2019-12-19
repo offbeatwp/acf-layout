@@ -329,8 +329,8 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		$order = 0;
 		$el = 'div';
 		$sub_fields = $fieldsMapper->map();
-		$id = ( $i === 'acfcloneindex' ) ? 'acfcloneindex' : "row-$i-";
-		$prefix = 'acf';
+		$id = ( $i === 'acfcloneindex' ) ? 'acfcloneindex' : "row-$i";
+		$prefix = 'acf[' . uniqid() . ']';
 		
 		$acfLayout = [
 			'display' => 'block',
@@ -449,7 +449,6 @@ if( !empty($sub_fields) ): ?>
 			
 			// update prefix to allow for nested values
 			$sub_field['prefix'] = $prefix;
-			
 			
 			// render input
 			acf_render_field_wrap( $sub_field, $el );

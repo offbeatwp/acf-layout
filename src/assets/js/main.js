@@ -402,6 +402,19 @@
                 
             }
             
+            if (args.layout) {
+                $(args.layout).find('input[name!=""], select[name!=""], textarea[name!=""]').each(function () {
+                    if ($(this).attr('name').indexOf('[acf_component]') !== -1) return;
+
+                    var current_field_name = $(this).attr('name');
+                    var fieldNameKey = current_field_name.substring(current_field_name.lastIndexOf('['));
+                    fieldNameKey = fieldNameKey.replace('[', '');
+                    fieldNameKey = fieldNameKey.replace(']', '');
+
+                    $(this).attr('name', 'acf[clone][' + fieldNameKey + ']');
+                });
+            }
+
             // Add row
             var $el = acf.duplicate({
                 target: args.layout,
@@ -414,7 +427,7 @@
                     
                     // Reset UniqID
                     $el2.attr('data-id', uniqid);
-                    
+
                     // append before
                     if(args.before){
                         
@@ -449,7 +462,7 @@
         
         // Flexible: Fix Inputs
         model.acfeFixInputs = function($layout){
-
+            
             $layout.find('input').each(function(){
                 
                 $(this).attr('value', this.value);
