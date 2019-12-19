@@ -259,7 +259,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 
 		// empty
 		if( empty($field['value']) ) {
-			$div['class'] .= 'acf-flexible-content -empty';
+			$div['class'] .= ' acf-flexible-content -empty';
 		}
 		
 		

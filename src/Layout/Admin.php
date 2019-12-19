@@ -4,6 +4,7 @@ namespace OffbeatWP\AcfLayout\Layout;
 class Admin {
     public function __construct($service)
     {
+        add_filter('use_block_editor_for_post', [$this, 'useBlockEditorForPost'], 20, 2);
         add_action('admin_init',    [$this, 'disableEditorWhenLayoutIsActive'], 99);
         add_action('acf/input/admin_head', [$this, 'rdsn_acf_repeater_collapse']);
 
@@ -26,6 +27,17 @@ class Admin {
         ) {
             remove_post_type_support(get_post_type($_GET['post']), 'editor');
         }
+    }
+
+    public  function useBlockEditorForPost($useBlockEditor, $post)
+    {
+        $postModel = offbeat('post')->get($post);
+
+        if ($postModel->hasLayout()) {
+            return false;
+        }
+
+        return $useBlockEditor;
     }
 
     public function setDataInputName($wrapper, $field)
@@ -94,26 +106,37 @@ class Admin {
                 }
 
                 function fixInputs(wrapper) {
+                    $(wrapper).find('input').each(function(){
+                        
+                        $(this).attr('value', this.value);
+                        
+                    });
+
+                    $(wrapper).find('textarea').each(function(){
+                        
+                        $(this).html(this.value);
+                        
+                    });
+
                     $(wrapper).find('input:radio,input:checkbox').each(function() {
                         
-                        if($(this).is('[checked="checked"]')) {
-                            $(this).attr('checked', 'checked');                        
-                        } else {
+                        if(this.checked)
+                            $(this).attr('checked', 'checked');
+                        
+                        else
                             $(this).attr('checked', false);
-                        }
+                        
                     });
-                    
+
                     $(wrapper).find('option').each(function(){
                         
-                        if($(this).is('[selected="selected"]'))
+                        if(this.selected)
                             $(this).attr('selected', 'selected');
                             
                         else
                             $(this).attr('selected', false);
                         
                     });
-        
-    
                 }
 
                 function getFieldName(fieldElement, doAltId) {
