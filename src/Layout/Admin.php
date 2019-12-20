@@ -179,7 +179,7 @@ class Admin {
 
                 function setupAcfLayoutSortable(el) {
                     $(el).find(".values").sortable({
-                        connectWith: "#acf-layout-builder .values",
+                        connectWith: ".page-layout-editor .values",
                         start: function(event, ui) {
                             acf.do_action('sortstart', ui.item, ui.placeholder);
                         },
@@ -194,7 +194,7 @@ class Admin {
                 }
 
                 acf.add_action('ready', function($el){
-                    setupAcfLayoutSortable('#acf-layout-builder');
+                    setupAcfLayoutSortable('.page-layout-editor');
                 });
 
                 acf.add_action('append_field', function (el) {
