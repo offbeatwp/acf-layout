@@ -180,6 +180,7 @@ class Admin {
                 function setupAcfLayoutSortable(el) {
                     $(el).find(".values").sortable({
                         connectWith: ".page-layout-editor .values",
+                        tolerance: 'pointer',
                         start: function(event, ui) {
                             acf.do_action('sortstart', ui.item, ui.placeholder);
                         },
