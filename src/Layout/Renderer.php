@@ -63,6 +63,9 @@ class Renderer
             }
         }
 
+        if (!is_object($rowSettings)) {
+            $rowSettings = (object)$rowSettings;
+        }
         $rowSettings->rowComponents = $rowComponents;
 
         $rowComponent = offbeat(AcfLayoutComponentRepository::class)->getActiveRowComponent();
