@@ -46,11 +46,13 @@ class Service extends AbstractServicePageBuilder {
             offbeat('console')->register(Console\CacheFields::class);
         }
 
-        add_action('acf/init', function () {
-            $componentFields = get_option('acf_layout_builder_component_fields');
+        if (offbeat('ajax')->isAjaxRequest()) {
+            add_action('acf/init', function () {
+                $componentFields = get_option('acf_layout_builder_component_fields');
 
-            acf_add_local_fields( $componentFields );
-        });
+                acf_add_local_fields( $componentFields );
+            });
+        }
     }
 
     public function onRegisterComponent($name, $componentClass)
