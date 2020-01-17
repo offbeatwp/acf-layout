@@ -24,7 +24,9 @@ class AcfPageBuilderRepository {
         $rowComponent = 'acflayout.row';
         if(offbeat('components')->exists('row')) $rowComponent = 'row';
 
-        return $rowComponent;
+        if(offbeat('components')->exists($rowComponent)) return $rowComponent;
+
+        return false;
     }
     public function getActiveComponentComponent()
     {

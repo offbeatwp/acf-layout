@@ -9,16 +9,19 @@ class LayoutField extends AcfField
     public function __construct()
     {
         $rowComponent = offbeat('acf_page_builder')->getActiveRowComponent();
-        $rowComponent = offbeat('components')->get($rowComponent);
-        
-        if (method_exists($rowComponent, 'variations')) {
-            $variations = collect($rowComponent::variations());
-            $variations = $variations->map(function ($item, $key) {
-                return $item['label'];
-            });
+
+        if ($rowComponent) {
+            $rowComponent = offbeat('components')->get($rowComponent);
+
+            if (method_exists($rowComponent, 'variations')) {
+                $variations = collect($rowComponent::variations());
+                $variations = $variations->map(function ($item, $key) {
+                    return $item['label'];
+                });
+            }
         }
 
-        $rowThemes   = offbeat('design')->getRowThemesList();
+        $rowThemes  = offbeat('design')->getRowThemesList();
         $margins    = offbeat('design')->getMarginsList('row');
         $paddings   = offbeat('design')->getPaddingsList('row');
 
@@ -119,7 +122,7 @@ class LayoutField extends AcfField
                                     'class' => '',
                                     'id' => '',
                                 ),
-                                'choices' => isset($variations) ? $variations->toArray() : [],
+                                'choices' => (isset($variations)) ? $variations->toArray() : [],
                                 'default_value' => array(
                                 ),
                                 'allow_null' => 0,
