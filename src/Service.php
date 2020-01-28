@@ -28,7 +28,7 @@ class Service extends AbstractServicePageBuilder {
         new Layout\LayoutEditor();
 
         PostModel::macro('hasLayout', function () {
-            return get_field('layout_enabled', $this->getId());
+            return get_field('page_layout_editor_enabled', $this->getId());
         });
         
         PostModel::macro('layout', function () {
@@ -46,13 +46,14 @@ class Service extends AbstractServicePageBuilder {
             offbeat('console')->register(Console\CacheFields::class);
         }
 
-        if (offbeat('ajax')->isAjaxRequest() && isset($_POST['action']) && preg_match('#^acf/fields/#', $_POST['action'])) {
-            add_action('acf/init', function () {
-                $componentFields = get_option('acf_layout_builder_component_fields');
+        add_action('acf/init', function () {
+            $componentFields = get_option('acf_layout_builder_component_fields');
+            if (!$componentFields) {
+                return;
+            }
 
-                acf_add_local_fields( $componentFields );
-            });
-        }
+            acf_add_local_fields( $componentFields );
+        });
     }
 
     public function onRegisterComponent($name, $componentClass)

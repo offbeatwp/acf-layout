@@ -10,10 +10,6 @@ class Renderer
     {
         $this->postId = $postId ?: get_the_ID();
 
-        if (!get_field('layout_enabled', $this->postId)) {
-            return;
-        }
-
         $rows = get_field('page_layout', $postId);
 
         $rows = json_encode($rows);
