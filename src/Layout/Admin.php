@@ -34,6 +34,8 @@ class Admin {
 
         $wrapper['data-input-key'] = $inputKey;
         
+        // $wrapper['class'] = str_replace('acf-field-offbeat-components', 'acf-field-offbeat-components acf-field-flexible-content', $wrapper['class']);
+        
         return $wrapper;
     }
 
@@ -65,22 +67,50 @@ class Admin {
         <script type="text/javascript">
             
             (function($) {
+                acf.add_action('ready', function( item ) {
+                    var wrapper = $('.page-layout-editor').first();
+                    acfResetFieldNames(wrapper); 
+                    
+                    fixInputs(wrapper);
+                });
+
                 acf.add_action('sortstop', function( item, placeholder ) {
-                    acfResetFieldNames($(item).closest('.acf-field-flexible-content').first());              
+                    acfResetFieldNames($(item).closest('.page-layout-editor').first());              
                 });
 
                 acf.add_action('append', function( item ) {
-                    acfResetFieldNames($(item).closest('.acf-field-flexible-content').first());              
+                    acfResetFieldNames($(item).closest('.page-layout-editor').first());              
                 });
+                
 
                 function acfResetFieldNames(wrapper) {
-                    $(wrapper).parents('.acf-row').find('[name^="acf[field_"]').each(function() {
-                        if ($(this).closest('.clones').length > 0) return;
-
+                    $(wrapper).find('[name^="acf["]').each(function() {
                         var field_name = getFieldName(this);
-
                         $(this).attr('name', field_name);
                     });
+                }
+
+                function fixInputs(wrapper) {
+                    $(wrapper).find('input:radio,input:checkbox').each(function() {
+                        
+                        if($(this).is('[checked="checked"]')) {
+                            $(this).attr('checked', 'checked');                        
+                        } else {
+                            $(this).attr('checked', false);
+                        }
+                    });
+                    
+                    $(wrapper).find('option').each(function(){
+                        
+                        if($(this).is('[selected="selected"]'))
+                            $(this).attr('selected', 'selected');
+                            
+                        else
+                            $(this).attr('selected', false);
+                        
+                    });
+        
+    
                 }
 
                 function getFieldName(fieldElement, doAltId) {

@@ -16,31 +16,23 @@
         /**
          * Reads the anchors from the current list and tries to create groups out of it.
          */
-        const re = new RegExp('^([^\(]+)\\((.+?)\\)$', 'gm');
         p.find('li a', p).each((_, anchor) => {
-            const text = $(anchor).text();
-            const labels = re.exec(text);
-            let itemlabel, grouplabel;
-            re.lastIndex = 0; // fuck this, resets the RegExp to work again on the next iteration
+            const itemLabel = $(anchor).text();
+            let groupLabel = $(anchor).data('category');
 
-            if (!labels) {
-                // defaults
-                itemlabel = text;
-                grouplabel = 'General';
-            } else {
-                itemlabel = labels[1];
-                grouplabel = labels[2];
+            if (!groupLabel) {
+                groupLabel = 'General';
             }
 
             const item = $(anchor).closest('li');
 
-            $(anchor).text(itemlabel);
+            $(anchor).text(itemLabel);
 
-            if (!groups[grouplabel]) {
-                groups[grouplabel] = []
+            if (!groups[groupLabel]) {
+                groups[groupLabel] = []
             }
 
-            groups[grouplabel].push(item.clone());
+            groups[groupLabel].push(item.clone());
         });
 
         let grouplabels = Object.keys(groups);
@@ -300,7 +292,7 @@
             return false;
         });
 
-        $(document).on('click', 'a[data-name="add-layout"]', (e) => {
+        $(document).on('click', 'a[data-name="add-component"]', (e) => {
             prepare(getCurrentPopup());
             attach(getCurrentPopup());
 
@@ -315,5 +307,354 @@
                 adjustPosition(getCurrentPopup());
             });
         });
+    });
+
+    var flexible = acf.getFieldType('offbeat_components');
+    var model = flexible.prototype;
+
+
+    model.events['click [data-acfe-flexible-control-clone]'] = 'acfeCloneComponent';
+    model.acfeCloneComponent = function(e, $el){
+
+        // Get Flexible
+        var flexible = this;
+        
+        // Vars
+        var $layout = $el.closest('.layout');
+        var layout_name = $layout.data('layout');
+        
+        // Popup min/max
+        var $popup = $(flexible.$popup().html());
+        var $layouts = flexible.$layouts();
+
+        var countLayouts = function(name){
+            return $layouts.filter(function(){
+                return $(this).data('layout') === name;
+            }).length;
+        };
+        
+         // vars
+        var $a = $popup.find('[data-layout="' + layout_name + '"]');
+        var min = $a.data('min') || 0;
+        var max = $a.data('max') || 0;
+        var count = countLayouts(layout_name);
+        
+        // max
+        if(max && count >= max){
+            
+            $el.addClass('disabled');
+            return false;
+            
+        }else{
+            
+            $el.removeClass('disabled');
+            
+        }
+        
+        // Fix inputs
+        flexible.acfeFixInputs($layout);
+        
+        var $_layout = $layout.clone();
+        
+        // Clean Layout
+        flexible.acfeCleanLayouts($_layout);
+        
+        var parent = $el.closest('.acf-flexible-content').find('> input[type=hidden]').attr('name');
+        
+        // Clone
+        var $layout_added = flexible.acfeDuplicate({
+            layout: $_layout,
+            before: $layout,
+            parent: parent
+        });
+    }
+
+    // Flexible: Duplicate
+    model.acfeDuplicate = function(args){
+        
+        // Arguments
+        args = acf.parseArgs(args, {
+            layout: '',
+            before: false,
+            parent: false,
+            search: '',
+            replace: '',
+        });
+        
+        // Validate
+        if(!this.allowAdd())
+            return false;
+        
+        var uniqid = acf.uniqid();
+        
+        if(args.parent){
+            
+            if(!args.search){
+                
+                args.search = args.parent + '[' + args.layout.attr('data-id') + ']';
+                
+            }
+            
+            args.replace = args.parent + '[' + uniqid + ']';
+            
+        }
+        
+        // Add row
+        var $el = acf.duplicate({
+            target: args.layout,
+            search: args.search,
+            replace: args.replace,
+            append: this.proxy(function($el, $el2){
+                
+                // Add class to duplicated layout
+                $el2.addClass('acfe-layout-duplicated');
+                
+                // Reset UniqID
+                $el2.attr('data-id', uniqid);
+                
+                // append before
+                if(args.before){
+                    
+                    // Fix clone: Use after() instead of native before()
+                    args.before.after($el2);
+                    
+                }
+                
+                // append end
+                else{
+                    
+                    this.$layoutsWrap().append($el2);
+                    
+                }
+                
+                // enable 
+                acf.enable($el2, this.cid);
+                
+                // render
+                this.render();
+                
+            })
+        });
+        
+        // trigger change for validation errors
+        this.$input().trigger('change');
+        
+        // return
+        return $el;
+        
+    }
+    
+    // Flexible: Fix Inputs
+    model.acfeFixInputs = function($layout){
+        
+        $layout.find('input').each(function(){
+            
+            $(this).attr('value', this.value);
+            
+        });
+        
+        $layout.find('textarea').each(function(){
+            
+            $(this).html(this.value);
+            
+        });
+        
+        $layout.find('input:radio,input:checkbox').each(function() {
+            
+            if(this.checked)
+                $(this).attr('checked', 'checked');
+            
+            else
+                $(this).attr('checked', false);
+            
+        });
+        
+        $layout.find('option').each(function(){
+            
+            if(this.selected)
+                $(this).attr('selected', 'selected');
+                
+            else
+                $(this).attr('selected', false);
+            
+        });
+        
+    }
+    
+    // Flexible: Clean Layout
+    model.acfeCleanLayouts = function($layout){
+        
+        // Clean WP Editor
+        $layout.find('.acf-editor-wrap').each(function(){
+            
+            var $input = $(this);
+            
+            $input.find('.wp-editor-container div').remove();
+            $input.find('.wp-editor-container textarea').css('display', '');
+            
+        });
+        
+        // Clean Date
+        $layout.find('.acf-date-picker').each(function(){
+            
+            var $input = $(this);
+            
+            $input.find('input.input').removeClass('hasDatepicker').removeAttr('id');
+            
+        });
+        
+        // Clean Time
+        $layout.find('.acf-time-picker').each(function(){
+            
+            var $input = $(this);
+            
+            $input.find('input.input').removeClass('hasDatepicker').removeAttr('id');
+            
+        });
+        
+        // Clean DateTime
+        $layout.find('.acf-date-time-picker').each(function(){
+            
+            var $input = $(this);
+            
+            $input.find('input.input').removeClass('hasDatepicker').removeAttr('id');
+            
+        });
+        
+        // Clean Color Picker
+        $layout.find('.acf-color-picker').each(function(){
+            
+            var $input = $(this);
+            
+            var $color_picker = $input.find('> input');
+            var $color_picker_proxy = $input.find('.wp-picker-container input.wp-color-picker').clone();
+            
+            $color_picker.after($color_picker_proxy);
+            
+            $input.find('.wp-picker-container').remove();
+            
+        });
+        
+        // Clean Post Object
+        $layout.find('.acf-field-post-object').each(function(){
+            
+            var $input = $(this);
+            
+            $input.find('> .acf-input span').remove();
+            
+            $input.find('> .acf-input select').removeAttr('tabindex aria-hidden').removeClass();
+            
+        });
+        
+        // Clean Page Link
+        $layout.find('.acf-field-page-link').each(function(){
+            
+            var $input = $(this);
+            
+            $input.find('> .acf-input span').remove();
+            
+            $input.find('> .acf-input select').removeAttr('tabindex aria-hidden').removeClass();
+            
+        });
+        
+        // Clean Select2
+        $layout.find('.acf-field-select').each(function(){
+            
+            var $input = $(this);
+            
+            $input.find('> .acf-input span').remove();
+            
+            $input.find('> .acf-input select').removeAttr('tabindex aria-hidden').removeClass();
+            
+        });
+        
+        // Clean FontAwesome
+        $layout.find('.acf-field-font-awesome').each(function(){
+            
+            var $input = $(this);
+            
+            $input.find('> .acf-input span').remove();
+            
+            $input.find('> .acf-input select').removeAttr('tabindex aria-hidden');
+            
+        });
+        
+        // Clean Tab
+        $layout.find('.acf-tab-wrap').each(function(){
+            
+            var $wrap = $(this);
+            
+            var $content = $wrap.closest('.acf-fields');
+            
+            var tabs = []
+            $.each($wrap.find('li a'), function(){
+                
+                tabs.push($(this));
+                
+            });
+            
+            $content.find('> .acf-field-tab').each(function(){
+                
+                $current_tab = $(this);
+                
+                $.each(tabs, function(){
+                    
+                    var $this = $(this);
+                    
+                    if($this.attr('data-key') != $current_tab.attr('data-key'))
+                        return;
+                    
+                    $current_tab.find('> .acf-input').append($this);
+                    
+                });
+                
+            });
+            
+            $wrap.remove();
+            
+        });
+        
+        // Clean Accordion
+        $layout.find('.acf-field-accordion').each(function(){
+            
+            var $input = $(this);
+            
+            $input.find('> .acf-accordion-title > .acf-accordion-icon').remove();
+            
+            // Append virtual endpoint after each accordion
+            $input.after('<div class="acf-field acf-field-accordion" data-type="accordion"><div class="acf-input"><div class="acf-fields" data-endpoint="1"></div></div></div>');
+            
+        });
+        
+    }
+
+    // console.log(model);
+
+    acf.addAction('new_field/type=offbeat_components', function(offbeat_components_field){
+
+        // console.log(offbeat_components_field);
+
+        // // Vars
+        // var $clones = flexible.$clones();
+        var $layouts = offbeat_components_field.$layouts();
+
+        
+        // // Merge
+        // var $all_layouts = $.merge($layouts, $clones);
+        
+        // Do Actions
+        $layouts.each(function(){
+            
+            var $layout = $(this);
+            var $controls = $layout.find('> .acf-fc-layout-controls');
+
+            if(!$controls.has('[data-acfe-flexible-control-clone]').length){
+                
+                $controls.prepend('<a class="acf-icon small light acf-js-tooltip acfe-flexible-icon dashicons dashicons-admin-page" href="#" title="Clone component" data-acfe-flexible-control-clone="' + $layout.attr('data-component') + '"></a>');
+                
+            }
+            
+        });
+
     });
 })(jQuery);

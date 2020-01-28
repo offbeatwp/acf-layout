@@ -9,27 +9,26 @@ class LayoutEditor {
 
     public function __construct()
     {
-        add_action('acf/init', function () {
-            $this->make();
-        }, 9999);
+        // add_action('acf/init', function () {
+        //     $this->make();
+        // }, 9999);
 
         add_filter('acf/pre_update_value', [$this, 'preUpdateValue'], 10, 4);
         add_filter('acf/pre_load_value', [$this, 'preLoadValue'], 10, 3);
         add_filter('acf/pre_load_reference', [$this, 'preLoadReference'], 10, 3);
         add_filter('acf/load_meta', [$this, 'loadMeta'], 10, 2);
 
-        add_filter('acfe/flexible/thumbnail/name=component', [$this, 'layoutThumbnail'], 10, 3);
+        // add_filter('acfe/flexible/thumbnail/name=component', [$this, 'layoutThumbnail'], 10, 3);
     }
 
     public function preUpdateValue($check, $value, $postId, $field )
     {
         global $post;
 
-        if ($field['name'] === 'layout_row') {
-
+        if ($field['name'] === 'page_layout') {
             $value = $this->normalizeAcfInputField($value, true);
 
-            acf_update_metadata($postId, 'acf_layout_editor_content', base64_encode(serialize($value)));
+            acf_update_metadata($postId, 'acf_layout_builder', $value);
 
             $check = false;
         }
@@ -38,39 +37,38 @@ class LayoutEditor {
     }
 
     public function normalizeAcfInputField($values, $toIndexedArray = false) {
+        if (is_array($values)) {
+            $valueKeys = array_keys($values);
 
-        if ($toIndexedArray && is_array($values)) {
-            $values = array_values($values);
-        }
-
-        if (!empty($values) && is_array($values)) foreach ($values as $key => $value) {
-            $toIndexedArray = false;
-
-            $fieldObject = get_field_object($key);
-
-            if (is_array($fieldObject) && isset($fieldObject['type']) && in_array($fieldObject['type'], ['flexible_content', 'repeater'])) {
-                $toIndexedArray = true;
+            if ($this->isIndexedArray($valueKeys)) {
+                $values = array_values($values);
             }
 
-            $values[$key] = $this->normalizeAcfInputField($value, $toIndexedArray);
-        } elseif (is_string($values)) {
-            $values = stripslashes($values);
+            if (!empty($values)) foreach ($values as $valueKey => $value) {
+                $values[$valueKey] = $this->normalizeAcfInputField($value);
+            }
         }
 
         return $values;
     }
+    
+    public function isIndexedArray($keys) {
+        if (!empty($keys)) foreach ($keys as $key) {
+            if (!is_numeric($key)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     public function preLoadValue($value, $postId, $field)
     {
-        if ($field['name'] === 'layout_row') {
-            $layoutEditorContent = get_post_meta($postId, 'acf_layout_editor_content', true);
+        if ($field['name'] === 'page_layout') {
+            $layoutEditorContent = get_post_meta($postId, 'acf_layout_builder', true);
 
             if (!empty($layoutEditorContent)) {
-                if ($layoutEditorContentDecoded = unserialize(base64_decode($layoutEditorContent))) {
-                    return $layoutEditorContentDecoded;
-                } elseif ($layoutEditorContentDecoded = json_decode($layoutEditorContent, true)) {
-                    return $layoutEditorContentDecoded;
-                }
+                return $layoutEditorContent;
             }
         }
 
@@ -79,15 +77,15 @@ class LayoutEditor {
 
     public function preLoadReference($reference, $fieldName, $postId)
     {
-        if ($fieldName === 'layout_row') {
-            return 'field_5c16d18ae5382';
+        if ($fieldName === 'page_layout') {
+            return 'field_5dd543a609ba3';
         }
 
         return $reference;
     }
 
     public function loadMeta($meta, $postId) {
-        if ($acfLayoutEditorContent = get_post_meta($postId, 'acf_layout_editor_content', true)) {
+        if ($acfLayoutEditorContent = get_post_meta($postId, 'acf_layout_builder', true)) {
             $meta['acf_layout_editor_content'] = $acfLayoutEditorContent;
         }
 

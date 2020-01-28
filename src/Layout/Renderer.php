@@ -1,8 +1,6 @@
 <?php
 namespace OffbeatWP\AcfLayout\Layout;
 
-use OffbeatWP\AcfLayout\Repositories\AcfLayoutComponentRepository;
-
 class Renderer
 {
     protected $postId;
@@ -68,7 +66,7 @@ class Renderer
         }
         $rowSettings->rowComponents = $rowComponents;
 
-        $rowComponent = offbeat(AcfLayoutComponentRepository::class)->getActiveRowComponent();
+        $rowComponent = offbeat('acf_page_builder')->getActiveRowComponent();
 
         return offbeat('components')->render($rowComponent, $rowSettings);
     }
@@ -91,7 +89,7 @@ class Renderer
             $componentSettings->componentContent = __('Component does not exist', 'offbeatwp');
         }
 
-        $componentComponent = offbeat(AcfLayoutComponentRepository::class)->getActiveComponentComponent();
+        $componentComponent = offbeat('acf_page_builder')->getActiveComponentComponent();
 
         return offbeat('components')->render($componentComponent, $componentSettings);
     }
