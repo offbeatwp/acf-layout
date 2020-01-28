@@ -28,8 +28,7 @@ class Service extends AbstractServicePageBuilder {
         new Layout\LayoutEditor();
 
         PostModel::macro('hasLayout', function () {
-            return true;
-            // return get_field('layout_enabled', $this->getId());
+            return get_field('layout_enabled', $this->getId());
         });
         
         PostModel::macro('layout', function () {
@@ -49,6 +48,9 @@ class Service extends AbstractServicePageBuilder {
 
         add_action('acf/init', function () {
             $componentFields = get_option('acf_layout_builder_component_fields');
+            if (!$componentFields) {
+                return;
+            }
 
             acf_add_local_fields( $componentFields );
         });

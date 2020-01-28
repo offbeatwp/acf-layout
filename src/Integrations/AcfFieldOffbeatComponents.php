@@ -648,7 +648,7 @@ if( !empty($sub_fields) ): ?>
 			$rows[ $i ]['acf_fc_layout'] = $l;
 			
 			
-			// bail early if layout deosnt contain sub fields
+			// bail early if layout doesnt contain sub fields
 			if( empty($layouts[ $l ]) ) {
 				
 				continue;
@@ -714,6 +714,10 @@ if( !empty($sub_fields) ): ?>
 	
 	function format_value( $value, $post_id, $field ) {
 		$formattedValue = [];
+
+		if (!$value) {
+		    return $formattedValue;
+        }
 
 		// loop over rows
 		foreach( array_keys($value) as $i ) {

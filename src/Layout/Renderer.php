@@ -1,69 +1,88 @@
 <?php
 namespace OffbeatWP\AcfLayout\Layout;
 
+
 class Renderer
 {
     protected $postId;
 
     public function renderLayout($postId)
     {
-        $this->postId = $postId;
+        $this->postId = $postId ?: get_the_ID();
 
-        $enabled = get_field('layout_enabled', $postId);
+        // $enabled = get_field('layout_enabled', $this->postId);
         $inLoop  = in_the_loop();
-        $content = null;
 
-        if ($enabled && $inLoop) {
-            $content = $this->renderRows(get_field('layout_row', $postId));
-        }
+
+        $rows = get_field('page_layout', $postId);
+
+        $rows = json_encode($rows);
+        $rows = json_decode($rows);
+        // if ($enabled && $inLoop) {
+        $content = $this->renderRows($rows);
+        // var_dump(get_field('page_layout'));
+        // }
 
         return $content;
     }
 
-    public function renderRows($layoutFields)
+    public function renderRows($rows)
     {
         $content           = '';
-        $layoutFieldsIndex = 0;
 
-        if (have_rows('layout_row', $this->postId)) {
-            while (have_rows('layout_row', $this->postId)) {
-                the_row();
-                $layoutFields = array_values($layoutFields);
-                $rowSettings = $this->getFields($layoutFields[$layoutFieldsIndex], ['component']);
+        if (!empty($rows)) foreach($rows as $row) {
 
-                $content .= $this->renderRow($rowSettings);
-
-                $layoutFieldsIndex++;
-            }
+            $content .= $this->renderRow($row);
         }
 
         return $content;
+
+    }
+
+    public function getComponentName() {
+        $row = get_row();
+
+        return $row['acf_component'];
+    }
+
+    public function renderComponent2($component)
+    {
+
+        $componentName = $component->acf_component;
+
+        if (offbeat('components')->exists($componentName)) {
+            $component->context = 'row';
+            $component->componentContent = offbeat('components')->render($componentName, $component);
+        } else {
+            $component->componentContent = __('Component does not exist (' . $componentName . ')', 'offbeatwp');
+        }
+
+        $componentComponent = offbeat('acf_page_builder')->getActiveComponentComponent();
+
+        return offbeat('components')->render($componentComponent, $component);
+    }
+
+    public function getAllComponentFields()
+    {
+        $component = offbeat('components')->get($this->getComponentName());
+
+        $fieldsMapper = new \OffbeatWP\AcfCore\FieldsMapper($component::getForm());
+
+        $keys = wp_list_pluck($fieldsMapper->map(), 'name');
+        $keys = array_filter($keys);
+
+        return $keys;
     }
 
     public function renderRow($rowSettings)
     {
+        $components = $rowSettings->components;
         $rowComponents        = [];
-        $componentFieldGroups = get_sub_field('component');
-        $componentIndex       = 0;
 
-        $rowSettings = json_encode($rowSettings);
-        $rowSettings = json_decode($rowSettings);
-
-        if (have_rows('component')) {
-            while (have_rows('component')) {
-                the_row();
-
-                $componentFields = $this->getFields($componentFieldGroups[$componentIndex], ['acf_fc_layout']);
-
-                $rowComponents[] = $this->renderComponent($componentFields);
-
-                $componentIndex++;
-            }
+        if (!empty($components)) foreach ($components as $component) {
+            $rowComponents[] = $this->renderComponent2($component);
         }
 
-        if (!is_object($rowSettings)) {
-            $rowSettings = (object)$rowSettings;
-        }
         $rowSettings->rowComponents = $rowComponents;
 
         $rowComponent = offbeat('acf_page_builder')->getActiveRowComponent();
@@ -74,9 +93,6 @@ class Renderer
     public function renderComponent($componentSettings)
     {
         $componentName = get_row_layout();
-
-        $componentSettings = json_encode($componentSettings);
-        $componentSettings = json_decode($componentSettings);
 
         if (!is_object($componentSettings)) {
             $componentSettings = (object) [];
@@ -117,7 +133,7 @@ class Renderer
                         $subFields = array_values($subFields);
                     }
 
-                    while (have_rows($key)) {
+                    while (have_rows($key, $this->postId)) {
                         the_row();
 
                         $repeaterFields[] = $this->getFields($subFields[$subFieldsIndex]);
@@ -127,7 +143,7 @@ class Renderer
 
                     $fields[$key] = $repeaterFields;
                 } elseif ($fieldObject['type'] == 'group') {
-                    while (have_rows($key)) {
+                    while (have_rows($key, $this->postId)) {
                         the_row();
                         $fields[$key] = $this->getFields($subFields, $ignoreKeys);
                     }
