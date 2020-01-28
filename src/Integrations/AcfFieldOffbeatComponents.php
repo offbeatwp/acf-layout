@@ -217,6 +217,8 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		$row = get_row();
 		$componentName = $row['acf_component'];
 
+        if( !offbeat('components')->exists($componentName)) return [];
+
 		$component = offbeat('components')->get($componentName);
 
 		$fieldsMapper = new \OffbeatWP\AcfCore\FieldsMapper($component::getForm());
@@ -280,7 +282,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 			foreach( $field['value'] as $i => $value ):
 				
 				// validate
-				if( !($component = offbeat('components')->get($value['acf_component']))) continue;
+                if (!offbeat('components')->exists($value['acf_component'])) continue;
 
 				// render
 				$this->render_component($value['acf_component'], $i, $value );
@@ -314,6 +316,8 @@ class AcfFieldOffbeatComponents extends \acf_field {
 	*/
 	
 	function render_component( $layout, $i, $value ) {
+        if (!offbeat('components')->exists($layout)) return;
+
 		$component = offbeat('components')->get($layout);
 
 		$componentClassName = explode('\\', $component);
@@ -727,6 +731,8 @@ if( !empty($sub_fields) ): ?>
 			$formattedValue[$i] = [];
 			$formattedValue[$i]['acf_component'] = $componentName;
 
+            if (!offbeat('components')->exists($componentName)) continue;
+
 			$component = offbeat('components')->get($componentName);
 
 			$componentClassName = explode('\\', $component);
@@ -953,7 +959,10 @@ if( !empty($sub_fields) ): ?>
 	
 	public function ajaxComponentFieldHtml()
 	{
-		$component = offbeat('components')->get($_GET['component']);
+        $componentName = $_GET['component'];
+        if (!offbeat('components')->exists($componentName)) return;
+
+        $component = offbeat('components')->get($componentName);
 
 		$this->render_component($_GET['component'], 'acfcloneindex', []);
 		exit;

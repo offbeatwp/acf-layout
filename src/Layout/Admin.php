@@ -22,7 +22,7 @@ class Admin {
             $pagenow == 'post.php' &&
             isset($_GET['post']) &&
             is_numeric($_GET['post']) &&
-            get_field('layout_enabled', $_GET['post']) === true
+            get_field('page_layout_editor_enabled', $_GET['post']) === true
         ) {
             remove_post_type_support(get_post_type($_GET['post']), 'editor');
         }
