@@ -33,12 +33,12 @@ class Service extends AbstractServicePageBuilder {
         
         PostModel::macro('layout', function () {
             $renderer = new Layout\Renderer();
-            return $renderer->renderLayout($this->getId());
+            return $renderer->renderLayout();
         });
 
         $view->registerGlobal('acflayout', new Helpers\AcfLayoutHelper());
 
-        // offbeat('components')->register('acflayout.row', Components\Row\Row::class);
+        // offbeat('components')->register(\'acflayout.row', Components\Row\Row::class);
         // offbeat('components')->register('acflayout.component', Components\Component\Component::class);
 
         if(offbeat('console')->isConsole()) {
@@ -49,9 +49,7 @@ class Service extends AbstractServicePageBuilder {
         if (offbeat('ajax')->isAjaxRequest() && isset($_POST['action']) && preg_match('#^acf/fields/#', $_POST['action'])) {
             add_action('acf/init', function () {
                 $componentFields = get_option('acf_layout_builder_component_fields');
-                if (!$componentFields) {
-                    return;
-                }
+
                 acf_add_local_fields( $componentFields );
             });
         }

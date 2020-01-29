@@ -27,7 +27,7 @@ class LayoutEditor {
     public function make() {
         $form = new Form();
         $form->add(LayoutField::make('page_layout', 'Layout'));
-
+        
         $acfFieldMapper = new FieldsMapper($form);
 
         $post_types = apply_filters('offbeat_acf_layouteditor_posttypes', ['page']);
@@ -121,7 +121,7 @@ class LayoutEditor {
 
         return $values;
     }
-
+    
     public function isIndexedArray($keys) {
         if (!empty($keys)) foreach ($keys as $key) {
             if (!is_numeric($key)) {

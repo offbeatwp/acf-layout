@@ -217,7 +217,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		$row = get_row();
 		$componentName = $row['acf_component'];
 
-        if( !offbeat('components')->exists($componentName)) return [];
+		if( !offbeat('components')->exists($componentName)) return [];
 
 		$component = offbeat('components')->get($componentName);
 
@@ -259,7 +259,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 
 		// empty
 		if( empty($field['value']) ) {
-			$div['class'] .= 'acf-flexible-content -empty';
+			$div['class'] .= ' acf-flexible-content -empty';
 		}
 		
 		
@@ -282,8 +282,8 @@ class AcfFieldOffbeatComponents extends \acf_field {
 			foreach( $field['value'] as $i => $value ):
 				
 				// validate
-                if (!offbeat('components')->exists($value['acf_component'])) continue;
-
+				if( !offbeat('components')->exists($value['acf_component'])) continue;
+				$component = offbeat('components')->get($value['acf_component']);
 				// render
 				$this->render_component($value['acf_component'], $i, $value );
 				
@@ -316,7 +316,7 @@ class AcfFieldOffbeatComponents extends \acf_field {
 	*/
 	
 	function render_component( $layout, $i, $value ) {
-        if (!offbeat('components')->exists($layout)) return;
+		if( !offbeat('components')->exists($layout)) return;
 
 		$component = offbeat('components')->get($layout);
 
@@ -329,8 +329,8 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		$order = 0;
 		$el = 'div';
 		$sub_fields = $fieldsMapper->map();
-		$id = ( $i === 'acfcloneindex' ) ? 'acfcloneindex' : "row-$i-";
-		$prefix = 'acf';
+		$id = ( $i === 'acfcloneindex' ) ? 'acfcloneindex' : "row-$i";
+		$prefix = 'acf[' . uniqid() . ']';
 		
 		$acfLayout = [
 			'display' => 'block',
@@ -449,7 +449,6 @@ if( !empty($sub_fields) ): ?>
 			
 			// update prefix to allow for nested values
 			$sub_field['prefix'] = $prefix;
-			
 			
 			// render input
 			acf_render_field_wrap( $sub_field, $el );
@@ -652,7 +651,7 @@ if( !empty($sub_fields) ): ?>
 			$rows[ $i ]['acf_fc_layout'] = $l;
 			
 			
-			// bail early if layout doesnt contain sub fields
+			// bail early if layout deosnt contain sub fields
 			if( empty($layouts[ $l ]) ) {
 				
 				continue;
@@ -719,9 +718,9 @@ if( !empty($sub_fields) ): ?>
 	function format_value( $value, $post_id, $field ) {
 		$formattedValue = [];
 
-		if (!$value) {
-		    return $formattedValue;
-        }
+		if (empty($value)) {
+			return null;
+		}
 
 		// loop over rows
 		foreach( array_keys($value) as $i ) {
@@ -731,7 +730,7 @@ if( !empty($sub_fields) ): ?>
 			$formattedValue[$i] = [];
 			$formattedValue[$i]['acf_component'] = $componentName;
 
-            if (!offbeat('components')->exists($componentName)) continue;
+			if( !offbeat('components')->exists($componentName)) continue;
 
 			$component = offbeat('components')->get($componentName);
 
@@ -959,10 +958,10 @@ if( !empty($sub_fields) ): ?>
 	
 	public function ajaxComponentFieldHtml()
 	{
-        $componentName = $_GET['component'];
-        if (!offbeat('components')->exists($componentName)) return;
+		$componentName = $_GET['component'];
+		if( !offbeat('components')->exists($componentName)) return;
 
-        $component = offbeat('components')->get($componentName);
+		$component = offbeat('components')->get($componentName);
 
 		$this->render_component($_GET['component'], 'acfcloneindex', []);
 		exit;

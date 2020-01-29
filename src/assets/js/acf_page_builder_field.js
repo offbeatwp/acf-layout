@@ -1,5 +1,6 @@
 (function($){
-    
+	if (typeof acf == 'undefined') return;
+
 	var Field = acf.Field.extend({
 		
 		type: 'offbeat_components',

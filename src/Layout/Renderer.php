@@ -6,27 +6,37 @@ class Renderer
 {
     protected $postId;
 
-    public function renderLayout($postId)
+    public function renderLayout()
     {
-        $this->postId = $postId ?: get_the_ID();
+        $this->postId = get_the_ID();
 
-        $rows = get_field('page_layout', $postId);
+        // $enabled = get_field('layout_enabled', $this->postId);
+        $inLoop  = in_the_loop();
+
+
+        $rows = get_field('page_layout');
 
         $rows = json_encode($rows);
         $rows = json_decode($rows);
+        // if ($enabled && $inLoop) {
+            $content = $this->renderRows($rows);
+            // var_dump(get_field('page_layout'));
+        // }
 
-        return $this->renderRows($rows);
+        return $content;
     }
 
     public function renderRows($rows)
     {
-        $content = '';
+        $content           = '';
 
-        if (!empty($rows)) foreach ($rows as $row) {
+        if (!empty($rows)) foreach($rows as $row) {
+
             $content .= $this->renderRow($row);
         }
 
         return $content;
+        
     }
 
     public function getComponentName() {
@@ -35,8 +45,9 @@ class Renderer
         return $row['acf_component'];
     }
 
-    public function renderComponent($component)
+    public function renderComponent2($component)
     {
+
         $componentName = $component->acf_component;
 
         if (offbeat('components')->exists($componentName)) {
@@ -53,10 +64,10 @@ class Renderer
 
     public function getAllComponentFields()
     {
-        $component = offbeat('components')->get($this->getComponentName());
+		$component = offbeat('components')->get($this->getComponentName());
 
         $fieldsMapper = new \OffbeatWP\AcfCore\FieldsMapper($component::getForm());
-
+        
         $keys = wp_list_pluck($fieldsMapper->map(), 'name');
         $keys = array_filter($keys);
 
@@ -66,10 +77,10 @@ class Renderer
     public function renderRow($rowSettings)
     {
         $components = $rowSettings->components;
-        $rowComponents = [];
+        $rowComponents        = [];
 
         if (!empty($components)) foreach ($components as $component) {
-            $rowComponents[] = $this->renderComponent($component);
+            $rowComponents[] = $this->renderComponent2($component);
         }
 
         $rowSettings->rowComponents = $rowComponents;
@@ -77,6 +88,26 @@ class Renderer
         $rowComponent = offbeat('acf_page_builder')->getActiveRowComponent();
 
         return offbeat('components')->render($rowComponent, $rowSettings);
+    }
+
+    public function renderComponent($componentSettings)
+    {
+        $componentName = get_row_layout();
+
+        if (!is_object($componentSettings)) {
+            $componentSettings = (object) [];
+        }
+
+        if (offbeat('components')->exists($componentName)) {
+            $componentSettings->context = 'row';
+            $componentSettings->componentContent = offbeat('components')->render($componentName, $componentSettings);
+        } else {
+            $componentSettings->componentContent = __('Component does not exist', 'offbeatwp');
+        }
+
+        $componentComponent = offbeat('acf_page_builder')->getActiveComponentComponent();
+
+        return offbeat('components')->render($componentComponent, $componentSettings);
     }
 
     public function getFields($data, $ignoreKeys = [])
@@ -102,7 +133,7 @@ class Renderer
                         $subFields = array_values($subFields);
                     }
 
-                    while (have_rows($key, $this->postId)) {
+                    while (have_rows($key)) {
                         the_row();
 
                         $repeaterFields[] = $this->getFields($subFields[$subFieldsIndex]);
@@ -112,7 +143,7 @@ class Renderer
 
                     $fields[$key] = $repeaterFields;
                 } elseif ($fieldObject['type'] == 'group') {
-                    while (have_rows($key, $this->postId)) {
+                    while (have_rows($key)) {
                         the_row();
                         $fields[$key] = $this->getFields($subFields, $ignoreKeys);
                     }

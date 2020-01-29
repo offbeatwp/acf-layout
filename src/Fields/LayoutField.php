@@ -8,6 +8,23 @@ class LayoutField extends AcfField
 {
     public function __construct()
     {
+        $rowComponent = offbeat('acf_page_builder')->getActiveRowComponent();
+
+        if ($rowComponent) {
+            $rowComponent = offbeat('components')->get($rowComponent);
+
+            if (method_exists($rowComponent, 'variations')) {
+                $variations = collect($rowComponent::variations());
+                $variations = $variations->map(function ($item, $key) {
+                    return $item['label'];
+                });
+            }
+        }
+
+        $rowThemes  = offbeat('design')->getRowThemesList();
+        $margins    = offbeat('design')->getMarginsList('row');
+        $paddings   = offbeat('design')->getPaddingsList('row');
+
         $this->attributes = [
             'acffield' => [
                 'type' => 'repeater',
@@ -54,18 +71,6 @@ class LayoutField extends AcfField
                             'width' => '',
                             'class' => '',
                             'id' => '',
-                        ),
-                        'layouts' => array(
-                            'layout_5dd54421eca26' => array(
-                                'key' => 'layout_5dd54421eca26',
-                                'name' => '',
-                                'label' => '',
-                                'display' => 'block',
-                                'sub_fields' => array(
-                                ),
-                                'min' => '',
-                                'max' => '',
-                            ),
                         ),
                         'min' => '',
                         'max' => '',
@@ -117,9 +122,7 @@ class LayoutField extends AcfField
                                     'class' => '',
                                     'id' => '',
                                 ),
-                                'choices' => array(
-
-                                ),
+                                'choices' => (isset($variations)) ? $variations->toArray() : [],
                                 'default_value' => array(
                                 ),
                                 'allow_null' => 0,
@@ -143,9 +146,7 @@ class LayoutField extends AcfField
                                     'class' => '',
                                     'id' => '',
                                 ),
-                                'choices' => array(
-                                    'default' => 'Default'
-                                ),
+                                'choices' => $rowThemes,
                                 'default_value' => array(
                                 ),
                                 'allow_null' => 0,
@@ -187,9 +188,7 @@ class LayoutField extends AcfField
                                     'class' => '',
                                     'id' => '',
                                 ),
-                                'choices' => array(
-                                    'default' => 'Default'
-                                ),
+                                'choices' => $margins,
                                 'default_value' => array(
                                 ),
                                 'allow_null' => 0,
@@ -213,9 +212,7 @@ class LayoutField extends AcfField
                                     'class' => '',
                                     'id' => '',
                                 ),
-                                'choices' => array(
-                                    'default' => 'Default'
-                                ),
+                                'choices' => $margins,
                                 'default_value' => array(
                                 ),
                                 'allow_null' => 0,
@@ -257,9 +254,7 @@ class LayoutField extends AcfField
                                     'class' => '',
                                     'id' => '',
                                 ),
-                                'choices' => array(
-                                    'default' => 'Default'
-                                ),
+                                'choices' => $paddings,
                                 'default_value' => array(
                                 ),
                                 'allow_null' => 0,
@@ -283,9 +278,7 @@ class LayoutField extends AcfField
                                     'class' => '',
                                     'id' => '',
                                 ),
-                                'choices' => array(
-                                    'default' => 'Default'
-                                ),
+                                'choices' => $paddings,
                                 'default_value' => array(
                                 ),
                                 'allow_null' => 0,
