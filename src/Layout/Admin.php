@@ -4,6 +4,7 @@ namespace OffbeatWP\AcfLayout\Layout;
 class Admin {
     public function __construct($service)
     {
+        add_filter('use_block_editor_for_post', [$this, 'useBlockEditorForPost'], 20, 2);
         add_action('admin_init',    [$this, 'disableEditorWhenLayoutIsActive'], 99);
         add_action('acf/input/admin_head', [$this, 'rdsn_acf_repeater_collapse']);
 
@@ -28,14 +29,25 @@ class Admin {
         }
     }
 
+    public  function useBlockEditorForPost($useBlockEditor, $post)
+    {
+        $postModel = offbeat('post')->get($post);
+
+        if ($postModel->hasLayout()) {
+            return false;
+        }
+
+        return $useBlockEditor;
+    }
+
     public function setDataInputName($wrapper, $field)
     {
         $inputKey = preg_replace('#.*\[([^\]]+)\]$#misU', '$1', $field['name']);
 
         $wrapper['data-input-key'] = $inputKey;
-        
+
         // $wrapper['class'] = str_replace('acf-field-offbeat-components', 'acf-field-offbeat-components acf-field-flexible-content', $wrapper['class']);
-        
+
         return $wrapper;
     }
 
@@ -47,41 +59,44 @@ class Admin {
     }
 
     public function rdsn_acf_repeater_collapse() {
-    ?>
-    <script type="text/javascript">
-        jQuery(function($) {
-            $('.acf-flexible-content .layout, .acf-layout-clones .layout').addClass('-collapsed');
+        ?>
+        <script type="text/javascript">
+            jQuery(function($) {
+                $('.acf-flexible-content .layout, .acf-layout-clones .layout').addClass('-collapsed');
 
-            $('[data-name="component"]').find('.acf-row:not(.acf-clone)').has('.-collapsed-target').addClass('-collapsed');
+                $('[data-name="component"]').find('.acf-row:not(.acf-clone)').has('.-collapsed-target').addClass('-collapsed');
 
-            $('[data-name="component"]').find('.acf-row:not(.acf-clone) .-collapsed-target').click(function () {
-                $(this).closest('.acf-row').removeClass('-collapsed');
+                $('[data-name="component"]').find('.acf-row:not(.acf-clone) .-collapsed-target').click(function () {
+                    $(this).closest('.acf-row').removeClass('-collapsed');
+                });
             });
-        });
-    </script>
-    <?php
+        </script>
+        <?php
     }
 
     function acfDragNDropFlexibleLayoutsBetweenRepeaters() {
         ?>
         <script type="text/javascript">
-            
+
             (function($) {
                 acf.add_action('ready', function( item ) {
                     var wrapper = $('.page-layout-editor').first();
-                    acfResetFieldNames(wrapper); 
-                    
+                    acfResetFieldNames(wrapper);
+
                     fixInputs(wrapper);
                 });
 
                 acf.add_action('sortstop', function( item, placeholder ) {
-                    acfResetFieldNames($(item).closest('.page-layout-editor').first());              
+                    acfResetFieldNames($(item).closest('.page-layout-editor').first());
                 });
 
                 acf.add_action('append', function( item ) {
-                    acfResetFieldNames($(item).closest('.page-layout-editor').first());              
+                    var wrapper = $('.page-layout-editor').first();
+                    acfResetFieldNames($(item).closest('.page-layout-editor').first());
+
+                    fixInputs(wrapper);
                 });
-                
+
 
                 function acfResetFieldNames(wrapper) {
                     $(wrapper).find('[name^="acf["]').each(function() {
@@ -91,26 +106,37 @@ class Admin {
                 }
 
                 function fixInputs(wrapper) {
-                    $(wrapper).find('input:radio,input:checkbox').each(function() {
-                        
-                        if($(this).is('[checked="checked"]')) {
-                            $(this).attr('checked', 'checked');                        
-                        } else {
-                            $(this).attr('checked', false);
-                        }
+                    $(wrapper).find('input').each(function(){
+
+                        $(this).attr('value', this.value);
+
                     });
-                    
+
+                    $(wrapper).find('textarea').each(function(){
+
+                        $(this).html(this.value);
+
+                    });
+
+                    $(wrapper).find('input:radio,input:checkbox').each(function() {
+
+                        if(this.checked)
+                            $(this).attr('checked', 'checked');
+
+                        else
+                            $(this).attr('checked', false);
+
+                    });
+
                     $(wrapper).find('option').each(function(){
-                        
-                        if($(this).is('[selected="selected"]'))
+
+                        if(this.selected)
                             $(this).attr('selected', 'selected');
-                            
+
                         else
                             $(this).attr('selected', false);
-                        
+
                     });
-        
-    
                 }
 
                 function getFieldName(fieldElement, doAltId) {
@@ -142,7 +168,7 @@ class Admin {
 
                     var field_name_additional_key_regex = field_name_additional_key.replace('[', '\\\[');
                     field_name_additional_key_regex = field_name_additional_key_regex.replace(']', '\\\]');
-                    
+
                     if (!nameValue.match(new RegExp(field_name_additional_key_regex + '$', 'g'))) {
                         nameValue += field_name_additional_key;
                     }
@@ -153,7 +179,8 @@ class Admin {
 
                 function setupAcfLayoutSortable(el) {
                     $(el).find(".values").sortable({
-                        connectWith: "#acf-layout-builder .values",
+                        connectWith: ".page-layout-editor .values",
+                        tolerance: 'pointer',
                         start: function(event, ui) {
                             acf.do_action('sortstart', ui.item, ui.placeholder);
                         },
@@ -168,7 +195,7 @@ class Admin {
                 }
 
                 acf.add_action('ready', function($el){
-                    setupAcfLayoutSortable('#acf-layout-builder');
+                    setupAcfLayoutSortable('.page-layout-editor');
                 });
 
                 acf.add_action('append_field', function (el) {
@@ -176,7 +203,7 @@ class Admin {
                         setupAcfLayoutSortable(el);
                     }
                 });
-            })(jQuery); 
+            })(jQuery);
 
         </script>
         <?php
