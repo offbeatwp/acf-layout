@@ -92,7 +92,7 @@ class LayoutField extends AcfField
                         'placement' => 'top',
                         'endpoint' => 0,
                     ),
-                    array(
+                    apply_filters('acf_layout_editor/rowsettings/appearance', array(
                         'key' => 'group_row_appearance',
                         'label' => 'Appearance',
                         'name' => 'appearance',
@@ -157,8 +157,8 @@ class LayoutField extends AcfField
                                 'placeholder' => '',
                             ),
                         ),
-                    ),
-                    array(
+                    )),
+                    apply_filters('acf_layout_editor/rowsettings/margins', array(
                         'key' => 'group_row_margins',
                         'label' => 'Margins',
                         'name' => 'margins',
@@ -223,8 +223,8 @@ class LayoutField extends AcfField
                                 'placeholder' => '',
                             ),
                         ),
-                    ),
-                    array(
+                    )),
+                    apply_filters('acf_layout_editor/rowsettings/paddings', array(
                         'key' => 'group_row_paddings',
                         'label' => 'Paddings',
                         'name' => 'paddings',
@@ -289,8 +289,8 @@ class LayoutField extends AcfField
                                 'placeholder' => '',
                             ),
                         ),
-                    ),
-                    array(
+                    )),
+                    apply_filters('acf_layout_editor/rowsettings/misc', array(
                         'key' => 'group_row_misc',
                         'label' => 'Other',
                         'name' => 'misc',
@@ -347,7 +347,7 @@ class LayoutField extends AcfField
                                 'maxlength' => '',
                             ),
                         ),
-                    ),
+                    )),
                 ),
                 
             ]
