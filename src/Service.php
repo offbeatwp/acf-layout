@@ -28,6 +28,8 @@ class Service extends AbstractServicePageBuilder {
         new Layout\LayoutEditor();
 
         PostModel::macro('hasLayout', function () {
+            if (!function_exists('get_field')) return null;
+
             return get_field('page_layout_editor_enabled', $this->getId());
         });
         

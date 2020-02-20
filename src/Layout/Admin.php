@@ -13,6 +13,9 @@ class Admin {
         add_action('acf/input/admin_footer', [$this,'acfDragNDropFlexibleLayoutsBetweenRepeaters']);
 
         add_action('admin_enqueue_scripts', [$this, 'enqueueScripts'], 999);
+
+        add_filter('_wp_post_revision_fields', array($this, 'wp_post_revision_fields'), 10, 2 );
+        add_filter("_wp_post_revision_field_acf_layout_builder", array($this, 'wp_post_revision_field'), 10, 4);
     }
 
     public  function disableEditorWhenLayoutIsActive()
@@ -207,5 +210,18 @@ class Admin {
 
         </script>
         <?php
+    }
+
+	function wp_post_revision_fields( $fields, $post = null ) {
+		$fields['acf_layout_builder'] = 'ACF Builder Content';
+		
+		// return
+		return $fields;
+	
+    }
+    
+    function wp_post_revision_field($value, $field_name, $post = null, $direction = false)
+    {
+        return serialize($value);
     }
 }

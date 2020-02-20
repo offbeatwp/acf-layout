@@ -156,7 +156,7 @@ class LayoutEditor {
 
     public function loadMeta($meta, $postId) {
         if ($acfLayoutEditorContent = get_post_meta($postId, 'acf_layout_builder', true)) {
-            $meta['acf_layout_editor_content'] = $acfLayoutEditorContent;
+            $meta['acf_layout_builder'] = $acfLayoutEditorContent;
         }
 
         return $meta;
