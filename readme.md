@@ -26,7 +26,7 @@ wp acf-layout:install
 
 Add within the `support` array in the settings method `pagebuilder` like:
 
-```php
+```
 public static function settings()
 {
     return [
