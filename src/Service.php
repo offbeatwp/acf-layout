@@ -35,7 +35,7 @@ class Service extends AbstractServicePageBuilder {
         
         PostModel::macro('layout', function () {
             $renderer = new Layout\Renderer();
-            return $renderer->renderLayout($this->getId());
+            return apply_filters('acf_layout_editor/content', $renderer->renderLayout($this->getId()));
         });
 
         $view->registerGlobal('acflayout', new Helpers\AcfLayoutHelper());
