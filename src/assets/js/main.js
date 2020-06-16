@@ -404,7 +404,7 @@
             
             if (args.layout) {
                 $(args.layout).find('input[name!=""], select[name!=""], textarea[name!=""]').each(function () {
-                    if ($(this).attr('name').indexOf('[acf_component]') !== -1) return;
+                    if (typeof $(this).attr('name') === 'undefined' || $(this).attr('name').indexOf('[acf_component]') !== -1) return;
 
                     var current_field_name = $(this).attr('name');
                     var fieldNameKey = current_field_name.substring(current_field_name.lastIndexOf('['));

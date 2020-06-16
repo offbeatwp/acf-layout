@@ -57,8 +57,8 @@ class Admin {
     public function enqueueScripts()
     {
         $min = defined('WP_DEBUG') && WP_DEBUG ? '' : 'min.';
-        wp_enqueue_script('offbeat-acf-layout', get_template_directory_uri() . "/vendor/offbeatwp/acf-layout/src/assets/js/main.{$min}js", ['jquery'], 1);
-        wp_enqueue_style( 'offbeat-acf-layout', get_template_directory_uri() . "/vendor/offbeatwp/acf-layout/src/assets/css/main.css", [], 1);
+        wp_enqueue_script('offbeat-acf-layout', get_template_directory_uri() . "/vendor/offbeatwp/acf-layout/src/assets/js/main.{$min}js", ['jquery'], '1.1');
+        wp_enqueue_style( 'offbeat-acf-layout', get_template_directory_uri() . "/vendor/offbeatwp/acf-layout/src/assets/css/main.css", [], '1.1');
     }
 
     public function rdsn_acf_repeater_collapse() {
