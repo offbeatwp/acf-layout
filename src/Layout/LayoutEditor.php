@@ -30,7 +30,7 @@ class LayoutEditor {
         
         $acfFieldMapper = new FieldsMapper($form);
 
-        $post_types = apply_filters('offbeat_acf_layouteditor_posttypes', ['page']);
+        $post_types = offbeat('acf_page_builder')->getEnabledPostTypes();
         $locations = [];
 
         if (!empty($post_types)) foreach($post_types as $post_type) {

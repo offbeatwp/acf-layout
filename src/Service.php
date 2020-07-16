@@ -46,6 +46,7 @@ class Service extends AbstractServicePageBuilder {
         if(offbeat('console')->isConsole()) {
             offbeat('console')->register(Console\Install::class);
             offbeat('console')->register(Console\CacheFields::class);
+            offbeat('console')->register(Console\Preload::class);
         }
 
         if (offbeat('ajax')->isAjaxRequest() && isset($_POST['action']) && preg_match('#^acf/fields/#', $_POST['action'])) {

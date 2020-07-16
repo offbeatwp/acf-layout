@@ -11,15 +11,22 @@ class Renderer
     {
         $this->postId = $postId ?: get_the_ID();
 
-        if (!($rows = get_post_meta($this->postId, 'acf_layout_builder_formatted', true))) {
-            $rows = get_field('page_layout', $this->postId);
-            $rows = json_encode($rows);
-            $rows = json_decode($rows);            
-
-            update_post_meta($this->postId, 'acf_layout_builder_formatted', $rows);
-        }
+        $rows = self::getLayoutFields($postId);
 
         return $this->renderRows($rows);
+    }
+
+    public static function getLayoutFields($postId, $force = false)
+    {
+        if ($force || !($fields = get_post_meta($postId, 'acf_layout_builder_formatted', true))) {
+            $fields = get_field('page_layout', $postId);
+            $fields = json_encode($fields);
+            $fields = json_decode($fields);            
+
+            update_post_meta($postId, 'acf_layout_builder_formatted', $fields);
+        }
+
+        return $fields;
     }
 
     public function renderRows($rows)

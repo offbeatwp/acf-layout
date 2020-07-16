@@ -35,4 +35,9 @@ class AcfPageBuilderRepository {
 
         return $componentComponent;
     } 
+
+    public function getEnabledPostTypes()
+    {
+        return apply_filters('offbeat_acf_layouteditor_posttypes', ['page']);
+    }
 }
