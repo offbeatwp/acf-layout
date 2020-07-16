@@ -99,6 +99,7 @@ class LayoutEditor {
             $value = $this->normalizeAcfInputField($value, true);
 
             acf_update_metadata($postId, 'acf_layout_builder', $value);
+            delete_post_meta($postId, 'acf_layout_builder_formatted');
 
             $check = false;
         }

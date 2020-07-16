@@ -11,9 +11,13 @@ class Renderer
     {
         $this->postId = $postId ?: get_the_ID();
 
-        $rows = get_field('page_layout', $this->postId);
-        $rows = json_encode($rows);
-        $rows = json_decode($rows);
+        if (!($rows = get_post_meta($this->postId, 'acf_layout_builder_formatted', true))) {
+            $rows = get_field('page_layout', $this->postId);
+            $rows = json_encode($rows);
+            $rows = json_decode($rows);            
+
+            update_post_meta($this->postId, 'acf_layout_builder_formatted', $rows);
+        }
 
         return $this->renderRows($rows);
     }
