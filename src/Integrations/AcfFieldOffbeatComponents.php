@@ -749,6 +749,10 @@ if( !empty($sub_fields) ): ?>
 				$sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
 
 				$formattedValue[$i][$sub_field['_name']] = acf_format_value( $value[$i][$sub_field['key']], $post_id, $sub_field );
+
+				if (isset($sub_field['type']) && $sub_field['type'] == 'wysiwyg') {
+					$formattedValue[$i][$sub_field['_name'] . '_raw'] = $value[$i][$sub_field['key']];
+				}
 			}			
 		}
 
