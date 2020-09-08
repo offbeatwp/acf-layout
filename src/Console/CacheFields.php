@@ -12,13 +12,16 @@ class CacheFields extends AbstractCommand
     {
         $components = offbeat('components')->get();
         $fields = [];
+        $amount = 0;
 
         if (!empty($components)) foreach ($components as $component) {
             $componentClassName = explode('\\', $component);
             $componentClassName = array_pop($componentClassName);
-    
+
             if ($component::supports('pagebuilder')) {
                 $fieldsMapper = new FieldsMapper($component::getForm(), lcfirst($componentClassName));
+                $amount++;
+                $this->log("Caching component #$amount $componentClassName");
 
                 $componentFields = $fieldsMapper->map();
 
@@ -30,6 +33,6 @@ class CacheFields extends AbstractCommand
 
         update_option('acf_layout_builder_component_fields', $fields);
 
-        $this->success('Components fields cached');
+        $this->success("Components fields cached for $amount components");
     }
 }
