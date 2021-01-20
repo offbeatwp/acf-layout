@@ -727,7 +727,7 @@ if( !empty($sub_fields) ): ?>
 			
 			// get layout name
 			$componentName = $value[ $i ]['acf_component'];
-			$formattedValue[$i] = [];
+			$formattedValue[$i] = $value[ $i ];
 			$formattedValue[$i]['acf_component'] = $componentName;
 
 			if( !offbeat('components')->exists($componentName)) continue;
@@ -750,9 +750,9 @@ if( !empty($sub_fields) ): ?>
 
 				$formattedValue[$i][$sub_field['_name']] = acf_format_value( $value[$i][$sub_field['key']], $post_id, $sub_field );
 
-				if (isset($sub_field['type']) && $sub_field['type'] == 'wysiwyg') {
-					$formattedValue[$i][$sub_field['_name'] . '_raw'] = $value[$i][$sub_field['key']];
-				}
+				// if (isset($sub_field['type']) && $sub_field['type'] == 'wysiwyg') {
+				// 	$formattedValue[$i][$sub_field['_name'] . '_raw'] = $value[$i][$sub_field['key']];
+				// }
 			}			
 		}
 

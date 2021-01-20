@@ -1,6 +1,7 @@
 <?php
 namespace OffbeatWP\AcfLayout;
 
+use OffbeatWP\AcfLayout\Hooks\SaveWysiwygContentAsUnformattedFilter;
 use OffbeatWP\Services\AbstractServicePageBuilder;
 use OffbeatWP\Content\Post\PostModel;
 use OffbeatWP\Contracts\View;
@@ -59,6 +60,8 @@ class Service extends AbstractServicePageBuilder {
                 acf_add_local_fields( $componentFields );
             });
         }
+
+        offbeat('hooks')->addFilter('acf/format_value', SaveWysiwygContentAsUnformattedFilter::class, 5 ,3);
     }
 
     public function onRegisterComponent($name, $componentClass)

@@ -33,9 +33,11 @@ class Renderer
     {
         $content = '';
 
+        $GLOBALS['acf_layout_editor_content'] = true;
         if (!empty($rows)) foreach ($rows as $row) {
             $content .= $this->renderRow($row);
         }
+        $GLOBALS['acf_layout_editor_content'] = false;
 
         return $content;
     }
