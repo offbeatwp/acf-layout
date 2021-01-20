@@ -19,11 +19,13 @@ class Renderer
     public static function getLayoutFields($postId, $force = false)
     {
         if ($force || !($fields = get_post_meta($postId, 'acf_layout_builder_formatted', true))) {
+            $GLOBALS['acf_layout_editor_content'] = true;
             $fields = get_field('page_layout', $postId);
             $fields = json_encode($fields);
             $fields = json_decode($fields);            
 
             update_post_meta($postId, 'acf_layout_builder_formatted', $fields);
+            $GLOBALS['acf_layout_editor_content'] = false;
         }
 
         return $fields;
@@ -33,11 +35,9 @@ class Renderer
     {
         $content = '';
 
-        $GLOBALS['acf_layout_editor_content'] = true;
         if (!empty($rows)) foreach ($rows as $row) {
             $content .= $this->renderRow($row);
         }
-        $GLOBALS['acf_layout_editor_content'] = false;
 
         return $content;
     }

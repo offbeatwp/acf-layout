@@ -6,6 +6,7 @@ use OffbeatWP\Hooks\AbstractFilter;
 class SaveWysiwygContentAsUnformattedFilter extends AbstractFilter {
     public function filter($value, $postId, $field) {
         if (empty($GLOBALS['acf_layout_editor_content'])) return $value;
+        
         if (
             $field['type'] == 'repeater' ||
             $field['type'] == 'offbeat_components' 
