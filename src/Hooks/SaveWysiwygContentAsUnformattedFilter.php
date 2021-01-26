@@ -6,10 +6,11 @@ use OffbeatWP\Hooks\AbstractFilter;
 class SaveWysiwygContentAsUnformattedFilter extends AbstractFilter {
     public function filter($value, $postId, $field) {
         if (empty($GLOBALS['acf_layout_editor_content'])) return $value;
-        
+
         if (
             $field['type'] == 'repeater' ||
-            $field['type'] == 'offbeat_components' 
+            $field['type'] == 'group' ||
+            $field['type'] == 'offbeat_components'
         ) {
             // bail early if no value
             if( empty($value) ) return $value;
@@ -20,7 +21,13 @@ class SaveWysiwygContentAsUnformattedFilter extends AbstractFilter {
 
             
             // bail early if no sub fields
-            if( $field['type'] == 'repeater' & empty($field['sub_fields']) ) return $value;
+            if(
+                (
+                    $field['type'] == 'repeater' ||
+                    $field['type'] == 'group'
+                ) &&
+                empty($field['sub_fields'])
+            ) return $value;
 
 
             // loop over rows
@@ -41,17 +48,22 @@ class SaveWysiwygContentAsUnformattedFilter extends AbstractFilter {
                 } else {
                     $sub_fields = $field['sub_fields'];
                 }
-                
-
 
                 foreach( array_keys($sub_fields) as $j ) {
                     $sub_field = $sub_fields[ $j ];
 
                     if ($sub_field['type'] != 'wysiwyg') continue;
 
-                    if( is_array($value[ $i ]) && array_key_exists($sub_field['key'], $value[ $i ]) ) {
-                        $value[ $i ][ $sub_field['_name'] . '_raw' ] = $value[ $i ][ $sub_field['key'] ];
+                    if ($field['type'] == 'group') {
+                        if( is_array($value) && array_key_exists($sub_field['key'], $value) ) {
+                            $value[ $sub_field['_name'] . '_raw' ] = $value[ $sub_field['key'] ];
+                        }
+                    } else {
+                        if( is_array($value[ $i ]) && array_key_exists($sub_field['key'], $value[ $i ]) ) {
+                            $value[ $i ][ $sub_field['_name'] . '_raw' ] = $value[ $i ][ $sub_field['key'] ];
+                        }
                     }
+
                 }
             }
 
