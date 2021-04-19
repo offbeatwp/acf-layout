@@ -345,6 +345,11 @@ class AcfFieldOffbeatComponents extends \acf_field {
 			'data-component'	=> $component::getSlug()
 		);
 
+		// clone
+		if( !is_numeric($i) ) {
+			$div['class'] .= ' acf-clone';			
+		}
+
 		// display
 		if( $acfLayout['display'] == 'table' ) {
 			
