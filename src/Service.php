@@ -52,10 +52,7 @@ class Service extends AbstractServicePageBuilder {
 
         if (offbeat('ajax')->isAjaxRequest() && isset($_POST['action']) && preg_match('#^acf/fields/#', $_POST['action'])) {
             add_action('acf/init', function () {
-                $componentFields = get_option('acf_layout_builder_component_fields');
-                if (!$componentFields) {
-                    return;
-                }
+                $componentFields = offbeat('acf_page_builder')->getComponentFields();
 
                 acf_add_local_fields( $componentFields );
             });
