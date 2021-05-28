@@ -416,7 +416,7 @@
             }
 
             // Add row
-            var $el = acf.duplicate({
+            var duplicate_args = {
                 target: args.layout,
                 search: args.search,
                 replace: args.replace,
@@ -450,7 +450,22 @@
                     this.render();
                     
                 })
-            });
+            };
+
+            var acfVersion = parseFloat(acf.get('acf_version'));
+
+            if (acfVersion < 5.9) {
+
+                // Add row
+                var $el = acf.duplicate(duplicate_args);
+
+                // Hotfix for ACF Pro 5.9
+            } else {
+
+                // Add row
+                var $el = model.acfeNewAcfDuplicate(duplicate_args);
+
+            }
             
             // trigger change for validation errors
             this.$input().trigger('change');
@@ -497,6 +512,94 @@
             
         }
         
+        
+    /*
+     * Based on acf.duplicate (5.9)
+     *
+     * doAction('duplicate) has been commented out
+     * This fix an issue with the WYSIWYG editor field during copy/paste since ACF 5.9
+     */
+    model.acfeNewAcfDuplicate = function(args) {
+
+        // allow jQuery
+        if (args instanceof jQuery) {
+            args = {
+                target: args
+            };
+        }
+
+        // defaults
+        args = acf.parseArgs(args, {
+            target: false,
+            search: '',
+            replace: '',
+            rename: true,
+            before: function($el) {},
+            after: function($el, $el2) {},
+            append: function($el, $el2) {
+                $el.after($el2);
+            }
+        });
+
+        // compatibility
+        args.target = args.target || args.$el;
+
+        // vars
+        var $el = args.target;
+
+        // search
+        args.search = args.search || $el.attr('data-id');
+        args.replace = args.replace || acf.uniqid();
+
+        // before
+        // - allow acf to modify DOM
+        // - fixes bug where select field option is not selected
+        args.before($el);
+        acf.doAction('before_duplicate', $el);
+
+        // clone
+        var $el2 = $el.clone();
+
+        // rename
+        if (args.rename) {
+            acf.rename({
+                target: $el2,
+                search: args.search,
+                replace: args.replace,
+                replacer: (typeof args.rename === 'function' ? args.rename : null)
+            });
+        }
+
+        // remove classes
+        $el2.removeClass('acf-clone');
+        $el2.find('.ui-sortable').removeClass('ui-sortable');
+
+        // after
+        // - allow acf to modify DOM
+        args.after($el, $el2);
+        acf.doAction('after_duplicate', $el, $el2);
+
+        // append
+        args.append($el, $el2);
+
+        /**
+         * Fires after an element has been duplicated and appended to the DOM.
+         *
+         * @date    30/10/19
+         * @since   5.8.7
+         *
+         * @param   jQuery $el The original element.
+         * @param   jQuery $el2 The duplicated element.
+         */
+        //acf.doAction('duplicate', $el, $el2 );
+
+        // append
+        acf.doAction('append', $el2);
+
+        // return
+        return $el2;
+    };
+
         // Flexible: Clean Layout
         model.acfeCleanLayouts = function($layout){
             
