@@ -5,13 +5,18 @@ use OffbeatWP\Components\AbstractComponent;
 
 class Row extends AbstractComponent
 {
+    public static function settings(): array
+    {
+        return [];
+    }
+
     public function render($settings)
     {
         $rowComponents = $settings->rowComponents;
         unset($settings->rowComponents);
 
         $variations = self::variations();
-        $variation  = isset($settings->width) ? $settings->width : '';
+        $variation  = $settings->width ?? '';
 
         if (empty($variation) || !isset($variations[$variation])) {
             $variation = 'default';
@@ -23,8 +28,8 @@ class Row extends AbstractComponent
         $paddingTop    = isset($settings->padding_top) ? offbeat('design')->getPaddingClasses($settings->padding_top, 'row', 'pt') : '';
         $paddingBottom = isset($settings->padding_bottom) ? offbeat('design')->getPaddingClasses($settings->padding_bottom, 'row', 'pb') : '';
 
-        $rowId                = isset($settings->id) && !empty($settings->id) ? $settings->id : null;
-        $additionalRowClasses = isset($settings->css_classes) ? $settings->css_classes : null;
+        $rowId                = !empty($settings->id) ? $settings->id : null;
+        $additionalRowClasses = $settings->css_classes ?? null;
 
         $rowClasses = implode(' ', compact('rowTheme', 'marginTop', 'marginBottom', 'paddingTop', 'paddingBottom'));
 
@@ -40,7 +45,7 @@ class Row extends AbstractComponent
         ]);
     }
 
-    public static function variations()
+    public static function variations(): array
     {
         return [
             'default'    => [
