@@ -1,10 +1,15 @@
 <?php
 namespace Components\Component;
 
-use \OffbeatWP\Components\AbstractComponent;
+use OffbeatWP\Components\AbstractComponent;
 
 class Component extends AbstractComponent
 {
+    public static function settings(): array
+    {
+        return [];
+    }
+
     public function render($settings)
     {
         $componentContent = $settings->componentContent;
@@ -14,7 +19,7 @@ class Component extends AbstractComponent
         $marginBottom = offbeat('design')->getMarginClasses($settings->margin_bottom, 'component', 'mb');
 
         $componentId       = isset($settings->id) || empty($settings->id) ? $settings->id : null;
-        $additionalClasses = isset($settings->css_classes) ? $settings->css_classes : null;
+        $additionalClasses = $settings->css_classes ?? null;
 
         $componentClasses = implode(' ', compact('marginTop', 'marginBottom'));
 
@@ -29,5 +34,4 @@ class Component extends AbstractComponent
             'settings'         => $settings,
         ]);
     }
-
 }
