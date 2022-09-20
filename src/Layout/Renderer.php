@@ -106,9 +106,9 @@ class Renderer
                 $subFieldsIndex = 0;
                 $fieldObject    = get_sub_field_object($key);
 
-                if ($key == 'layout_row') {
+                if ($key === 'layout_row') {
                     $fields['layout'] = $this->renderRows($subFields );
-                } elseif ($fieldObject['type'] == 'repeater') {
+                } elseif ($fieldObject && $fieldObject['type'] === 'repeater') {
 
                     $repeaterFields = [];
                     if (is_array($subFields)) {
@@ -124,17 +124,13 @@ class Renderer
                     }
 
                     $fields[$key] = $repeaterFields;
-                } elseif ($fieldObject['type'] == 'group') {
+                } elseif ($fieldObject && $fieldObject['type'] === 'group') {
                     while (have_rows($key)) {
                         the_row();
                         $fields[$key] = $this->getFields($subFields, $ignoreKeys);
                     }
                 } else {
-                    $fieldValue = get_sub_field($key);
-
-                    if (is_array($fieldValue)) $fieldValue = $fieldValue;
-
-                    $fields[$key] = $fieldValue;
+                    $fields[$key] = get_sub_field($key);
                 }
             }
         }
