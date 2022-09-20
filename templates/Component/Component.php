@@ -30,4 +30,7 @@ class Component extends AbstractComponent
         ]);
     }
 
+    static function setttings() {
+        return [];
+    }
 }
