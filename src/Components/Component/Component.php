@@ -5,7 +5,7 @@ use OffbeatWP\Components\AbstractComponent;
 
 class Component extends AbstractComponent
 {
-    static function setttings() {
+    static function settings() {
         return [];
     }
 

@@ -49,7 +49,7 @@ class Row extends AbstractComponent
         ];
     }
 
-    static function setttings() {
+    static function settings() {
         return [];
     }
 }
