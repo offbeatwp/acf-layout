@@ -29,8 +29,4 @@ class Component extends AbstractComponent
             'settings'         => $settings,
         ]);
     }
-
-    static function setttings() {
-        return [];
-    }
 }

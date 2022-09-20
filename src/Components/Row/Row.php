@@ -48,4 +48,8 @@ class Row extends AbstractComponent
             ],
         ];
     }
+
+    static function setttings() {
+        return [];
+    }
 }
