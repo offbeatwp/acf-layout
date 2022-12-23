@@ -14,8 +14,7 @@ class Admin {
 
         add_action('admin_enqueue_scripts', [$this, 'enqueueScripts'], 999);
 
-        add_filter('_wp_post_revision_fields', array($this, 'wp_post_revision_fields'), 10, 2 );
-        add_filter("_wp_post_revision_field_acf_layout_builder", array($this, 'wp_post_revision_field'), 10, 4);
+        add_filter('wp_save_post_revision_post_has_changed', [$this, 'revisionCheckForChanges'], 10, 3 );
     }
 
     public  function disableEditorWhenLayoutIsActive()
@@ -212,16 +211,25 @@ class Admin {
         <?php
     }
 
-	function wp_post_revision_fields( $fields, $post = null ) {
-		$fields['acf_layout_builder'] = 'ACF Builder Content';
+    public function revisionCheckForChanges($postHasChanged, $lastRevision, $post) {
+        if ($postHasChanged) {
+            return $postHasChanged;
+        }
+
+        $revisitionLayoutBuilderContent = $lastRevision->acf_layout_builder;
+        if (!is_string($revisitionLayoutBuilderContent)) {
+            $revisitionLayoutBuilderContent = serialize($revisitionLayoutBuilderContent);
+        }
+
+        $postLayoutBuilderContent = $post->acf_layout_builder;
+        if (!is_string($postLayoutBuilderContent)) {
+            $postLayoutBuilderContent = serialize($postLayoutBuilderContent);
+        }
+
+        if ($revisitionLayoutBuilderContent !== $postLayoutBuilderContent) {
+            $postHasChanged = true;
+        }
 		
-		// return
-		return $fields;
-	
-    }
-    
-    function wp_post_revision_field($value, $field_name, $post = null, $direction = false)
-    {
-        return serialize($value);
+        return $postHasChanged;
     }
 }
