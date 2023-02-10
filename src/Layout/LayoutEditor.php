@@ -33,12 +33,14 @@ class LayoutEditor {
         $post_types = offbeat('acf_page_builder')->getEnabledPostTypes();
         $locations = [];
 
-        if (!empty($post_types)) foreach($post_types as $post_type) {
-            $locations[] = [[
-                'param' => 'post_type',
-                'operator' => '==',
-                'value' => $post_type,
-            ]];
+        if (!empty($post_types)) {
+            foreach ($post_types as $post_type) {
+                $locations[] = [[
+                    'param' => 'post_type',
+                    'operator' => '==',
+                    'value' => $post_type,
+                ]];
+            }
         }
 
         $fields = [[
@@ -49,11 +51,11 @@ class LayoutEditor {
             'instructions' => '',
             'required' => 0,
             'conditional_logic' => 0,
-            'wrapper' => array(
+            'wrapper' => [
                 'width' => '',
                 'class' => '',
                 'id' => '',
-            ),
+            ],
             'message' => '',
             'default_value' => 0,
             'ui' => 0,
@@ -74,7 +76,7 @@ class LayoutEditor {
 
         $fields = array_merge($fields, $layoutFields);
 
-        acf_add_local_field_group(array(
+        acf_add_local_field_group([
             'key' => 'group_page_layout',
             'title' => 'Layout',
             'fields' => $fields,
@@ -87,7 +89,7 @@ class LayoutEditor {
             'hide_on_screen' => '',
             'active' => 1,
             'description' => '',
-        ));
+        ]);
 
     }
 
@@ -115,8 +117,10 @@ class LayoutEditor {
                 $values = array_values($values);
             }
 
-            if (!empty($values)) foreach ($values as $valueKey => $value) {
-                $values[$valueKey] = $this->normalizeAcfInputField($value);
+            if (!empty($values)) {
+                foreach ($values as $valueKey => $value) {
+                    $values[$valueKey] = $this->normalizeAcfInputField($value);
+                }
             }
         }
 
@@ -124,9 +128,11 @@ class LayoutEditor {
     }
     
     public function isIndexedArray($keys) {
-        if (!empty($keys)) foreach ($keys as $key) {
-            if (!is_numeric($key)) {
-                return false;
+        if (!empty($keys)) {
+            foreach ($keys as $key) {
+                if (!is_numeric($key)) {
+                    return false;
+                }
             }
         }
 
@@ -156,7 +162,8 @@ class LayoutEditor {
     }
 
     public function loadMeta($meta, $postId) {
-        if ($acfLayoutEditorContent = get_post_meta($postId, 'acf_layout_builder', true)) {
+        $acfLayoutEditorContent = get_post_meta($postId, 'acf_layout_builder', true);
+        if ($acfLayoutEditorContent) {
             $meta['acf_layout_builder'] = $acfLayoutEditorContent;
         }
 

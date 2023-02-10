@@ -4,5 +4,10 @@ namespace OffbeatWP\AcfLayout\Fields;
 use OffbeatWP\Form\Fields\AbstractField;
 
 class ComponentsField extends AbstractField {
-    const FIELD_TYPE = 'offbeat_components';
+    public const FIELD_TYPE = 'offbeat_components';
+
+    public function getFieldType(): string
+    {
+        return self::FIELD_TYPE;
+    }
 }

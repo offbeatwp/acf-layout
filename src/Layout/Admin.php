@@ -1,28 +1,29 @@
 <?php
 namespace OffbeatWP\AcfLayout\Layout;
 
-class Admin {
+class Admin
+{
     public function __construct($service)
     {
         add_filter('use_block_editor_for_post', [$this, 'useBlockEditorForPost'], 20, 2);
-        add_action('admin_init',    [$this, 'disableEditorWhenLayoutIsActive'], 99);
+        add_action('admin_init', [$this, 'disableEditorWhenLayoutIsActive'], 99);
         add_action('acf/input/admin_head', [$this, 'rdsn_acf_repeater_collapse']);
 
         add_filter('acf/field_wrapper_attributes', [$this, 'setDataInputName'], 10, 2);
 
-        add_action('acf/input/admin_footer', [$this,'acfDragNDropFlexibleLayoutsBetweenRepeaters']);
+        add_action('acf/input/admin_footer', [$this, 'acfDragNDropFlexibleLayoutsBetweenRepeaters']);
 
         add_action('admin_enqueue_scripts', [$this, 'enqueueScripts'], 999);
 
-        add_filter('wp_save_post_revision_post_has_changed', [$this, 'revisionCheckForChanges'], 10, 3 );
+        add_filter('wp_save_post_revision_post_has_changed', [$this, 'revisionCheckForChanges'], 10, 3);
     }
 
-    public  function disableEditorWhenLayoutIsActive()
+    public function disableEditorWhenLayoutIsActive()
     {
         global $pagenow, $post;
 
         if (
-            $pagenow == 'post.php' &&
+            $pagenow === 'post.php' &&
             isset($_GET['post']) &&
             is_numeric($_GET['post']) &&
             get_field('page_layout_editor_enabled', $_GET['post']) === true
@@ -31,7 +32,7 @@ class Admin {
         }
     }
 
-    public  function useBlockEditorForPost($useBlockEditor, $post)
+    public function useBlockEditorForPost($useBlockEditor, $post)
     {
         $postModel = offbeat('post')->get($post);
 
@@ -47,9 +48,9 @@ class Admin {
         $inputKey = preg_replace('#.*\[([^\]]+)\]$#misU', '$1', $field['name']);
 
         $wrapper['data-input-key'] = $inputKey;
-        
+
         // $wrapper['class'] = str_replace('acf-field-offbeat-components', 'acf-field-offbeat-components acf-field-flexible-content', $wrapper['class']);
-        
+
         return $wrapper;
     }
 
@@ -57,87 +58,97 @@ class Admin {
     {
         $min = defined('WP_DEBUG') && WP_DEBUG ? '' : 'min.';
         wp_enqueue_script('offbeat-acf-layout', get_template_directory_uri() . "/vendor/offbeatwp/acf-layout/src/assets/js/main.{$min}js", ['jquery'], '1.1');
-        wp_enqueue_style( 'offbeat-acf-layout', get_template_directory_uri() . "/vendor/offbeatwp/acf-layout/src/assets/css/main.css", [], '1.1');
+        wp_enqueue_style('offbeat-acf-layout', get_template_directory_uri() . "/vendor/offbeatwp/acf-layout/src/assets/css/main.css", [], '1.1');
     }
 
-    public function rdsn_acf_repeater_collapse() {
-    ?>
-    <script type="text/javascript">
-        jQuery(function($) {
-            $('.acf-flexible-content .layout, .acf-layout-clones .layout').addClass('-collapsed');
-
-            $('[data-name="component"]').find('.acf-row:not(.acf-clone)').has('.-collapsed-target').addClass('-collapsed');
-
-            $('[data-name="component"]').find('.acf-row:not(.acf-clone) .-collapsed-target').click(function () {
-                $(this).closest('.acf-row').removeClass('-collapsed');
-            });
-        });
-    </script>
-    <?php
-    }
-
-    function acfDragNDropFlexibleLayoutsBetweenRepeaters() {
+    public function rdsn_acf_repeater_collapse()
+    {
         ?>
         <script type="text/javascript">
-            
-            (function($) {
-                acf.add_action('ready', function( item ) {
+            jQuery(function ($) {
+                $('.acf-flexible-content .layout, .acf-layout-clones .layout').addClass('-collapsed');
+
+                $('[data-name="component"]').find('.acf-row:not(.acf-clone)').has('.-collapsed-target').addClass('-collapsed');
+
+                $('[data-name="component"]').find('.acf-row:not(.acf-clone) .-collapsed-target').click(function () {
+                    $(this).closest('.acf-row').removeClass('-collapsed');
+                });
+            });
+        </script>
+        <?php
+    }
+
+    public function acfDragNDropFlexibleLayoutsBetweenRepeaters()
+    {
+        ?>
+        <script type="text/javascript">
+
+            (function ($) {
+                acf.add_action('ready', function (item) {
                     var wrapper = $('.page-layout-editor').first();
-                    acfResetFieldNames(wrapper); 
-                    
+                    acfResetFieldNames(wrapper);
+
                     fixInputs(wrapper);
                 });
 
-                acf.add_action('sortstop', function( item, placeholder ) {
-                    acfResetFieldNames($(item).closest('.page-layout-editor').first());              
+                acf.add_action('sortstop', function (item, placeholder) {
+                    acfResetFieldNames($(item).closest('.page-layout-editor').first());
                 });
 
-                acf.add_action('append', function( item ) {
+                acf.add_action('append', function (item) {
                     var wrapper = $('.page-layout-editor').first();
-                    acfResetFieldNames($(item).closest('.page-layout-editor').first());              
+                    acfResetFieldNames($(item).closest('.page-layout-editor').first());
 
                     fixInputs(wrapper);
                 });
-                
+
 
                 function acfResetFieldNames(wrapper) {
-                    $(wrapper).find('[name^="acf["]').each(function() {
+                    $(wrapper).find('[name^="acf["]').each(function () {
                         var field_name = getFieldName(this);
                         $(this).attr('name', field_name);
                     });
                 }
 
                 function fixInputs(wrapper) {
-                    $(wrapper).find('input').each(function(){
-                        
+                    $(wrapper).find('input').each(function () {
+
                         $(this).attr('value', this.value);
-                        
+
                     });
 
-                    $(wrapper).find('textarea').each(function(){
-                        
+                    $(wrapper).find('textarea').each(function () {
+
                         $(this).html(this.value);
-                        
+
                     });
 
-                    $(wrapper).find('input:radio,input:checkbox').each(function() {
-                        
-                        if(this.checked)
-                            $(this).attr('checked', 'checked');
-                        
+                    $(wrapper).find('input:radio,input:checkbox').each(function () {
+
+                        if (this.checked)
+                            {
+                                $(this).attr('checked', 'checked');
+                            }
+
                         else
-                            $(this).attr('checked', false);
-                        
+                            {
+                                $(this).attr('checked', false);
+                            }
+
                     });
 
-                    $(wrapper).find('option').each(function(){
-                        
-                        if(this.selected)
-                            $(this).attr('selected', 'selected');
-                            
+                    $(wrapper).find('option').each(function () {
+
+                        if (this.selected)
+                            {
+                                $(this).attr('selected', 'selected');
+                            }
+
                         else
-                            $(this).attr('selected', false);
-                        
+                            {
+                                $(this).attr('selected', false);
+                            }
+
                     });
                 }
 
@@ -146,7 +157,7 @@ class Admin {
                     var nameValue = '';
                     var isFirstId = true;
 
-                    while($(currentElement).parents('[data-input-key], [data-id]').length > 0) {
+                    while ($(currentElement).parents('[data-input-key], [data-id]').length > 0) {
                         var currentElement = $(currentElement).parents('[data-input-key], [data-id]').first();
 
                         if (typeof currentElement.data('input-key') !== 'undefined') {
@@ -170,7 +181,7 @@ class Admin {
 
                     var field_name_additional_key_regex = field_name_additional_key.replace('[', '\\\[');
                     field_name_additional_key_regex = field_name_additional_key_regex.replace(']', '\\\]');
-                    
+
                     if (!nameValue.match(new RegExp(field_name_additional_key_regex + '$', 'g'))) {
                         nameValue += field_name_additional_key;
                     }
@@ -183,12 +194,12 @@ class Admin {
                     $(el).find(".values").sortable({
                         connectWith: ".page-layout-editor .values",
                         tolerance: 'pointer',
-                        start: function(event, ui) {
+                        start: function (event, ui) {
                             acf.do_action('sortstart', ui.item, ui.placeholder);
                         },
-                        stop: function(event, ui) {
+                        stop: function (event, ui) {
                             acf.do_action('sortstop', ui.item, ui.placeholder);
-                            $(this).find('.mce-tinymce').each(function() {
+                            $(this).find('.mce-tinymce').each(function () {
                                 tinyMCE.execCommand('mceRemoveControl', true, $(this).attr('id'));
                                 tinyMCE.execCommand('mceAddControl', true, $(this).attr('id'));
                             });
@@ -196,7 +207,7 @@ class Admin {
                     });
                 }
 
-                acf.add_action('ready', function($el){
+                acf.add_action('ready', function ($el) {
                     setupAcfLayoutSortable('.page-layout-editor');
                 });
 
@@ -205,13 +216,14 @@ class Admin {
                         setupAcfLayoutSortable(el);
                     }
                 });
-            })(jQuery); 
+            })(jQuery);
 
         </script>
         <?php
     }
 
-    public function revisionCheckForChanges($postHasChanged, $lastRevision, $post) {
+    public function revisionCheckForChanges($postHasChanged, $lastRevision, $post)
+    {
         if ($postHasChanged) {
             return $postHasChanged;
         }
@@ -229,7 +241,7 @@ class Admin {
         if ($revisitionLayoutBuilderContent !== $postLayoutBuilderContent) {
             $postHasChanged = true;
         }
-		
+
         return $postHasChanged;
     }
 }

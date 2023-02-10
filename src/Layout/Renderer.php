@@ -35,8 +35,10 @@ class Renderer
     {
         $content = '';
 
-        if (!empty($rows)) foreach ($rows as $row) {
-            $content .= $this->renderRow($row);
+        if (!empty($rows)) {
+            foreach ($rows as $row) {
+                $content .= $this->renderRow($row);
+            }
         }
 
         return $content;
@@ -82,8 +84,10 @@ class Renderer
         $components = $rowSettings->components;
         $rowComponents = [];
 
-        if (!empty($components)) foreach ($components as $component) {
-            $rowComponents[] = $this->renderComponent($component);
+        if (!empty($components)) {
+            foreach ($components as $component) {
+                $rowComponents[] = $this->renderComponent($component);
+            }
         }
 
         $rowSettings->rowComponents = $rowComponents;
@@ -107,9 +111,9 @@ class Renderer
                 $subFieldsIndex = 0;
                 $fieldObject = get_sub_field_object($key);
 
-                if ($key == 'layout_row') {
+                if ($key === 'layout_row') {
                     $fields['layout'] = $this->renderRows($subFields);
-                } elseif ($fieldObject['type'] == 'repeater') {
+                } elseif ($fieldObject['type'] === 'repeater') {
 
                     $repeaterFields = [];
                     if (is_array($subFields)) {
@@ -125,17 +129,13 @@ class Renderer
                     }
 
                     $fields[$key] = $repeaterFields;
-                } elseif ($fieldObject['type'] == 'group') {
+                } elseif ($fieldObject['type'] === 'group') {
                     while (have_rows($key, $this->postId)) {
                         the_row();
                         $fields[$key] = $this->getFields($subFields, $ignoreKeys);
                     }
                 } else {
-                    $fieldValue = get_sub_field($key);
-
-                    if (is_array($fieldValue)) $fieldValue = $fieldValue;
-
-                    $fields[$key] = $fieldValue;
+                    $fields[$key] = get_sub_field($key);
                 }
             }
         }

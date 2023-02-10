@@ -23,16 +23,22 @@ class AcfPageBuilderRepository {
     public function getActiveRowComponent()
     {   
         $rowComponent = 'acflayout.row';
-        if(offbeat('components')->exists('row')) $rowComponent = 'row';
+        if(offbeat('components')->exists('row')) {
+            $rowComponent = 'row';
+        }
 
-        if(offbeat('components')->exists($rowComponent)) return $rowComponent;
+        if(offbeat('components')->exists($rowComponent)) {
+            return $rowComponent;
+        }
 
         return false;
     }
     public function getActiveComponentComponent()
     {
         $componentComponent = 'acflayout.component';
-        if(offbeat('components')->exists('component')) $componentComponent = 'component';
+        if(offbeat('components')->exists('component')) {
+            $componentComponent = 'component';
+        }
 
         return $componentComponent;
     } 
@@ -56,17 +62,19 @@ class AcfPageBuilderRepository {
         $components = offbeat('components')->get();
         $fields = [];
 
-        if (!empty($components)) foreach ($components as $component) {
-            $componentClassName = explode('\\', $component);
-            $componentClassName = array_pop($componentClassName);
-    
-            if ($component::supports('pagebuilder')) {
-                $fieldsMapper = new FieldsMapper($component::getForm(), lcfirst($componentClassName));
+        if (!empty($components)) {
+            foreach ($components as $component) {
+                $componentClassName = explode('\\', $component);
+                $componentClassName = array_pop($componentClassName);
 
-                $componentFields = $fieldsMapper->map();
+                if ($component::supports('pagebuilder')) {
+                    $fieldsMapper = new FieldsMapper($component::getForm(), lcfirst($componentClassName));
 
-                if (!empty($componentFields)) {
-                    $fields = array_merge($fields, $componentFields);
+                    $componentFields = $fieldsMapper->map();
+
+                    if (!empty($componentFields)) {
+                        $fields = array_merge($fields, $componentFields);
+                    }
                 }
             }
         }
