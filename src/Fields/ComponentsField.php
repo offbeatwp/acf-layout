@@ -5,9 +5,9 @@ use OffbeatWP\Form\Fields\AbstractField;
 use OffbeatWP\AcfLayout\Repositories\AcfLayoutComponentRepository;
 
 class ComponentsField extends AbstractField {
-    const FIELD_TYPE = 'flexible_content';
+    public const FIELD_TYPE = 'flexible_content';
 
-    public function __construct()
+    public function init(): void
     {
         if (did_action('acf/init')) {
             $this->layouts();
@@ -19,5 +19,10 @@ class ComponentsField extends AbstractField {
         $acfLayoutComponentRepository = offbeat(AcfLayoutComponentRepository::class);
 
         $this->attribute('layouts', $acfLayoutComponentRepository->getLayouts(true));
+    }
+
+    public function getFieldType(): string
+    {
+        return self::FIELD_TYPE;
     }
 }

@@ -6,7 +6,7 @@ use OffbeatWP\AcfCore\Fields\AcfField;
 
 class LayoutField extends AcfField
 {
-    public function __construct()
+    public function init(): void
     {
         $this->attributes = [
             'acffield' => [
