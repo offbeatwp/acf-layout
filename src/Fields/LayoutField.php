@@ -6,7 +6,7 @@ use OffbeatWP\AcfCore\Fields\AcfField;
 
 class LayoutField extends AcfField
 {
-    public function __construct()
+    public function init(): void
     {
         $rowComponent = offbeat('acf_page_builder')->getActiveRowComponent();
 
@@ -31,18 +31,18 @@ class LayoutField extends AcfField
                 'instructions' => '',
                 'required' => 0,
                 'conditional_logic' => 0,
-                'wrapper' => array(
+                'wrapper' => [
                     'width' => '',
                     'class' => 'page-layout-editor',
                     'id' => '',
-                ),
+                ],
                 'collapsed' => '',
                 'min' => 0,
                 'max' => 0,
                 'layout' => 'block',
                 'button_label' => '',
-                'sub_fields' => array(
-                    array(
+                'sub_fields' => [
+                    [
                         'key' => 'tab_components',
                         'label' => 'Components',
                         'name' => '',
@@ -50,15 +50,15 @@ class LayoutField extends AcfField
                         'instructions' => '',
                         'required' => 0,
                         'conditional_logic' => 0,
-                        'wrapper' => array(
+                        'wrapper' => [
                             'width' => '',
                             'class' => '',
                             'id' => '',
-                        ),
+                        ],
                         'placement' => 'top',
                         'endpoint' => 0,
-                    ),
-                    array(
+                    ],
+                    [
                         'key' => 'field_components',
                         'label' => 'Components',
                         'name' => 'components',
@@ -67,16 +67,16 @@ class LayoutField extends AcfField
                         'instructions' => '',
                         'required' => 0,
                         'conditional_logic' => 0,
-                        'wrapper' => array(
+                        'wrapper' => [
                             'width' => '',
                             'class' => '',
                             'id' => '',
-                        ),
+                        ],
                         'min' => '',
                         'max' => '',
                         'button_label' => 'Add Component',
-                    ),
-                    array(
+                    ],
+                    [
                         'key' => 'tab_row_settings',
                         'label' => 'Row Settings',
                         'name' => '',
@@ -84,15 +84,15 @@ class LayoutField extends AcfField
                         'instructions' => '',
                         'required' => 0,
                         'conditional_logic' => 0,
-                        'wrapper' => array(
+                        'wrapper' => [
                             'width' => '',
                             'class' => '',
                             'id' => '',
-                        ),
+                        ],
                         'placement' => 'top',
                         'endpoint' => 0,
-                    ),
-                    apply_filters('acf_layout_editor/rowsettings/appearance', array(
+                    ],
+                    apply_filters('acf_layout_editor/rowsettings/appearance', [
                         'key' => 'group_row_appearance',
                         'label' => 'Appearance',
                         'name' => 'appearance',
@@ -101,14 +101,14 @@ class LayoutField extends AcfField
                         'instructions' => '',
                         'required' => 0,
                         'conditional_logic' => 0,
-                        'wrapper' => array(
+                        'wrapper' => [
                             'width' => '',
                             'class' => '',
                             'id' => '',
-                        ),
+                        ],
                         'layout' => 'block',
-                        'sub_fields' => array(
-                            array(
+                        'sub_fields' => [
+                            [
                                 'key' => 'field_row_appearance_width',
                                 'label' => 'Width',
                                 'name' => 'width',
@@ -117,22 +117,22 @@ class LayoutField extends AcfField
                                 'instructions' => '',
                                 'required' => 0,
                                 'conditional_logic' => 0,
-                                'wrapper' => array(
+                                'wrapper' => [
                                     'width' => '',
                                     'class' => '',
                                     'id' => '',
-                                ),
+                                ],
                                 'choices' => (isset($variations)) ? $variations->toArray() : [],
-                                'default_value' => array(
-                                ),
+                                'default_value' => [
+                                ],
                                 'allow_null' => 0,
                                 'multiple' => 0,
                                 'ui' => 0,
                                 'return_format' => 'value',
                                 'ajax' => 0,
                                 'placeholder' => '',
-                            ),
-                            array(
+                            ],
+                            [
                                 'key' => 'field_row_appearance_row_theme',
                                 'label' => 'Row theme',
                                 'name' => 'row_theme',
@@ -141,24 +141,24 @@ class LayoutField extends AcfField
                                 'instructions' => '',
                                 'required' => 0,
                                 'conditional_logic' => 0,
-                                'wrapper' => array(
+                                'wrapper' => [
                                     'width' => '',
                                     'class' => '',
                                     'id' => '',
-                                ),
+                                ],
                                 'choices' => $rowThemes,
-                                'default_value' => array(
-                                ),
+                                'default_value' => [
+                                ],
                                 'allow_null' => 0,
                                 'multiple' => 0,
                                 'ui' => 0,
                                 'return_format' => 'value',
                                 'ajax' => 0,
                                 'placeholder' => '',
-                            ),
-                        ),
-                    )),
-                    apply_filters('acf_layout_editor/rowsettings/margins', array(
+                            ],
+                        ],
+                    ]),
+                    apply_filters('acf_layout_editor/rowsettings/margins', [
                         'key' => 'group_row_margins',
                         'label' => 'Margins',
                         'name' => 'margins',
@@ -167,14 +167,14 @@ class LayoutField extends AcfField
                         'instructions' => '',
                         'required' => 0,
                         'conditional_logic' => 0,
-                        'wrapper' => array(
+                        'wrapper' => [
                             'width' => '',
                             'class' => '',
                             'id' => '',
-                        ),
+                        ],
                         'layout' => 'block',
-                        'sub_fields' => array(
-                            array(
+                        'sub_fields' => [
+                            [
                                 'key' => 'field_row_margins_margin_top',
                                 'label' => 'Margin top',
                                 'name' => 'margin_top',
@@ -183,22 +183,22 @@ class LayoutField extends AcfField
                                 'instructions' => '',
                                 'required' => 0,
                                 'conditional_logic' => 0,
-                                'wrapper' => array(
+                                'wrapper' => [
                                     'width' => '',
                                     'class' => '',
                                     'id' => '',
-                                ),
+                                ],
                                 'choices' => $margins,
-                                'default_value' => array(
-                                ),
+                                'default_value' => [
+                                ],
                                 'allow_null' => 0,
                                 'multiple' => 0,
                                 'ui' => 0,
                                 'return_format' => 'value',
                                 'ajax' => 0,
                                 'placeholder' => '',
-                            ),
-                            array(
+                            ],
+                            [
                                 'key' => 'field_row_margins_margin_bottom',
                                 'label' => 'Margin bottom',
                                 'name' => 'margin_bottom',
@@ -207,24 +207,24 @@ class LayoutField extends AcfField
                                 'instructions' => '',
                                 'required' => 0,
                                 'conditional_logic' => 0,
-                                'wrapper' => array(
+                                'wrapper' => [
                                     'width' => '',
                                     'class' => '',
                                     'id' => '',
-                                ),
+                                ],
                                 'choices' => $margins,
-                                'default_value' => array(
-                                ),
+                                'default_value' => [
+                                ],
                                 'allow_null' => 0,
                                 'multiple' => 0,
                                 'ui' => 0,
                                 'return_format' => 'value',
                                 'ajax' => 0,
                                 'placeholder' => '',
-                            ),
-                        ),
-                    )),
-                    apply_filters('acf_layout_editor/rowsettings/paddings', array(
+                            ],
+                        ],
+                    ]),
+                    apply_filters('acf_layout_editor/rowsettings/paddings', [
                         'key' => 'group_row_paddings',
                         'label' => 'Paddings',
                         'name' => 'paddings',
@@ -233,14 +233,14 @@ class LayoutField extends AcfField
                         'instructions' => '',
                         'required' => 0,
                         'conditional_logic' => 0,
-                        'wrapper' => array(
+                        'wrapper' => [
                             'width' => '',
                             'class' => '',
                             'id' => '',
-                        ),
+                        ],
                         'layout' => 'block',
-                        'sub_fields' => array(
-                            array(
+                        'sub_fields' => [
+                            [
                                 'key' => 'field_row_paddings_padding_top',
                                 'label' => 'Padding top',
                                 'name' => 'padding_top',
@@ -249,22 +249,22 @@ class LayoutField extends AcfField
                                 'instructions' => '',
                                 'required' => 0,
                                 'conditional_logic' => 0,
-                                'wrapper' => array(
+                                'wrapper' => [
                                     'width' => '',
                                     'class' => '',
                                     'id' => '',
-                                ),
+                                ],
                                 'choices' => $paddings,
-                                'default_value' => array(
-                                ),
+                                'default_value' => [
+                                ],
                                 'allow_null' => 0,
                                 'multiple' => 0,
                                 'ui' => 0,
                                 'return_format' => 'value',
                                 'ajax' => 0,
                                 'placeholder' => '',
-                            ),
-                            array(
+                            ],
+                            [
                                 'key' => 'field_row_paddings_padding_bottom',
                                 'label' => 'Padding bottom',
                                 'name' => 'padding_bottom',
@@ -273,24 +273,24 @@ class LayoutField extends AcfField
                                 'instructions' => '',
                                 'required' => 0,
                                 'conditional_logic' => 0,
-                                'wrapper' => array(
+                                'wrapper' => [
                                     'width' => '',
                                     'class' => '',
                                     'id' => '',
-                                ),
+                                ],
                                 'choices' => $paddings,
-                                'default_value' => array(
-                                ),
+                                'default_value' => [
+                                ],
                                 'allow_null' => 0,
                                 'multiple' => 0,
                                 'ui' => 0,
                                 'return_format' => 'value',
                                 'ajax' => 0,
                                 'placeholder' => '',
-                            ),
-                        ),
-                    )),
-                    apply_filters('acf_layout_editor/rowsettings/misc', array(
+                            ],
+                        ],
+                    ]),
+                    apply_filters('acf_layout_editor/rowsettings/misc', [
                         'key' => 'group_row_misc',
                         'label' => 'Other',
                         'name' => 'misc',
@@ -299,14 +299,14 @@ class LayoutField extends AcfField
                         'instructions' => '',
                         'required' => 0,
                         'conditional_logic' => 0,
-                        'wrapper' => array(
+                        'wrapper' => [
                             'width' => '',
                             'class' => '',
                             'id' => '',
-                        ),
+                        ],
                         'layout' => 'block',
-                        'sub_fields' => array(
-                            array(
+                        'sub_fields' => [
+                            [
                                 'key' => 'field_row_misc_id',
                                 'label' => 'ID',
                                 'name' => 'id',
@@ -315,18 +315,18 @@ class LayoutField extends AcfField
                                 'instructions' => '',
                                 'required' => 0,
                                 'conditional_logic' => 0,
-                                'wrapper' => array(
+                                'wrapper' => [
                                     'width' => '',
                                     'class' => '',
                                     'id' => '',
-                                ),
+                                ],
                                 'default_value' => '',
                                 'placeholder' => '',
                                 'prepend' => '',
                                 'append' => '',
                                 'maxlength' => '',
-                            ),
-                            array(
+                            ],
+                            [
                                 'key' => 'field_row_misc_css_class',
                                 'label' => 'Class',
                                 'name' => 'css_class',
@@ -335,20 +335,20 @@ class LayoutField extends AcfField
                                 'instructions' => '',
                                 'required' => 0,
                                 'conditional_logic' => 0,
-                                'wrapper' => array(
+                                'wrapper' => [
                                     'width' => '',
                                     'class' => '',
                                     'id' => '',
-                                ),
+                                ],
                                 'default_value' => '',
                                 'placeholder' => '',
                                 'prepend' => '',
                                 'append' => '',
                                 'maxlength' => '',
-                            ),
-                        ),
-                    )),
-                ),
+                            ],
+                        ],
+                    ]),
+                ],
                 
             ]
         ];

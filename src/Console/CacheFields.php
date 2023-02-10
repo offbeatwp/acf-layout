@@ -5,7 +5,7 @@ use OffbeatWP\Console\AbstractCommand;
 
 class CacheFields extends AbstractCommand
 {
-    const COMMAND = 'acf-layout:cache-fields';
+    public const COMMAND = 'acf-layout:cache-fields';
 
     public function execute($args, $argsNamed)
     {

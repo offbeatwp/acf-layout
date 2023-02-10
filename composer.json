@@ -15,6 +15,7 @@
         }
     },
     "require": {
-        "offbeatwp/acf-core": "dev-master"
+        "offbeatwp/acf-core": "dev-master",
+        "php": ">=7.1"
     }
 }
