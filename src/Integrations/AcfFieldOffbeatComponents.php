@@ -217,7 +217,9 @@ class AcfFieldOffbeatComponents extends \acf_field {
 		$row = get_row();
 		$componentName = $row['acf_component'];
 
-		if( !offbeat('components')->exists($componentName)) return [];
+		if( !offbeat('components')->exists($componentName)) {
+            return [];
+        }
 
 		$component = offbeat('components')->get($componentName);
 
@@ -282,7 +284,9 @@ class AcfFieldOffbeatComponents extends \acf_field {
 			foreach( $field['value'] as $i => $value ):
 				
 				// validate
-				if( !offbeat('components')->exists($value['acf_component'])) continue;
+				if( !offbeat('components')->exists($value['acf_component'])) {
+                    continue;
+                }
 				$component = offbeat('components')->get($value['acf_component']);
 				// render
 				$this->render_component($value['acf_component'], $i, $value );
@@ -316,7 +320,9 @@ class AcfFieldOffbeatComponents extends \acf_field {
 	*/
 	
 	function render_component( $layout, $i, $value ) {
-		if( !offbeat('components')->exists($layout)) return;
+		if( !offbeat('components')->exists($layout)) {
+            return;
+        }
 
 		$component = offbeat('components')->get($layout);
 
@@ -396,7 +402,9 @@ if( !empty($sub_fields) ): ?>
 					
 					
 					// bail ealry if no field
-					if( !$sub_field ) continue;
+					if( !$sub_field ) {
+                        continue;
+                    }
 					
 					
 					// vars
@@ -676,7 +684,9 @@ if( !empty($sub_fields) ): ?>
 				
 				
 				// bail ealry if no name (tab)
-				if( acf_is_empty($sub_field['name']) ) continue;
+				if( acf_is_empty($sub_field['name']) ) {
+                    continue;
+                }
 				
 				
 				// update full name
@@ -735,7 +745,9 @@ if( !empty($sub_fields) ): ?>
 			$formattedValue[$i] = $value[ $i ];
 			$formattedValue[$i]['acf_component'] = $componentName;
 
-			if( !offbeat('components')->exists($componentName)) continue;
+			if( !offbeat('components')->exists($componentName)) {
+                continue;
+            }
 
 			$component = offbeat('components')->get($componentName);
 
@@ -747,14 +759,18 @@ if( !empty($sub_fields) ): ?>
 			$sub_fields = $fieldsMapper->map();
 
 
-			if (!empty($sub_fields)) foreach($sub_fields as $sub_field) {
-				if(!isset($value[$i][$sub_field['key']])) continue;
+			if (!empty($sub_fields)) {
+                foreach ($sub_fields as $sub_field) {
+                    if (!isset($value[$i][$sub_field['key']])) {
+                        continue;
+                    }
 
-				// update $sub_field name
-				$sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
+                    // update $sub_field name
+                    $sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
 
-				$formattedValue[$i][$sub_field['_name']] = acf_format_value( $value[$i][$sub_field['key']], $post_id, $sub_field );
-			}			
+                    $formattedValue[$i][$sub_field['_name']] = acf_format_value($value[$i][$sub_field['key']], $post_id, $sub_field);
+                }
+            }
 		}
 
 		// return
@@ -781,7 +797,9 @@ if( !empty($sub_fields) ): ?>
 	
 
 	public function componentsListTemplate() {
-		if (isset($GLOBALS['registeredComponentsListTemplate'])) return;
+		if (isset($GLOBALS['registeredComponentsListTemplate'])) {
+            return;
+        }
 
 		?>
 		<script type="text-html" class="tmpl-offbeat-components"><ul><?php 
@@ -818,14 +836,18 @@ if( !empty($sub_fields) ): ?>
 	function get_layout( $name, $field ) {
 		
 		// bail early if no layouts
-		if( !isset($field['layouts']) ) return false;
+		if( !isset($field['layouts']) ) {
+            return false;
+        }
 		
 		
 		// loop
 		foreach( $field['layouts'] as $layout ) {
 			
 			// match
-			if( $layout['name'] === $name ) return $layout;
+			if( $layout['name'] === $name ) {
+                return $layout;
+            }
 			
 		}
 		
@@ -838,7 +860,9 @@ if( !empty($sub_fields) ): ?>
 	public function ajaxComponentFieldHtml()
 	{
 		$componentName = $_GET['component'];
-		if( !offbeat('components')->exists($componentName)) return;
+		if( !offbeat('components')->exists($componentName)) {
+            return;
+        }
 
 		$component = offbeat('components')->get($componentName);
 
@@ -868,7 +892,9 @@ if( !empty($sub_fields) ): ?>
 		
 		
 		// bail early if no value
-		if( !is_array($value) || !isset($value[ $i ]) ) return false;
+		if( !is_array($value) || !isset($value[ $i ]) ) {
+            return false;
+        }
 		
 		
 		// get layout
@@ -876,7 +902,9 @@ if( !empty($sub_fields) ): ?>
 		
 		
 		// bail early if no layout
-		if( !$layout || empty($layout['sub_fields']) ) return false;
+		if( !$layout || empty($layout['sub_fields']) ) {
+            return false;
+        }
 		
 		
 		// loop
@@ -916,7 +944,9 @@ if( !empty($sub_fields) ): ?>
 	function update_row( $row, $i, $field, $post_id ) {
 		
 		// bail early if no layout reference
-		if( !is_array($row) || !isset($row['acf_fc_layout']) ) return false;
+		if( !is_array($row) || !isset($row['acf_fc_layout']) ) {
+            return false;
+        }
 		
 		
 		// get layout
@@ -924,7 +954,9 @@ if( !empty($sub_fields) ): ?>
 		
 		
 		// bail early if no layout
-		if( !$layout || empty($layout['sub_fields']) ) return false;
+		if( !$layout || empty($layout['sub_fields']) ) {
+            return false;
+        }
 		
 		
 		// loop
@@ -989,7 +1021,9 @@ if( !empty($sub_fields) ): ?>
 	function update_value( $value, $post_id, $field ) {
 		
 		// bail early if no layouts
-		if( empty($field['layouts']) ) return $value;
+		if( empty($field['layouts']) ) {
+            return $value;
+        }
 		
 		
 		// vars
@@ -1013,7 +1047,9 @@ if( !empty($sub_fields) ): ?>
 			foreach( $value as $row ) {	$i++;
 				
 				// bail early if no layout reference
-				if( !is_array($row) || !isset($row['acf_fc_layout']) ) continue;
+				if( !is_array($row) || !isset($row['acf_fc_layout']) ) {
+                    continue;
+                }
 				
 				
 				// delete old row if layout has changed
@@ -1055,7 +1091,9 @@ if( !empty($sub_fields) ): ?>
 		
 		
 		// save false for empty value
-		if( empty($new_value) ) $new_value = '';
+		if( empty($new_value) ) {
+            $new_value = '';
+        }
 		
 		
 		// return
@@ -1085,7 +1123,9 @@ if( !empty($sub_fields) ): ?>
 		
 		
 		// bail early if no rows or no sub fields
-		if( empty($old_value) ) return;
+		if( empty($old_value) ) {
+            return;
+        }
 				
 		
 		// loop
@@ -1259,12 +1299,16 @@ if( !empty($sub_fields) ): ?>
 		
 		// load field
 		$field = acf_get_field( $options['field_key'] );
-		if( !$field ) die();
+		if( !$field ) {
+            die();
+        }
 		
 		
 		// vars
 		$layout = $this->get_layout( $options['layout'], $field );
-		if( !$layout ) die();
+		if( !$layout ) {
+            die();
+        }
 		
 		
 		// title
