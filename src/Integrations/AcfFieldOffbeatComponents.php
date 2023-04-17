@@ -868,20 +868,11 @@ class AcfFieldOffbeatComponents extends acf_field
         $GLOBALS['registeredComponentsListTemplate'] = true;
     }
 
-    /*
-    *  get_layout
-    *
-    *  This function will return a specific layout by name from a field
-    *
-    *  @type	function
-    *  @date	15/2/17
-    *  @since	5.5.8
-    *
-    *  @param	$name (string)
-    *  @param	$field (array)
-    *  @return	(array)
-    */
-
+    /**
+     * @param string $name
+     * @param array $field
+     * @return mixed
+     */
     public function get_layout($name, $field)
     {
 
@@ -920,24 +911,15 @@ class AcfFieldOffbeatComponents extends acf_field
         exit;
     }
 
-    /*
-    *  delete_row
-    *
-    *  This function will delete a value row
-    *
-    *  @type	function
-    *  @date	15/2/17
-    *  @since	5.5.8
-    *
-    *  @param	$i (int)
-    *  @param	$field (array)
-    *  @param	$post_id (mixed)
-    *  @return	(boolean)
-    */
-
+    /**
+     * This function will delete a value row
+     * @param int|numeric-string $i
+     * @param array $field
+     * @param int|numeric-string $post_id
+     * @return bool
+     */
     public function delete_row($i, $field, $post_id)
     {
-
         // vars
         $value = acf_get_metadata($post_id, $field['name']);
 
@@ -947,16 +929,13 @@ class AcfFieldOffbeatComponents extends acf_field
             return false;
         }
 
-
         // get layout
         $layout = $this->get_layout($value[$i], $field);
-
 
         // bail early if no layout
         if (!$layout || empty($layout['sub_fields'])) {
             return false;
         }
-
 
         // loop
         foreach ($layout['sub_fields'] as $sub_field) {
@@ -970,53 +949,38 @@ class AcfFieldOffbeatComponents extends acf_field
 
         }
 
-
         // return
         return true;
 
     }
 
-
-    /*
-    *  update_row
-    *
-    *  This function will update a value row
-    *
-    *  @type	function
-    *  @date	15/2/17
-    *  @since	5.5.8
-    *
-    *  @param	$i (int)
-    *  @param	$field (array)
-    *  @param	$post_id (mixed)
-    *  @return	(boolean)
-    */
-
+    /**
+     * This function will update a value row
+     * @param array $row
+     * @param int|numeric-string $i
+     * @param array $field
+     * @param int|numeric-string $post_id
+     * @return bool
+     */
     public function update_row($row, $i, $field, $post_id)
     {
-
         // bail early if no layout reference
         if (!is_array($row) || !isset($row['acf_fc_layout'])) {
             return false;
         }
 
-
         // get layout
         $layout = $this->get_layout($row['acf_fc_layout'], $field);
-
 
         // bail early if no layout
         if (!$layout || empty($layout['sub_fields'])) {
             return false;
         }
 
-
         // loop
         foreach ($layout['sub_fields'] as $sub_field) {
-
             // value
             $value = null;
-
 
             // find value (key)
             if (isset($row[$sub_field['key']])) {
@@ -1035,20 +999,15 @@ class AcfFieldOffbeatComponents extends acf_field
 
             }
 
-
             // modify name for save
             $sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
 
-
             // update field
             acf_update_value($value, $post_id, $sub_field);
-
         }
-
 
         // return
         return true;
-
     }
 
 
@@ -1068,20 +1027,24 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$value - the modified value
     */
 
+    /**
+     * This filter is appied to the $value before it is updated in the db
+     * @param mixed $value
+     * @param int|numeric-string $post_id
+     * @param array $field
+     * @return array|string
+     */
     public function update_value($value, $post_id, $field)
     {
-
         // bail early if no layouts
         if (empty($field['layouts'])) {
             return $value;
         }
 
-
         // vars
         $new_value = [];
         $old_value = acf_get_metadata($post_id, $field['name']);
         $old_value = is_array($old_value) ? $old_value : [];
-
 
         // update
         if (!empty($value)) {
@@ -1094,7 +1057,6 @@ class AcfFieldOffbeatComponents extends acf_field
 
             }
 
-
             // loop through rows
             foreach ($value as $row) {
                 $i++;
@@ -1104,70 +1066,46 @@ class AcfFieldOffbeatComponents extends acf_field
                     continue;
                 }
 
-
                 // delete old row if layout has changed
                 if (isset($old_value[$i]) && $old_value[$i] !== $row['acf_fc_layout']) {
-
                     $this->delete_row($i, $field, $post_id);
-
                 }
-
 
                 // update row
                 $this->update_row($row, $i, $field, $post_id);
 
-
                 // append to order
                 $new_value[] = $row['acf_fc_layout'];
-
             }
-
         }
-
 
         // vars
         $old_count = empty($old_value) ? 0 : count($old_value);
         $new_count = empty($new_value) ? 0 : count($new_value);
 
-
         // remove old rows
         if ($old_count > $new_count) {
-
             // loop
             for ($i = $new_count; $i < $old_count; $i++) {
-
                 $this->delete_row($i, $field, $post_id);
-
             }
-
         }
-
 
         // save false for empty value
         if (empty($new_value)) {
             $new_value = '';
         }
 
-
         // return
         return $new_value;
-
     }
 
-
-    /*
-    *  delete_value
-    *
-    *  description
-    *
-    *  @type	function
-    *  @date	1/07/2015
-    *  @since	5.2.3
-    *
-    *  @param	$post_id (int)
-    *  @return	$post_id (int)
-    */
-
+    /**
+     * @param int|numeric-string $post_id
+     * @param string $key
+     * @param $field
+     * @return void
+     */
     public function delete_value($post_id, $key, $field)
     {
 
@@ -1191,36 +1129,19 @@ class AcfFieldOffbeatComponents extends acf_field
 
     }
 
-
-    /*
-    *  update_field()
-    *
-    *  This filter is appied to the $field before it is saved to the database
-    *
-    *  @type	filter
-    *  @since	3.6
-    *  @date	23/01/13
-    *
-    *  @param	$field - the field array holding all the field options
-    *  @param	$post_id - the field group ID (post_type = acf)
-    *
-    *  @return	$field - the modified field
-    */
-
+    /**
+     * This filter is appied to the $field before it is saved to the database
+     * @param array $field
+     * @return array
+     */
     public function update_field($field)
     {
-
         // loop
         if (!empty($field['layouts'])) {
-
             foreach ($field['layouts'] as &$layout) {
-
                 unset($layout['sub_fields']);
-
             }
-
         }
-
 
         // return
         return $field;
