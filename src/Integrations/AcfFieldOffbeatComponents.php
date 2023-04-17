@@ -21,7 +21,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	n/a
     */
 
-    function initialize()
+    public function initialize()
     {
 
         // vars
@@ -72,7 +72,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$post_id (int)
     */
 
-    function input_admin_enqueue_scripts()
+    public function input_admin_enqueue_scripts()
     {
 
         // localize
@@ -109,7 +109,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$layout (array)
     */
 
-    function get_valid_layout($layout = [])
+    public function get_valid_layout($layout = [])
     {
 
         // parse
@@ -143,7 +143,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$field - the field array holding all the field options
     */
 
-    function load_field($field)
+    public function load_field($field)
     {
 
         // bail early if no field layouts
@@ -220,7 +220,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @param	$field (array)
     *  @return	$post_id (int)
     */
-    function get_sub_field($sub_field, $id, $field)
+    public function get_sub_field($sub_field, $id, $field)
     {
 
         $row = get_row();
@@ -253,7 +253,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @date	23/01/13
     */
 
-    function render_field($field)
+    public function render_field($field)
     {
 
         // defaults
@@ -326,7 +326,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$post_id (int)
     */
 
-    function render_component($layout, $i, $value)
+    public function render_component($layout, $i, $value)
     {
         if (!offbeat('components')->exists($layout)) {
             return;
@@ -507,7 +507,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @param	$field	- an array holding all the field's data
     */
 
-    function render_field_settings($field)
+    public function render_field_settings($field)
     {
 
         // load default layout
@@ -533,96 +533,96 @@ class AcfFieldOffbeatComponents extends acf_field
 
             ?>
             <tr class="acf-field acf-field-setting-fc_layout" data-name="fc_layout" data-setting="flexible_content" data-id="<?php echo $layout['key']; ?>">
-            <td class="acf-label">
-                <label><?php _e("Layout", 'acf'); ?></label>
-                <ul class="acf-bl acf-fl-actions">
-                    <li>
-                        <a class="reorder-layout" href="#" title="<?php _e("Reorder Layout", 'acf'); ?>"><?php _e("Reorder", 'acf'); ?></a>
-                    </li>
-                    <li>
-                        <a class="delete-layout" href="#" title="<?php _e("Delete Layout", 'acf'); ?>"><?php _e("Delete", 'acf'); ?></a>
-                    </li>
-                    <li>
-                        <a class="duplicate-layout" href="#" title="<?php _e("Duplicate Layout", 'acf'); ?>"><?php _e("Duplicate", 'acf'); ?></a>
-                    </li>
-                    <li>
-                        <a class="add-layout" href="#" title="<?php _e("Add New Layout", 'acf'); ?>"><?php _e("Add New", 'acf'); ?></a>
-                    </li>
-                </ul>
-            </td>
-            <td class="acf-input">
-                <?php
+                <td class="acf-label">
+                    <label><?php _e("Layout", 'acf'); ?></label>
+                    <ul class="acf-bl acf-fl-actions">
+                        <li>
+                            <a class="reorder-layout" href="#" title="<?php _e("Reorder Layout", 'acf'); ?>"><?php _e("Reorder", 'acf'); ?></a>
+                        </li>
+                        <li>
+                            <a class="delete-layout" href="#" title="<?php _e("Delete Layout", 'acf'); ?>"><?php _e("Delete", 'acf'); ?></a>
+                        </li>
+                        <li>
+                            <a class="duplicate-layout" href="#" title="<?php _e("Duplicate Layout", 'acf'); ?>"><?php _e("Duplicate", 'acf'); ?></a>
+                        </li>
+                        <li>
+                            <a class="add-layout" href="#" title="<?php _e("Add New Layout", 'acf'); ?>"><?php _e("Add New", 'acf'); ?></a>
+                        </li>
+                    </ul>
+                </td>
+                <td class="acf-input">
+                    <?php
 
-                acf_hidden_input([
-                    'id' => acf_idify($layout_prefix . '[key]'),
-                    'name' => $layout_prefix . '[key]',
-                    'class' => 'layout-key',
-                    'value' => $layout['key']
-                ]);
+                    acf_hidden_input([
+                        'id' => acf_idify($layout_prefix . '[key]'),
+                        'name' => $layout_prefix . '[key]',
+                        'class' => 'layout-key',
+                        'value' => $layout['key']
+                    ]);
 
-                ?>
-                <ul class="acf-fc-meta acf-bl">
-                    <li class="acf-fc-meta-label">
-                        <?php
-
-                        acf_render_field([
-                            'type' => 'text',
-                            'name' => 'label',
-                            'class' => 'layout-label',
-                            'prefix' => $layout_prefix,
-                            'value' => $layout['label'],
-                            'prepend' => __('Label', 'acf')
-                        ]);
-
-                        ?>
-                    </li>
-                    <li class="acf-fc-meta-name">
-                        <?php
-
-                        acf_render_field([
-                            'type' => 'text',
-                            'name' => 'name',
-                            'class' => 'layout-name',
-                            'prefix' => $layout_prefix,
-                            'value' => $layout['name'],
-                            'prepend' => __('Name', 'acf')
-                        ]);
-
-                        ?>
-                    </li>
-                    <li class="acf-fc-meta-display">
-                        <div class="acf-input-prepend"><?php _e('Layout', 'acf'); ?></div>
-                        <div class="acf-input-wrap select">
+                    ?>
+                    <ul class="acf-fc-meta acf-bl">
+                        <li class="acf-fc-meta-label">
                             <?php
 
                             acf_render_field([
-                                'type' => 'select',
-                                'name' => 'display',
+                                'type' => 'text',
+                                'name' => 'label',
+                                'class' => 'layout-label',
                                 'prefix' => $layout_prefix,
-                                'value' => $layout['display'],
-                                'choices' => [
-                                    'table' => __('Table', 'acf'),
-                                    'block' => __('Block', 'acf'),
-                                    'row' => __('Row', 'acf')
-                                ],
+                                'value' => $layout['label'],
+                                'prepend' => __('Label', 'acf')
                             ]);
 
                             ?>
-                        </div>
-                    </li>
-                </ul>
-                <?php
+                        </li>
+                        <li class="acf-fc-meta-name">
+                            <?php
 
-                // vars
-                $args = [
-                    'fields' => $layout['sub_fields'],
-                    'parent' => $field['ID']
-                ];
+                            acf_render_field([
+                                'type' => 'text',
+                                'name' => 'name',
+                                'class' => 'layout-name',
+                                'prefix' => $layout_prefix,
+                                'value' => $layout['name'],
+                                'prepend' => __('Name', 'acf')
+                            ]);
 
-                acf_get_view('field-group-fields', $args);
+                            ?>
+                        </li>
+                        <li class="acf-fc-meta-display">
+                            <div class="acf-input-prepend"><?php _e('Layout', 'acf'); ?></div>
+                            <div class="acf-input-wrap select">
+                                <?php
 
-                ?>
-            </td>
+                                acf_render_field([
+                                    'type' => 'select',
+                                    'name' => 'display',
+                                    'prefix' => $layout_prefix,
+                                    'value' => $layout['display'],
+                                    'choices' => [
+                                        'table' => __('Table', 'acf'),
+                                        'block' => __('Block', 'acf'),
+                                        'row' => __('Row', 'acf')
+                                    ],
+                                ]);
+
+                                ?>
+                            </div>
+                        </li>
+                    </ul>
+                    <?php
+
+                    // vars
+                    $args = [
+                        'fields' => $layout['sub_fields'],
+                        'parent' => $field['ID']
+                    ];
+
+                    acf_get_view('field-group-fields', $args);
+
+                    ?>
+                </td>
             </tr>
             <?php
 
@@ -647,7 +647,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$value
     */
 
-    function load_value($value, $post_id, $field)
+    public function load_value($value, $post_id, $field)
     {
 
         // bail early if no value
@@ -748,7 +748,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$value (mixed) the modified value
     */
 
-    function format_value($value, $post_id, $field)
+    public function format_value($value, $post_id, $field)
     {
         $formattedValue = [];
 
@@ -810,7 +810,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$post_id (int)
     */
 
-    function validate_value($valid, $value, $field, $input)
+    public function validate_value($valid, $value, $field, $input)
     {
         return true;
     }
@@ -835,6 +835,33 @@ class AcfFieldOffbeatComponents extends acf_field
             endforeach; ?>
 			</ul>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </script>
         <?php
 
@@ -855,7 +882,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	(array)
     */
 
-    function get_layout($name, $field)
+    public function get_layout($name, $field)
     {
 
         // bail early if no layouts
@@ -908,7 +935,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	(boolean)
     */
 
-    function delete_row($i, $field, $post_id)
+    public function delete_row($i, $field, $post_id)
     {
 
         // vars
@@ -965,7 +992,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	(boolean)
     */
 
-    function update_row($row, $i, $field, $post_id)
+    public function update_row($row, $i, $field, $post_id)
     {
 
         // bail early if no layout reference
@@ -1041,7 +1068,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$value - the modified value
     */
 
-    function update_value($value, $post_id, $field)
+    public function update_value($value, $post_id, $field)
     {
 
         // bail early if no layouts
@@ -1141,7 +1168,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$post_id (int)
     */
 
-    function delete_value($post_id, $key, $field)
+    public function delete_value($post_id, $key, $field)
     {
 
         // vars
@@ -1180,7 +1207,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$field - the modified field
     */
 
-    function update_field($field)
+    public function update_field($field)
     {
 
         // loop
@@ -1213,7 +1240,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$post_id (int)
     */
 
-    function delete_field($field)
+    public function delete_field($field)
     {
 
         if (!empty($field['layouts'])) {
@@ -1257,7 +1284,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$field - the modified field
     */
 
-    function duplicate_field($field)
+    public function duplicate_field($field)
     {
 
         // vars
@@ -1314,7 +1341,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$post_id (int)
     */
 
-    function ajax_layout_title()
+    public function ajax_layout_title()
     {
 
         // options
@@ -1353,7 +1380,7 @@ class AcfFieldOffbeatComponents extends acf_field
     }
 
 
-    function get_layout_title($layout, $i, $value)
+    public function get_layout_title($layout, $i, $value)
     {
 
         // vars
@@ -1388,7 +1415,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$clone
     */
 
-    function clone_any_field($field, $clone_field)
+    public function clone_any_field($field, $clone_field)
     {
 
         // remove parent_layout
@@ -1423,7 +1450,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$post_id (int)
     */
 
-    function prepare_field_for_export($field)
+    public function prepare_field_for_export($field)
     {
 
         // loop
@@ -1443,7 +1470,7 @@ class AcfFieldOffbeatComponents extends acf_field
 
     }
 
-    function prepare_any_field_for_export($field)
+    public function prepare_any_field_for_export($field)
     {
 
         // remove parent_layout
@@ -1469,7 +1496,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$post_id (int)
     */
 
-    function prepare_field_for_import($field)
+    public function prepare_field_for_import($field)
     {
 
         // Bail early if no layouts
@@ -1528,7 +1555,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$field
     */
 
-    function validate_any_field($field)
+    public function validate_any_field($field)
     {
 
         // width has changed
@@ -1558,7 +1585,7 @@ class AcfFieldOffbeatComponents extends acf_field
     *  @return	$field
     */
 
-    function translate_field($field)
+    public function translate_field($field)
     {
 
         // translate
