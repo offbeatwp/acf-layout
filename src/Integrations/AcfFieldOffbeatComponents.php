@@ -815,7 +815,7 @@ if( !empty($sub_fields) ): ?>
 	*  @return	(array)
 	*/
 	
-	function get_layout( $name = '', $field ) {
+	function get_layout( $name, $field ) {
 		
 		// bail early if no layouts
 		if( !isset($field['layouts']) ) return false;
@@ -861,7 +861,7 @@ if( !empty($sub_fields) ): ?>
 	*  @return	(boolean)
 	*/
 	
-	function delete_row( $i = 0, $field, $post_id ) {
+	function delete_row( $i, $field, $post_id ) {
 		
 		// vars
 		$value = acf_get_metadata( $post_id, $field['name'] );
@@ -913,7 +913,7 @@ if( !empty($sub_fields) ): ?>
 	*  @return	(boolean)
 	*/
 	
-	function update_row( $row, $i = 0, $field, $post_id ) {
+	function update_row( $row, $i, $field, $post_id ) {
 		
 		// bail early if no layout reference
 		if( !is_array($row) || !isset($row['acf_fc_layout']) ) return false;
