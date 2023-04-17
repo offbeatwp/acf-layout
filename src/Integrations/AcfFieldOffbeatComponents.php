@@ -365,7 +365,7 @@ class AcfFieldOffbeatComponents extends acf_field
         }
 
         // display
-        if ($acfLayout['display'] == 'table') {
+        if ($acfLayout['display'] === 'table') {
 
             $el = 'td';
 
@@ -398,7 +398,7 @@ class AcfFieldOffbeatComponents extends acf_field
 
         if (!empty($sub_fields)): ?>
 
-            <?php if ($acfLayout['display'] == 'table'): ?>
+            <?php if ($acfLayout['display'] === 'table'): ?>
                 <table class="acf-table">
 
                 <thead>
@@ -446,7 +446,7 @@ class AcfFieldOffbeatComponents extends acf_field
                 <tbody>
                 <tr class="acf-row">
             <?php else: ?>
-                <div class="acf-fields <?php if ($acfLayout['display'] == 'row'): ?>-left<?php endif; ?>">
+                <div class="acf-fields <?php if ($acfLayout['display'] === 'row'): ?>-left<?php endif; ?>">
             <?php endif; ?>
 
             <?php
@@ -478,7 +478,7 @@ class AcfFieldOffbeatComponents extends acf_field
 
             ?>
 
-            <?php if ($acfLayout['display'] == 'table'): ?>
+            <?php if ($acfLayout['display'] === 'table'): ?>
                 </tr>
                 </tbody>
                 </table>
