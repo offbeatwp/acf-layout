@@ -962,10 +962,15 @@ class AcfFieldOffbeatComponents extends acf_field
      * @param int|numeric-string $post_id
      * @return bool
      */
-    public function update_row($row, $i, $field, $post_id)
+    public function update_row($row, $i = 0, $field = null, $post_id = 0)
     {
+        if (!is_array($row) || $field === null || $post_id === 0) {
+            trigger_error('update_row index/field/post_id arguments were not provided', E_USER_WARNING);
+            return false;
+        }
+
         // bail early if no layout reference
-        if (!is_array($row) || !isset($row['acf_fc_layout'])) {
+        if (!isset($row['acf_fc_layout'])) {
             return false;
         }
 
