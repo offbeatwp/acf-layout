@@ -36,7 +36,7 @@ class Admin
     {
         $postModel = offbeat('post')->get($post);
 
-        if ($postModel->hasLayout()) {
+        if ($postModel && $postModel->hasLayout()) {
             return false;
         }
 
