@@ -5,12 +5,10 @@ use OffbeatWP\Components\AbstractComponent;
 
 class Component extends AbstractComponent
 {
-    // public static function settings()
-    // {
-    //     return [
-    //         'form' => self::form()
-    //     ];
-    // }
+    public static function settings()
+    {
+        return [];
+    }
 
     public function render($settings)
     {

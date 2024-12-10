@@ -5,6 +5,11 @@ use OffbeatWP\Components\AbstractComponent;
 
 class Row extends AbstractComponent
 {
+    public static function settings()
+    {
+        return [];
+    }
+
     public function render($settings)
     {
         $rowContent = $settings->rowContent;
